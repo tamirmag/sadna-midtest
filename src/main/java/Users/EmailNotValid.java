@@ -1,12 +1,11 @@
 package Users;
 
-
-import Loggers.ErrorLogger;
+import Loggers.IErrorLogger;
 
 public class EmailNotValid extends Exception {
     public EmailNotValid(String s)
     {
         super();
-        ErrorLogger.getInstance().writeToFile("email " +s+ "is not valid");
+        IErrorLogger.getInstance().writeToFile("email " +s+ "is not valid");
     }
 }

@@ -7,21 +7,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 
+import Users.IAccountManager;
+import Users.IUserManager;
 import Users.User;
 
 import static java.lang.Thread.sleep;
 
-public class ActiveGamesLogManager {
+public class ActiveGamesLogManager implements IActiveGamesLogManager {
     private static ActiveGamesLogManager instance = null;
     ArrayList<GameLogger> ActiveGames = new ArrayList<GameLogger>();
     private final String relPathToLogs = "GameLogs";
-
-    public static ActiveGamesLogManager getInstance() {
-        if (instance == null) {
-            instance = new ActiveGamesLogManager();
-        }
-        return instance;
-    }
 
     private ActiveGamesLogManager() {
         String filepath = "GameLogs";
@@ -39,6 +34,17 @@ public class ActiveGamesLogManager {
         }
     }
 
+
+    public static IActiveGamesLogManager getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new ActiveGamesLogManager();
+        }
+        return instance;
+    }
+
+    @Override
     public ArrayList<String> getNamesOfAllActiveGames() {
         ArrayList<String> ans = new ArrayList<>();
         for (GameLogger g : ActiveGames)
@@ -46,6 +52,7 @@ public class ActiveGamesLogManager {
         return ans;
     }
 
+    @Override
     public void spectateGame(int gameNumber, User user) {
 
         String filename = getFileNameByGameNum(gameNumber);
@@ -80,14 +87,16 @@ public class ActiveGamesLogManager {
         }
     }
 
+    @Override
     public boolean isActiveGameExists(int num) {
-        //return !filterActiveGames(isActiveGameExistsfilter(num)).isEmpty();
+
         for (GameLogger g : ActiveGames) {
             if (g.getFilename().equals("Game" + num + ".txt")) return true;
         }
         return false;
     }
 
+    @Override
     public String getFileNameByGameNum(int num) {
         for (GameLogger g : ActiveGames) {
             if (g.getFilename().equals("Game" + num + ".txt")) return g.getFilename();
@@ -96,27 +105,30 @@ public class ActiveGamesLogManager {
     }
 
 
+    @Override
     public void AddGameLogger(int g) {
         GameLogger g1 = new GameLogger(g);
         ActiveGames.add(g1);
 
     }
 
+    @Override
     public void WriteToGameLogger(int gameNum, String message) {
-        GameLogger g = getGameLogger(gameNum);
+        IMyLogger g = getGameLogger(gameNum);
         if (g != null) {
             g.writeToFile(message);
         }
     }
 
 
-    private GameLogger getGameLogger(int ganeNum) {
+    private IMyLogger getGameLogger(int ganeNum) {
         for (GameLogger logger : ActiveGames) {
             if (logger.getGameNumber() == ganeNum) return logger;
         }
         return null;
     }
 
+    @Override
     public void RemoveGameLogger(int gameNum) {
         for (GameLogger logger : ActiveGames) {
             if (logger.getGameNumber() == gameNum) ActiveGames.remove(logger);

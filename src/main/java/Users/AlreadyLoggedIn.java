@@ -1,10 +1,10 @@
 package Users;
 
-import Loggers.ErrorLogger;
+import Loggers.IErrorLogger;
 
 public class AlreadyLoggedIn extends Exception {
     public AlreadyLoggedIn(String s) {
         super();
-        ErrorLogger.getInstance().writeToFile("user "+s+" already logged in");
+        IErrorLogger.getInstance().writeToFile("user "+s+" already logged in");
     }
 }

@@ -1,11 +1,10 @@
 package Users;
 
-
-import Loggers.ErrorLogger;
+import Loggers.IErrorLogger;
 
 public class PasswordNotValid extends Exception {
     public PasswordNotValid(String s) {
         super();
-        ErrorLogger.getInstance().writeToFile("password "+s+" is not valid");
+        IErrorLogger.getInstance().writeToFile("password "+s+" is not valid");
     }
 }

@@ -5,26 +5,31 @@ import Games.IGame;
 import Games.Player;
 import Games.Preferences;
 import Loggers.ActionLogger;
-import Loggers.ActiveGamesLogManager;
 import Loggers.FinishedGamesManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 
 
-public class UserManager {
+public class UserManager implements IUserManager {
 
 
     private User user;
 
-    public UserManager(User one) {
+    public UserManager (User one) {
         user = one;
     }
 
+    public UserManager(String username, String password, int league, String email, Wallet wallet) {
+        user = new User(username, password, league, email, wallet);
+    }
+
+    @Override
     public void logout() throws UserNotExists, AlreadyLoggedOut {
         AccountManager.getInstance().logout(user);
     }
 
+    @Override
     public void editProfile(String username, String password, String email)
             throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists {
 
@@ -74,17 +79,19 @@ public class UserManager {
 
     }
 
+    @Override
     public void addPlayer(Player p) {
         user.getExistingPlayers().add(p);
     }
 
+    @Override
     public void addFavoriteTurn(String turn) {
         user.getFavoriteTurns().add(turn);
         ActionLogger.getInstance().writeToFile(user.getUsername() + " added a new favorite turn");
     }
 
+    @Override
     public void viewReplay(int gameNumber) {
-
         ArrayList<String> replay = FinishedGamesManager.getInstance().viewReplay(gameNumber);
         for (String s : replay)
             for (char c : s.toCharArray()) {
@@ -92,10 +99,12 @@ public class UserManager {
             }
     }
 
+    @Override
     public void spectateGame(int gameNumber) {
-        ActiveGamesLogManager.getInstance().spectateGame(gameNumber, user);
+        //ActiveGamesLogManager.getInstance().spectateGame(gameNumber, user);
     }
 
+    @Override
     public void CreateGame(String type, Preferences pref) {
         ActiveGamesManager.getInstance().createGame(this.user, type, pref);
         Player p = new Player(this.user.getUsername(), this.user.getWallet());
@@ -104,42 +113,43 @@ public class UserManager {
     }
 
 
+    @Override
     public ArrayList<IGame> findActiveGamesByPlayerName(String playerName) {
-
         return new ArrayList<>(ActiveGamesManager.getInstance().findActiveGamesByPlayer(playerName));
-
     }
 
 
+    @Override
     public ArrayList<IGame> findActiveGamesByPotSize(int potSize) {
-
         return ActiveGamesManager.getInstance().findActiveGamesByPotSize(potSize);
-
     }
 
 
+    @Override
     public ArrayList<IGame> findActiveGamesBySpectatingPolicy(boolean spectatingAllowed) {
-
         return new ArrayList<>(ActiveGamesManager.getInstance().findSpectatableGames(user));
     }
 
 
+    @Override
     public ArrayList<IGame> findActiveGamesByMinPlayersPolicy(int minimal) {
 
         return ActiveGamesManager.getInstance().findActiveGamesByMinimumBetPolicy(minimal);
     }
 
+    @Override
     public ArrayList<IGame> findActiveGamesByMaxPlayersPolicy(int maximal) {
         return ActiveGamesManager.getInstance().findActiveGamesByPlayersMaximumPolicy(maximal);
     }
 
 
+    @Override
     public ArrayList<IGame> findActiveGamesByMinimumBetPolicy(int minimumBet) {
 
         return ActiveGamesManager.getInstance().findActiveGamesByMinimumBetPolicy(minimumBet);
     }
 
-
+    @Override
     public ArrayList<IGame> findActiveGamesByChipPolicy(int numOfChips) {
 
         return ActiveGamesManager.getInstance().findActiveGamesByChipPolicy(numOfChips);
@@ -147,6 +157,7 @@ public class UserManager {
     }
 
 
+    @Override
     public ArrayList<IGame> findActiveGamesByBuyInPolicy(int costOfJoin) {
 
         return ActiveGamesManager.getInstance().findActiveGamesByBuyInPolicy(costOfJoin);
@@ -154,6 +165,7 @@ public class UserManager {
     }
 
 
+    @Override
     public ArrayList<IGame> findActiveGamesByGameTypePolicy(String gameTypePolicy) {
 
         return ActiveGamesManager.getInstance().findActiveGamesByGameTypePolicy(gameTypePolicy);
@@ -168,10 +180,12 @@ public class UserManager {
         }
     }
 
+    @Override
     public User getUser() {
         return user;
     }
 
+    @Override
     public void JoinGame(int gameNumber) {
         ActiveGamesManager.getInstance().JoinGame(gameNumber, this.user);
         Player p = new Player(this.user.getUsername(), this.user.getWallet());
@@ -179,9 +193,12 @@ public class UserManager {
         ActionLogger.getInstance().writeToFile(user.getUsername() + " joined to game " + gameNumber);
     }
 
+    //highest ranking users operations
+
+    @Override
     public void moveUserToLeague(String username, int toLeague)
             throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists {
-
+        if(!user.isHighestRanking()) return; //TODO : throw costume exception
         if (toLeague < 0) throw new NegativeValue(toLeague);
         User u = AccountManager.getInstance().getUser(username);
         int formerLeague = AccountManager.getInstance().getUser(username).getLeague();
@@ -193,17 +210,49 @@ public class UserManager {
         ActionLogger.getInstance().writeToFile("Users " + u.getUsername() + " moved from league " + formerLeague + " to league " + toLeague);
     }
 
+    @Override
     public void setCriteria() throws NotImplementedException {
+        if(!user.isHighestRanking()) return;//TODO : throw costume exception
         throw new NotImplementedException();
     }
 
+    @Override
     public void setDefaultLeague(int defaultLeague) throws NegativeValue {
+        if(!user.isHighestRanking()) return;//TODO : throw costume exception
         int formerDefaultLeague = AccountManager.getInstance().getDefaultLeague();
         AccountManager.getInstance().setDefaultLeague(defaultLeague);
         System.out.println("default league changed to " + defaultLeague + " and all users from " + formerDefaultLeague + " moved to it.");
         ActionLogger.getInstance().writeToFile("default league changed to " + defaultLeague + " by " + user.getUsername() + " and all users from " + formerDefaultLeague + " moved to it.");
-
     }
+
+    //Game actions
+    @Override
+    public void check(int gameID)
+    {
+        ActiveGamesManager.getInstance().check(gameID , user);
+    }
+    @Override
+    public void bet(int gameID, int amount)
+    {
+        ActiveGamesManager.getInstance().bet(gameID , amount,user);
+    }
+    @Override
+    public void allIn(int gameID)
+    {
+        ActiveGamesManager.getInstance().allIn(gameID , user);
+    }
+    @Override
+    public void fold(int gameID)
+    {
+        ActiveGamesManager.getInstance().fold(gameID , user);
+    }
+    @Override
+    public void raise(int gameID, int amount)
+    {
+        ActiveGamesManager.getInstance().raise(gameID,amount , user);
+    }
+
+
 }
 
 

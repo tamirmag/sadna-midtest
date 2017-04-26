@@ -1,12 +1,12 @@
 package Users;
 
 
-import Loggers.ErrorLogger;
+import Loggers.IErrorLogger;
 
 public class UserAlreadyExists extends Exception{
 
     public UserAlreadyExists(String s) {
         super();
-        ErrorLogger.getInstance().writeToFile("user "+s+" already exists");
+        IErrorLogger.getInstance().writeToFile("user "+s+" already exists");
     }
 }

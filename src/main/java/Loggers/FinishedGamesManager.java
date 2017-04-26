@@ -88,20 +88,6 @@ public class FinishedGamesManager {
         }
     }
 
-   /* private boolean isFinishedGameExists(int num) {
-        return !filterFinishedGames(isFinishedGameExistsfilter(num)).isEmpty();
-    }
-
-
-
-    private Predicate<GameLogger> isFinishedGameExistsfilter(int num) {
-        return p -> p.getFilename().equals("Game" + num + ".txt");
-    }
-
-
-    private ArrayList<GameLogger> filterFinishedGames(Predicate<GameLogger> predicate) {
-        return new ArrayList<>(finishedGames.stream().filter(predicate).collect(Collectors.toList()));
-    }*/
 
     private boolean isFinishedGameExists(int num) {
        for(GameLogger gameLogger : finishedGames)

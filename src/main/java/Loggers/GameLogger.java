@@ -2,7 +2,7 @@ package Loggers;
 
 import java.util.ArrayList;
 
-public class GameLogger extends MyLogger{
+public class GameLogger extends MyLogger implements IMyLogger{
 
     private int gameNumber;
     public GameLogger(int gameNumber)

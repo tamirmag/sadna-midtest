@@ -1,19 +1,20 @@
 package Users;
 
 import Loggers.ActionLogger;
+import Loggers.IActionLogger;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 
-public class AccountManager {
+public class AccountManager implements IAccountManager {
 
     private int defaultLeague;
     private ArrayList<User> users;
     private ArrayList<User> loggedInUsers;
     private Hashtable<Integer, ArrayList<User>> leagues;
     private final String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-    private static AccountManager instance;
+    private static IAccountManager instance ;
     private int maximalRank;
 
     private AccountManager() {
@@ -25,11 +26,14 @@ public class AccountManager {
         leagues.put(defaultLeague, new ArrayList<User>());
     }
 
-    public static AccountManager getInstance() {
-        if (instance == null) instance = new AccountManager();
-        return instance;
+    public static IAccountManager getInstance()
+    {
+        if(instance==null)
+        {
+           instance = new AccountManager();
+        }return instance;
     }
-
+    @Override
     public boolean isUserExists(String username) {
 
         for (User u : users) {
@@ -38,6 +42,7 @@ public class AccountManager {
         return false;
     }
 
+    @Override
     public User getUser(String username) {
 
         for (User u : users) {
@@ -47,6 +52,7 @@ public class AccountManager {
         return null;
     }
 
+    @Override
     public UserManager register(String username, String password, String email, int wallet)
             throws UserAlreadyExists, PasswordNotValid, EmailNotValid, NegativeValue, UsernameNotValid {
 
@@ -67,17 +73,19 @@ public class AccountManager {
             leagues.get(defaultLeague).add(u);
             users.add(u);
             loggedInUsers.add(u);
-            ActionLogger.getInstance().writeToFile("user " + username + " successfully registered.");
+            IActionLogger.getInstance().writeToFile("user " + username + " successfully registered.");
             System.out.println("UserTests successfully registered.");
             return new UserManager(u);
         }
 
     }
 
+    @Override
     public boolean isValidEmail(String email) {
         return email.matches(EMAIL_REGEX);
     }
 
+    @Override
     public void logout(User u) throws AlreadyLoggedOut, UserNotExists {
         if (u == null) throw new UserNotExists("null");
         else if (!users.contains(u)) throw new UserNotExists(u.getUsername());
@@ -91,6 +99,7 @@ public class AccountManager {
 
     }
 
+    @Override
     public UserManager login(String username, String password)
             throws UsernameNotValid, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists {
 
@@ -117,6 +126,7 @@ public class AccountManager {
 
     }
 
+    @Override
     public void addUser(User u) throws UserAlreadyExists, UsernameNotValid {
         String username = u.getUsername();
         if (username == null || username.equals("") || username.contains(" ")) throw new UsernameNotValid(username);
@@ -125,27 +135,32 @@ public class AccountManager {
 
     }
 
+    @Override
     public void addLoggedInUser(User u) throws AlreadyLoggedIn {
         if (loggedInUsers.contains(u)) throw new AlreadyLoggedIn(u.getUsername());
         else loggedInUsers.add(u);
     }
 
+    @Override
     public void setUsername(User u, String username) {
         users.get(users.indexOf(u)).setUsername(username);
         loggedInUsers.get(loggedInUsers.indexOf(u)).setUsername(username);
-        ActionLogger.getInstance().writeToFile(u.getUsername() + " successfully logged out.");
+        IActionLogger.getInstance().writeToFile(u.getUsername() + " successfully logged out.");
     }
 
+    @Override
     public void setEmail(User u, String email) {
         users.get(users.indexOf(u)).setEmail(email);
         loggedInUsers.get(loggedInUsers.indexOf(u)).setEmail(email);
     }
 
+    @Override
     public void setPassword(User u, String password) {
         users.get(users.indexOf(u)).setPassword(password);
         loggedInUsers.get(loggedInUsers.indexOf(u)).setPassword(password);
     }
 
+    @Override
     public void addUserToLeague(User u) throws UserAlreadyInLeague {
         int league = u.getLeague();
         if (leagues.get(league) != null && leagues.get(league).contains(u))
@@ -157,6 +172,7 @@ public class AccountManager {
         ActionLogger.getInstance().writeToFile(u.getUsername() + " was moved to league " + league);
     }
 
+    @Override
     public void removeUserFromLeague(User u) throws UserNotInLeague, LeagueNotExists {
 
         int league = u.getLeague();
@@ -166,6 +182,7 @@ public class AccountManager {
         ActionLogger.getInstance().writeToFile(u.getUsername() + " was removed from league " + league);
     }
 
+    @Override
     public void setDefaultLeague(int league) throws NegativeValue {
         if (league < 0) throw new NegativeValue(league);
         else {
@@ -174,8 +191,37 @@ public class AccountManager {
         }
     }
 
+    @Override
     public int getDefaultLeague() {
         return defaultLeague;
+    }
+
+    @Override
+    public void clearUsers() {
+        users.clear();
+    }
+
+    @Override
+    public void clearLoggedInUsers() {
+        loggedInUsers.clear();
+    }
+
+    @Override
+    public void clearLeagues() {
+        leagues.clear();
+    }
+
+    @Override
+    public int getMaximalRank() {
+        if (loggedInUsers.size() == 0) return maximalRank;
+        else {
+            int ret = loggedInUsers.get(0).getLeague();
+            for (User u : loggedInUsers) {
+                if (u.getLeague() > ret)
+                    ret = u.getLeague();
+            }
+            return ret;
+        }
     }
 
     private void moveUsersFromDefaultLeague(int newLeague) throws NegativeValue {
@@ -203,32 +249,6 @@ public class AccountManager {
         }
         return false;
     }
-
-    public void clearUsers() {
-        users.clear();
-    }
-
-    public void clearLoggedInUsers() {
-        loggedInUsers.clear();
-    }
-
-    public void clearLeagues() {
-        leagues.clear();
-    }
-
-    public int getMaximalRank() {
-        if (loggedInUsers.size() == 0) return maximalRank;
-        else {
-            int ret = loggedInUsers.get(0).getLeague();
-            for (User u : loggedInUsers) {
-                if (u.getLeague() > ret)
-                    ret = u.getLeague();
-            }
-            return ret;
-        }
-    }
-
-
 }
 
 

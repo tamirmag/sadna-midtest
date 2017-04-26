@@ -3,7 +3,7 @@ package Loggers;
 import java.util.ArrayList;
 
 
-public class ActionLogger extends MyLogger {
+public class ActionLogger extends MyLogger implements IActionLogger {
     private static ActionLogger instance = null;
 
     private ActionLogger(){
@@ -11,13 +11,14 @@ public class ActionLogger extends MyLogger {
 
     }
 
-    public static ActionLogger getInstance()
+    public static IActionLogger getInstance()
     {
         if(instance == null) {
             instance = new ActionLogger();
         }
         return instance;
     }
+    @Override
     public ArrayList<String> getLinesByUsername(String username)
     {
         ArrayList<String> ret = getContentOfFile();

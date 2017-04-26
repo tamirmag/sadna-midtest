@@ -2,11 +2,11 @@ package Users;
 
 
 
-import Loggers.ErrorLogger;
+import Loggers.IErrorLogger;
 
 public class AlreadyLoggedOut extends Exception {
     public AlreadyLoggedOut(String s) {
         super();
-        ErrorLogger.getInstance().writeToFile("user " +s+ " already logged out");
+        IErrorLogger.getInstance().writeToFile("user " +s+ " already logged out");
     }
 }

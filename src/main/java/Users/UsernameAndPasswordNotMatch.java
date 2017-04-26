@@ -1,13 +1,13 @@
 package Users;
 
 
-import Loggers.ErrorLogger;
+import Loggers.IErrorLogger;
 
 public class UsernameAndPasswordNotMatch extends Exception{
 
     public UsernameAndPasswordNotMatch(String username , String password ) {
         super();
-        ErrorLogger.getInstance().writeToFile("username " + username+" and passwrod "+password+" does not match");
+        IErrorLogger.getInstance().writeToFile("username " + username+" and passwrod "+password+" does not match");
 
     }
 }

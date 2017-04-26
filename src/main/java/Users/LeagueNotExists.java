@@ -1,12 +1,12 @@
 package Users;
 
 
-import Loggers.ErrorLogger;
+import Loggers.IErrorLogger;
 
 public class LeagueNotExists extends Exception {
 
     public LeagueNotExists(int league) {
         super();
-        ErrorLogger.getInstance().writeToFile("league " +league+ " does not exist");
+        IErrorLogger.getInstance().writeToFile("league " +league+ " does not exist");
     }
 }
