@@ -42,19 +42,19 @@ public class ActiveGamesManager
         switch (type)
         {
             case "NoLimitHoldem":
-                game = new NoLimitHoldem(players, ++index);
+                game = new NoLimitHoldem(players, ++index, user.getLeague());
                 break;
 
             case "LimitHoldem":
-                game = new LimitHoldem(players, ++index);
+                game = new LimitHoldem(players, ++index, user.getLeague());
                 break;
 
             case "PotLimitHoldem":
-                game = new PotLimitHoldem(players, ++index);
+                game = new PotLimitHoldem(players, ++index, user.getLeague());
                 break;
 
             default:
-                game = new Game(players, ++index, "Normal");
+                game = new Game(players, ++index, "Normal", user.getLeague());
         }
 
         game = buildByPref(pref, game);
@@ -159,6 +159,15 @@ public class ActiveGamesManager
 
     public void spectateGame(IGame game, User user) {
         game.spectateGame(user);
+    }
+
+    public List<IGame> findAllActiveGames(User user) {
+        ArrayList<IGame> ourGames = new ArrayList();
+        for (IGame game : games) {
+            if (game.canJoin(user))
+                ourGames.add(game);
+        }
+        return ourGames;
     }
 
     public List<IGame> findActiveGamesByPlayer(String name) {

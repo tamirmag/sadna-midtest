@@ -8,7 +8,7 @@ import java.util.Hashtable;
 /**
  * Created by tamir on 16/04/2017.
  */
-public abstract class Policy implements IGame{
+public abstract class Policy implements IGame {
 
     IGame policy;
 
@@ -32,18 +32,13 @@ public abstract class Policy implements IGame{
         policy.setChipNum(num);
     }
 
-
-
     @Override
     public int getId() {
         return policy.getId();
     }
 
     @Override
-    public void publishMessage(String msg, Player player) {
-        policy.publishMessage(msg,player);
-
-    }
+    public void publishMessage(String msg, Player player) { policy.publishMessage(msg, player); }
 
     @Override
     public boolean isPlayerInGame(String name) {
@@ -56,23 +51,19 @@ public abstract class Policy implements IGame{
     }
 
     @Override
-    public int getPot(){
+    public int getPot() {
         return policy.getPot();
     }
 
     @Override
-    public boolean spectaAble(){
+    public boolean spectaAble() {
         return policy.spectaAble();
     }
-
 
     @Override
     public int getMinimumBet() {
         return this.policy.getMinimumBet();
     }
-
-
-
 
     @Override
     public String getType() {
@@ -80,16 +71,10 @@ public abstract class Policy implements IGame{
     }
 
     @Override
-    public ArrayList<String> getAllTurnsOfPlayer(Player p, ArrayList<String> allTurns)
-    {
-        return this.policy.getAllTurnsOfPlayer(p,allTurns);
-    }
+    public ArrayList<String> getAllTurnsOfPlayer(Player p, ArrayList<String> allTurns) { return this.policy.getAllTurnsOfPlayer(p, allTurns); }
 
     @Override
-    public Hashtable<String ,ArrayList<String>> getAllTurnsByAllPlayers(){
-        return this.policy.getAllTurnsByAllPlayers();
-    }
-
+    public Hashtable<String, ArrayList<String>> getAllTurnsByAllPlayers() { return this.policy.getAllTurnsByAllPlayers(); }
 
     @Override
     public void spectateGame(User user) {
@@ -98,12 +83,12 @@ public abstract class Policy implements IGame{
 
     @Override
     public void bet(int amount, Player player) {
-        this.policy.bet(amount,player);
+        this.policy.bet(amount, player);
     }
 
     @Override
     public void call(int amount, Player player) {
-        this.policy.call(amount,player);
+        this.policy.call(amount, player);
     }
 
     @Override
@@ -122,12 +107,12 @@ public abstract class Policy implements IGame{
     }
 
     @Override
-    public int getMaxPlayers(){
+    public int getMaxPlayers() {
         return this.policy.getMaxPlayers();
     }
 
     @Override
-    public int getMinPlayers(){
+    public int getMinPlayers() {
         return this.policy.getMinPlayers();
     }
 
@@ -142,11 +127,7 @@ public abstract class Policy implements IGame{
     }
 
     @Override
-    public void allIn(Player player){ this.policy.allIn(player);}
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+    public void allIn(Player player) { this.policy.allIn(player); }
 
     @Override
     public int getTurn() {
@@ -160,10 +141,8 @@ public abstract class Policy implements IGame{
 
     @Override
     public void leaveGame(Player player, int userID) {
-        this.policy.leaveGame(player,userID);
+        this.policy.leaveGame(player, userID);
     }
-
-
 
     @Override
     public void terminateGame() {
@@ -185,10 +164,9 @@ public abstract class Policy implements IGame{
         this.policy.endRound();
     }
 
-
     @Override
     public void raise(int amount, Player player) {
-        this.policy.raise(amount,player);
+        this.policy.raise(amount, player);
     }
 
     @Override
@@ -207,9 +185,10 @@ public abstract class Policy implements IGame{
     }
 
     @Override
-    public Player findPlayer(User usr)
-    {
+    public Player findPlayer(User usr) {
         return this.policy.findPlayer(usr);
     }
 
+    @Override
+    public boolean canJoin(User user) { return this.policy.canJoin(user); }
 }

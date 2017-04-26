@@ -1,6 +1,8 @@
 package Games;
 
 
+import Users.User;
+
 public class BuyInPolicy extends Policy{
 
     int cost;
@@ -22,5 +24,13 @@ public class BuyInPolicy extends Policy{
             return false;
         player.wallet.sub(cost);
         return this.policy.join(player);
+    }
+
+    @Override
+    public boolean canJoin(User user) {
+        if(user.getWallet().getAmountOfMoney() > cost)
+           return super.canJoin(user);
+        else
+            return false;
     }
 }

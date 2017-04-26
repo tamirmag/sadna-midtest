@@ -7,9 +7,9 @@ import java.util.ArrayList;
  */
 public class NoLimitHoldem extends Game{
 
-    public NoLimitHoldem(ArrayList<Player> players, int id)
+    public NoLimitHoldem(ArrayList<Player> players, int id, int legue)
     {
-        super(players, id, "NoLimitHoldem");
+        super(players, id, "NoLimitHoldem", legue);
     }
 
 
