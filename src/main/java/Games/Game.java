@@ -25,6 +25,7 @@ public class Game implements IGame {
     }
 
     private int id;
+    private int legue;
     private DeckManager deck = new DeckManager();
     private ArrayList<Player> desk = new ArrayList<Player>(); // players that not yet fold
     private ArrayList<Card> flop = new ArrayList<Card>(); // cards on desk
@@ -43,7 +44,7 @@ public class Game implements IGame {
     private String type = "nurmal";
     private GameLogger logger;
 
-    public Game(ArrayList<Player> players, int id, String type) {
+    public Game(ArrayList<Player> players, int id, String type, int legue) {
         this.players = players;
         currentMinimumBet = 0;
         //      maxPlayers = 0;
@@ -51,6 +52,7 @@ public class Game implements IGame {
         this.id = id;
         this.type = type;
         logger = new GameLogger(id);
+        this.legue = legue;
     }
 
 
@@ -341,6 +343,12 @@ public class Game implements IGame {
                 return p;
         }
         return null;
+    }
+
+
+    @Override
+    public boolean canJoin(User user) {
+        return user.getLeague() == legue;
     }
 
 }

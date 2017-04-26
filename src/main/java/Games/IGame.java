@@ -86,4 +86,6 @@ public interface IGame {
     boolean isLocked();
 
     Player findPlayer(User usr);
+
+    boolean canJoin(User user);
 }

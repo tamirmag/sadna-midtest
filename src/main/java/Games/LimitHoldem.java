@@ -6,9 +6,9 @@ import java.util.ArrayList;
  */
 public class LimitHoldem extends Game{
 
-    public LimitHoldem(ArrayList<Player> players, int id)
+    public LimitHoldem(ArrayList<Player> players, int id, int legue)
     {
-        super(players, id, "LimitHoldem");
+        super(players, id, "LimitHoldem", legue);
     }
 
     @Override

@@ -7,10 +7,10 @@ import java.util.ArrayList;
  */
 public class PotLimitHoldem extends Game{
 
-    public PotLimitHoldem(ArrayList<Player> players, int id)
+    public PotLimitHoldem(ArrayList<Player> players, int id, int legue)
     {
 
-        super(players, id, "PotLimitHoldem");
+        super(players, id, "PotLimitHoldem", legue);
     }
 
     @Override
