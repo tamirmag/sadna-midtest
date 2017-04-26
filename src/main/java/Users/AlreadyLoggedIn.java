@@ -4,7 +4,7 @@ import Loggers.IErrorLogger;
 
 public class AlreadyLoggedIn extends Exception {
     public AlreadyLoggedIn(String s) {
-        super();
+        super("user "+s+" already logged in");
         IErrorLogger.getInstance().writeToFile("user "+s+" already logged in");
     }
 }
