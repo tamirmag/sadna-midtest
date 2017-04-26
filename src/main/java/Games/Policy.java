@@ -140,4 +140,76 @@ public abstract class Policy implements IGame{
     public int getBuyIn() {
         return this.policy.getBuyIn();
     }
+
+    @Override
+    public void allIn(Player player){ this.policy.allIn(player);}
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    @Override
+    public int getTurn() {
+        return this.policy.getTurn();
+    }
+
+    @Override
+    public void check(Player player) {
+        this.policy.check(player);
+    }
+
+    @Override
+    public void leaveGame(Player player, int userID) {
+        this.policy.leaveGame(player,userID);
+    }
+
+
+
+    @Override
+    public void terminateGame() {
+        this.policy.terminateGame();
+    }
+
+    @Override
+    public boolean inMax() {
+        return this.policy.inMax();
+    }
+
+    @Override
+    public void endTurn(Player player) {
+        this.policy.endTurn(player);
+    }
+
+    @Override
+    public void endRound() {
+        this.policy.endRound();
+    }
+
+
+    @Override
+    public void raise(int amount, Player player) {
+        this.policy.raise(amount,player);
+    }
+
+    @Override
+    public void fold(Player player) {
+        this.policy.fold(player);
+    }
+
+    @Override
+    public void win(Player player) {
+        this.policy.win(player);
+    }
+
+    @Override
+    public void dealCard(Player player) {
+        this.policy.dealCard(player);
+    }
+
+    @Override
+    public Player findPlayer(User usr)
+    {
+        return this.policy.findPlayer(usr);
+    }
+
 }

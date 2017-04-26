@@ -131,19 +131,21 @@ public class ServiceImpl implements ServiceInterface{
         else return "no games were found";
     }
 
-    public String setDefaultLeague(int league ,HighestRankingUser u){
+    public String setDefaultLeague(int league ,User u){
         try {
-            u.setDefaultLeague(league);
+            UserManager u1 = new UserManager(u);
+            u1.setDefaultLeague(league);
         } catch (NegativeValue negativeValue) {
             return "negative value was inserted";
         }
         return "default league was changed";
     }
 
-    public String setCriteria(int criteria, HighestRankingUser u){
+    public String setCriteria(int criteria, User u){
         try
         {
-            u.setCriteria();
+            UserManager u1 = new UserManager(u);
+            u1.setCriteria();
         }
         catch (NotImplementedException ex)
         {
@@ -152,10 +154,11 @@ public class ServiceImpl implements ServiceInterface{
         return "criteria was set";
     }
 
-    public String moveToLeague(String username , HighestRankingUser hu ,int league){
+    public String moveToLeague(String username , User hu ,int league){
 
         try {
-            hu.moveUserToLeague(username ,league);
+            UserManager u1 = new UserManager(hu);
+            u1.moveUserToLeague(username ,league);
         } catch (UserAlreadyInLeague userAlreadyInLeague) {
             return "user already in league";
         } catch (NegativeValue negativeValue) {

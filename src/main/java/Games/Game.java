@@ -12,6 +12,8 @@ import java.util.Hashtable;
  * Created by tamir on 16/04/2017.
  */
 public class Game implements IGame {
+
+    @Override
     public int getId() {
         return id;
     }
@@ -31,10 +33,10 @@ public class Game implements IGame {
     private int turnId = 0; //number of current playing player
     private int turn = 0; // number of round
     private boolean up = false; // if somones raised in this round
-//    private int minimumBet;
+    //    private int minimumBet;
     private int currentMinimumBet;
- //   private int maxPlayers;
- //   private int minPlayers;
+    //   private int maxPlayers;
+    //   private int minPlayers;
     private int pot;
     private ArrayList<Integer> playerDesk; //the amount of many that every player put
     private boolean locked = false;
@@ -44,7 +46,7 @@ public class Game implements IGame {
     public Game(ArrayList<Player> players, int id, String type) {
         this.players = players;
         currentMinimumBet = 0;
-  //      maxPlayers = 0;
+        //      maxPlayers = 0;
         pot = 0;
         this.id = id;
         this.type = type;
@@ -52,10 +54,12 @@ public class Game implements IGame {
     }
 
 
+    @Override
     public int getPlayersNum() {
         return players.size();
     }
 
+    @Override
     public boolean inMax(){
         return true;
     }
@@ -65,6 +69,7 @@ public class Game implements IGame {
         return this.type;
     }
 
+    @Override
     public boolean join(Player player)
     {
         if(locked)
@@ -73,6 +78,7 @@ public class Game implements IGame {
         return true;
     }
 
+    @Override
     public int getMaxPlayers()
     {
         return 0;
@@ -83,6 +89,7 @@ public class Game implements IGame {
         return locked;
     }
 
+    @Override
     public boolean isPlayerInGame(String name){
         for (Player player: players) {
             if(player.getName().equals(name))
@@ -92,15 +99,15 @@ public class Game implements IGame {
     }
 
 
-
+    @Override
     public int getTurn(){
-        return turn;
+        return turnId;
     }
 
     @Override
     public void setMinimumBet(int bet) {
         currentMinimumBet = bet;
-  //      minimumBet = bet;
+        //      minimumBet = bet;
     }
 
 
@@ -123,11 +130,12 @@ public class Game implements IGame {
     }
 
 
-
+    @Override
     public int getMinimumBet(){
         return currentMinimumBet;
     }
 
+    @Override
     public int getPot(){
         return pot;
     }
@@ -137,6 +145,7 @@ public class Game implements IGame {
         return false;
     }
 
+    @Override
     public void raise(int amount, Player player) {
         this.currentMinimumBet += amount;
         player.wallet.sub(currentMinimumBet);;
@@ -144,6 +153,7 @@ public class Game implements IGame {
         endTurn(player);
     }
 
+    @Override
     public void fold(Player player) {
         if (desk.get(turnId).equals(player)) {
             desk.remove(turnId);
@@ -156,42 +166,54 @@ public class Game implements IGame {
         }
     }
 
-    private void win(Player player) {
-        /*
+    @Override
+    public void win(Player player) {
+
         if (player != null) {
+            player.getWallet().add(pot);
         } else {
+            for (Player p :desk) {
+                p.hand.addAll(flop);
+            }
         }
-        */
+
+        pot = 0;
+
     }
 
+    @Override
     public void dealCard(Player player) {
         Card card = deck.dealCard();
         player.hand.add(card);
     }
 
+    @Override
     public void bet(int amount, Player player) {
         call(amount,player);
     }
 
+    @Override
     public void call(int amount, Player player) {
         if (desk.get(turnId).equals(player)) {
             if(amount >= currentMinimumBet) {
                 playerDesk.set(turnId, amount);
-                player.wallet.setAmountOfMoney(amount);
+                player.wallet.sub(amount);
                 currentMinimumBet = amount;
                 endTurn(player);
             }
         }
     }
 
+    @Override
     public void check(Player player) {
         if (desk.get(turnId).equals(player)) {
             playerDesk.set(turnId, currentMinimumBet);
-            player.wallet.setAmountOfMoney(currentMinimumBet);
+            player.wallet.sub(currentMinimumBet);
             endTurn(player);
         }
     }
 
+    @Override
     public void leaveGame(Player player, int userID) {
         desk.remove(player);
         if(desk.size() == 1){
@@ -202,19 +224,27 @@ public class Game implements IGame {
         players.remove(player);
     }
 
+    @Override
     public void allIn(Player player) {
         call(player.wallet.getAmountOfMoney(),player);
     }
 
+    @Override
     public void terminateGame() {
     }
 
+    @Override
     public void startGame() {
         locked = true;
-
+        playerDesk = new ArrayList<Integer>();
+        for (Player p:players) {
+            desk.add(p);
+            playerDesk.add(0);
+        }
     }
 
-    private void endTurn(Player player) {
+    @Override
+    public void endTurn(Player player) {
         if (desk.get(turnId).equals(player)) {
             this.turnId = this.turnId + 1;
             if (this.turnId == desk.size())
@@ -222,7 +252,8 @@ public class Game implements IGame {
         }
     }
 
-    private void endRound() {
+    @Override
+    public void endRound() {
         if (up) {
             this.up = false;
             this.turnId = 0;
@@ -256,6 +287,7 @@ public class Game implements IGame {
         }
     }
 
+    @Override
     public ArrayList<String> getAllTurnsOfPlayer(Player p, ArrayList<String> allTurns)
     {
         for (String s: allTurns) {
@@ -269,6 +301,7 @@ public class Game implements IGame {
 
     }
 
+    @Override
     public Hashtable<String ,ArrayList<String>> getAllTurnsByAllPlayers()
     {
         Hashtable<String ,ArrayList<String>> ans = new Hashtable<>();
@@ -298,6 +331,16 @@ public class Game implements IGame {
     @Override
     public int getBuyIn() {
         return 0;
+    }
+
+    @Override
+    public Player findPlayer(User usr)
+    {
+        for (Player p:players) {
+            if(p.getName().equals(usr.getUsername()))
+                return p;
+        }
+        return null;
     }
 
 }

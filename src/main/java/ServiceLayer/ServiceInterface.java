@@ -14,8 +14,8 @@ public interface ServiceInterface {
     String viewReplay(int gamename, String username);
     String saveFavoriteTurn(int gamename, String username, String turn);
     String findActiveGamesByPotSize(int potSize, String username);
-    String setDefaultLeague(int league, HighestRankingUser u);
-    String setCriteria(int criteria, HighestRankingUser u);
-    String moveToLeague(String username, HighestRankingUser u, int league);
+    String setDefaultLeague(int league, User u);
+    String setCriteria(int criteria, User u);
+    String moveToLeague(String username, User u, int league);
     String findSpectatableGames(String username);
 }

@@ -9,10 +9,20 @@ import java.util.Hashtable;
  * Created by tamir on 16/04/2017.
  */
 public interface IGame {
+    int getTurn();
+
     void setMinimumBet(int bet);
     int getMinimumBet();
 
     void setMinimumPlayers(int num);
+
+    void check(Player player);
+
+    void leaveGame(Player player, int userID);
+
+    void allIn(Player player);
+
+
 
     void setMaximumPlayers(int num);
 
@@ -42,20 +52,38 @@ public interface IGame {
 
     int getPlayersNum();
 
+    void terminateGame();
+
     void startGame();
 
+
+    boolean inMax();
 
     String getType();
 
     Hashtable<String ,ArrayList<String>> getAllTurnsByAllPlayers();
 
+    void endTurn(Player player);
+
+    void endRound();
+
     ArrayList<String> getAllTurnsOfPlayer(Player p, ArrayList<String> allTurns);
 
     void spectateGame(User user);
+
+    void raise(int amount, Player player);
+
+    void fold(Player player);
+
+    void win(Player player);
+
+    void dealCard(Player player);
 
     void bet(int amount, Player player);
 
     void call(int amount, Player player);
 
     boolean isLocked();
+
+    Player findPlayer(User usr);
 }
