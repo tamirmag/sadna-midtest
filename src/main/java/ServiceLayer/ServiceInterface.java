@@ -1,6 +1,6 @@
 package ServiceLayer;
 
-import
+import Users.*;
 
 public interface ServiceInterface {
     String register(String name, String password, String email, int wallet);

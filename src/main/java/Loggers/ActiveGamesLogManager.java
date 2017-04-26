@@ -15,7 +15,7 @@ import static java.lang.Thread.sleep;
 
 public class ActiveGamesLogManager {
     private static ActiveGamesLogManager instance = null;
-    ArrayList<GameLogger> ActiveGames = new ArrayList<>();
+    ArrayList<GameLogger> ActiveGames = new ArrayList<GameLogger>();
     private final String relPathToLogs = "GameLogs";
 
     public static ActiveGamesLogManager getInstance() {
