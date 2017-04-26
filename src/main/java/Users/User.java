@@ -1,4 +1,5 @@
 package Users;
+
 import Games.Player;
 
 import java.util.ArrayList;
@@ -8,11 +9,14 @@ public class User {
     private String password;
     private String email;
     private int league;
-    private Wallet wallet ;
-    private ArrayList<Player> existingPlayers = new ArrayList<>();
-    private ArrayList<String> favoriteTurns= new ArrayList<>();
+    private Wallet wallet;
 
-    public User(String username, String password,int league,String email,Wallet wallet) {
+
+    private boolean isHighestRanking;
+    private ArrayList<Player> existingPlayers = new ArrayList<>();
+    private ArrayList<String> favoriteTurns = new ArrayList<>();
+
+    public User(String username, String password, int league, String email, Wallet wallet) {
         this.username = username;
         this.password = password;
         this.league = league;
@@ -57,8 +61,7 @@ public class User {
         this.league = league;
     }
 
-    public void getCharToPrint(char c)
-    {
+    public void getCharToPrint(char c) {
         System.out.print(c);
     }
 
@@ -86,9 +89,12 @@ public class User {
         this.wallet = wallet;
     }
 
+    public boolean isHighestRanking() {return isHighestRanking;}
+
+    public void setHighestRanking(boolean highestRanking) {isHighestRanking = highestRanking;}
+
     @Override
-    public boolean equals(Object other)
-    {
-        return username.equals(((User)other).username) && password.equals(((User)other).password);
+    public boolean equals(Object other) {
+        return username.equals(((User) other).username) && password.equals(((User) other).password);
     }
 }
