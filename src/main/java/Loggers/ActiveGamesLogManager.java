@@ -5,10 +5,8 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-import Users.*;
+
 import Users.User;
 
 import static java.lang.Thread.sleep;
@@ -48,24 +46,9 @@ public class ActiveGamesLogManager {
         return ans;
     }
 
-    public void spectateGame(int gameNumber,User user) {
-      /*  Scanner scanner = new Scanner(System.in);
-        System.out.println("please insert number of game:");
-        String s = scanner.next();
-        while (!isInteger(s)) {
-            System.out.println("your input is not representing a game number.please try again.");
-            System.out.println("please insert number of game:");
-            s = scanner.next();
-        }
-        int game = Integer.parseInt(s);
-        while (!isActiveGameExists(game)) {
-            System.out.println("there is no finished game with this number. try again:");
-            System.out.println("please insert number of game:");
-            s = scanner.next();
-            if (!isInteger(s)) continue;
-            else game = Integer.parseInt(s);
-        }*/
-        String filename = filterActiveGames(isActiveGameExistsfilter(gameNumber)).get(0).getFilename();
+    public void spectateGame(int gameNumber, User user) {
+
+        String filename = getFileNameByGameNum(gameNumber);
         boolean running = true;
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(filename))) {
             while (running) {
@@ -98,49 +81,47 @@ public class ActiveGamesLogManager {
     }
 
     public boolean isActiveGameExists(int num) {
-        return !filterActiveGames(isActiveGameExistsfilter(num)).isEmpty();
+        //return !filterActiveGames(isActiveGameExistsfilter(num)).isEmpty();
+        for (GameLogger g : ActiveGames) {
+            if (g.getFilename().equals("Game" + num + ".txt")) return true;
+        }
+        return false;
+    }
+
+    public String getFileNameByGameNum(int num) {
+        for (GameLogger g : ActiveGames) {
+            if (g.getFilename().equals("Game" + num + ".txt")) return g.getFilename();
+        }
+        return "";
     }
 
 
-    private Predicate<GameLogger> isActiveGameExistsfilter(int num) {
-        return p -> p.getFilename().equals("Game" + num + ".txt");
-    }
-
-    public void AddGameLogger(int g)
-    {
+    public void AddGameLogger(int g) {
         GameLogger g1 = new GameLogger(g);
         ActiveGames.add(g1);
 
     }
 
-    public void WriteToGameLogger(int gameNum,String message)
-    {
+    public void WriteToGameLogger(int gameNum, String message) {
         GameLogger g = getGameLogger(gameNum);
-        if(g!=null)
-        {
+        if (g != null) {
             g.writeToFile(message);
         }
     }
 
 
-    private GameLogger getGameLogger(int ganeNum)
-    {
-        for(GameLogger logger : ActiveGames)
-        {
-            if(logger.getGameNumber() == ganeNum) return logger;
+    private GameLogger getGameLogger(int ganeNum) {
+        for (GameLogger logger : ActiveGames) {
+            if (logger.getGameNumber() == ganeNum) return logger;
         }
         return null;
     }
 
-    public void RemoveGameLogger(int gameNum)
-    {
-        for(GameLogger logger : ActiveGames)
-        {
-            if(logger.getGameNumber() == gameNum) ActiveGames.remove(logger);
+    public void RemoveGameLogger(int gameNum) {
+        for (GameLogger logger : ActiveGames) {
+            if (logger.getGameNumber() == gameNum) ActiveGames.remove(logger);
         }
     }
 
-    private ArrayList<GameLogger> filterActiveGames(Predicate<GameLogger> predicate) {
-        return new ArrayList<>(ActiveGames.stream().filter(predicate).collect(Collectors.toList()));
-    }
+
 }

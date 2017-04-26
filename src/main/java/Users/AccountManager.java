@@ -1,13 +1,9 @@
 package Users;
 
 import Loggers.ActionLogger;
-//import java.io.*;
-//import java.lang.reflect.Type;
 import java.util.ArrayList;
-//import java.util.Arrays;
 import java.util.Hashtable;
-//import java.util.function.Predicate;
-//import java.util.stream.Collectors;
+
 
 
 public class AccountManager {
@@ -269,17 +265,7 @@ public class AccountManager {
         return false;
     }
 
-  /*  private Predicate<User> usernameFilter(String username) {
-        return p -> p.getUsername().equals(username);
-    }
 
-    private Predicate<User> passwordFitsToUsername(String username, String password) {
-        return p -> p.getUsername().equals(username) && p.getPassword().equals(password);
-    }
-
-    public ArrayList<User> filterUsers(Predicate<User> predicate) {
-        return new ArrayList<User>(users.stream().filter(predicate).collect(Collectors.<User>toList()));
-    }*/
 
     public void clearUsers() {
         users.clear();

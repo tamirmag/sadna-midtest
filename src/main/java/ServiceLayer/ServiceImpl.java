@@ -1,7 +1,5 @@
 package ServiceLayer;
 
-
-import Games.ActiveGamesManager;
 import Games.IGame;
 import Games.Preferences;
 import Loggers.ActiveGamesLogManager;
