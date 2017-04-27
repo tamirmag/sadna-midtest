@@ -1,6 +1,7 @@
 package Games;
 
 
+import Users.NoMutchMany;
 import Users.User;
 
 public class BuyInPolicy extends Policy{
@@ -18,8 +19,7 @@ public class BuyInPolicy extends Policy{
         return cost;
     }
 
-    public boolean join(Player player)
-    {
+    public boolean join(Player player) throws NoMutchMany {
         if(this.policy.isLocked())
             return false;
         player.wallet.sub(cost);

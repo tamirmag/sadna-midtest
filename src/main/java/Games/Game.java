@@ -148,7 +148,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void raise(int amount, Player player) {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh {
         this.currentMinimumBet += amount;
         player.wallet.sub(currentMinimumBet);;
         playerDesk.set(turnId, this.currentMinimumBet);
