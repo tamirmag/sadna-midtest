@@ -1,5 +1,6 @@
 package Games;
 
+import Users.NoMutchMany;
 import Users.User;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public interface IGame {
 
     boolean isPlayerInGame(String name);
 
-    boolean join(Player player);
+    boolean join(Player player) throws NoMutchMany;
 
     int getPot();
 
@@ -71,7 +72,7 @@ public interface IGame {
 
     void spectateGame(User user);
 
-    void raise(int amount, Player player);
+    void raise(int amount, Player player) throws NotAllowedNumHigh;
 
     void fold(Player player);
 

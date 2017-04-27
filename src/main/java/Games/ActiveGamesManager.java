@@ -3,11 +3,12 @@ package Games;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+
+import Users.NoMutchMany;
 import Users.User;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 
-public class ActiveGamesManager
-{
+public class ActiveGamesManager implements IActiveGamesManager {
     private static ActiveGamesManager instance = null;
     ArrayList<IGame> games = new ArrayList();
     int index = 0;
@@ -24,6 +25,8 @@ public class ActiveGamesManager
         }
         return instance;
     }
+
+    @Override
     public void publishMessage(String msg, int gameNumber, Player player) {
         for (IGame game : games) {
             if (game.getId() == gameNumber) {
@@ -32,6 +35,7 @@ public class ActiveGamesManager
         }
     }
 
+    @Override
     public int createGame(User user, String type, Preferences pref) {
         ArrayList<Player> players = new ArrayList<Player>();
         Player p = new Player(user.getUsername(), user.getWallet());
@@ -89,13 +93,14 @@ public class ActiveGamesManager
         return myGame;
     }
 
+    @Override
     public void startGame(int id){
         IGame myGame = find(id);
         myGame.startGame();
     }
 
-    public void raise(int id, int amount, User usr)
-    {
+    @Override
+    public void raise(int id, int amount, User usr) throws NotAllowedNumHigh {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.raise(amount,p);
@@ -106,48 +111,39 @@ public class ActiveGamesManager
         return myGame.getMinimumBet();
     }
 
+    @Override
     public void fold(int id, User usr){
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.fold(p);
     }
 
-    public boolean isPlayerInGame(int id, String name){
-        IGame myGame = find(id);
-        return myGame.isPlayerInGame(name);
-    }
 
-    public void allIn(int id,User usr){
+    @Override
+    public void allIn(int id, User usr){
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.allIn(p);
     }
 
-    public int getPlayersNum(int id)
-    {
-        IGame myGame = find(id);
-        return myGame.getPlayersNum();
-    }
 
-    public void check(int id,User usr){
+    @Override
+    public void check(int id, User usr){
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.check(p);
     }
 
-    public void bet(int id,int amount, User usr){
+    @Override
+    public void bet(int id, int amount, User usr){
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.bet(amount, p);
     }
 
-    public int getTurn(int id){
-        IGame myGame = find(id);
-        return myGame.getTurn();
-    }
 
-
-    public void JoinGame(int id, User user) {
+    @Override
+    public void JoinGame(int id, User user) throws NoMutchMany {
         IGame myGame=null;
         for (IGame game:games ) {
             if(game.getId() == id)
@@ -157,10 +153,8 @@ public class ActiveGamesManager
         myGame.join(p);
     }
 
-    public void spectateGame(IGame game, User user) {
-        game.spectateGame(user);
-    }
 
+    @Override
     public List<IGame> findAllActiveGames(User user) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
@@ -170,6 +164,7 @@ public class ActiveGamesManager
         return ourGames;
     }
 
+    @Override
     public List<IGame> findActiveGamesByPlayer(String name) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
@@ -179,6 +174,7 @@ public class ActiveGamesManager
         return ourGames;
     }
 
+    @Override
     public ArrayList<IGame> findActiveGamesByPotSize(int potSize) {
 
         ArrayList<IGame> ourGames = new ArrayList();
@@ -190,6 +186,7 @@ public class ActiveGamesManager
     }
 
 
+    @Override
     public List<IGame> findSpectatableGames(User user) {
 
         ArrayList<IGame> ourGames = new ArrayList();
@@ -200,8 +197,8 @@ public class ActiveGamesManager
         return ourGames;
     }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    @Override
     public ArrayList<IGame> findActiveGamesByPlayersMinimumPolicy(int minimal) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
@@ -211,6 +208,7 @@ public class ActiveGamesManager
         return ourGames;
     }
 
+    @Override
     public ArrayList<IGame> findActiveGamesByPlayersMaximumPolicy(int maximal) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
@@ -220,6 +218,7 @@ public class ActiveGamesManager
         return ourGames;
     }
 
+    @Override
     public ArrayList<IGame> findActiveGamesByMinimumBetPolicy(int minimumBet) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
@@ -229,6 +228,7 @@ public class ActiveGamesManager
         return ourGames;
     }
 
+    @Override
     public ArrayList<IGame> findActiveGamesByChipPolicy(int numOfChips) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
@@ -238,6 +238,7 @@ public class ActiveGamesManager
         return ourGames;
     }
 
+    @Override
     public ArrayList<IGame> findActiveGamesByBuyInPolicy(int costOfJoin) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
@@ -247,6 +248,7 @@ public class ActiveGamesManager
         return ourGames;
     }
 
+    @Override
     public ArrayList<IGame> findActiveGamesByGameTypePolicy(String gameTypePolicy) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
@@ -257,34 +259,7 @@ public class ActiveGamesManager
     }
 
 
-    ///////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    public void setMinimumBet(int id,int bet) {
-        IGame myGame = find(id);
-        myGame.setMinimumBet(bet);
-    }
-
-
-
-
-    public void setMinimumPlayers(int id, int num) {
-        IGame myGame = find(id);
-        myGame.setMinimumPlayers(num);
-    }
-
-
-
-
+    @Override
     public void leaveGame(int id, User usr, int userID) {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
@@ -292,47 +267,8 @@ public class ActiveGamesManager
     }
 
 
-    public void setMaximumPlayers(int id, int num) {
-        IGame myGame = find(id);
-        myGame.setMaximumPlayers(num);
-    }
 
-    public void setChipNum(int id, int num) {
-        IGame myGame = find(id);
-        myGame.setChipNum(num);
-    }
-
-
-    public int getMaxPlayers(int id) {
-        IGame myGame = find(id);
-        return myGame.getMaxPlayers();
-    }
-
-
-    public int getMinPlayers(int id) {
-        IGame myGame = find(id);
-        return myGame.getMinPlayers();
-    }
-
-
-    public int getChips(int id) {
-        IGame myGame = find(id);
-        return myGame.getChips();
-    }
-
-
-    public int getBuyIn(int id) {
-        IGame myGame = find(id);
-        return myGame.getBuyIn();
-    }
-
-
-    public int getId(int id) {
-        IGame myGame = find(id);
-        return myGame.getId();
-    }
-
-
+    @Override
     public void publishMessage(int id, String msg, Player player) {
         IGame myGame = find(id);
         myGame.publishMessage(msg, player);
@@ -341,60 +277,12 @@ public class ActiveGamesManager
 
 
 
-    public int getPot(int id) {
-        IGame myGame = find(id);
-        return myGame.getPot();
-    }
-
-
-    public boolean spectaAble(int id) {
-        IGame myGame = find(id);
-        return myGame.spectaAble();
-    }
-
-
-
+    @Override
     public void terminateGame(int id) {
         IGame myGame = find(id);
         myGame.terminateGame();
     }
 
-
-
-    public boolean inMax(int id) {
-        IGame myGame = find(id);
-        return myGame.inMax();
-    }
-
-
-    public String getType(int id) {
-        IGame myGame = find(id);
-        return myGame.getType();
-    }
-
-
-    public Hashtable<String, ArrayList<String>> getAllTurnsByAllPlayers(int id) {
-        IGame myGame = find(id);
-        return myGame.getAllTurnsByAllPlayers();
-    }
-
-
-    public void endTurn(int id, Player player) {
-        IGame myGame = find(id);
-        myGame.endTurn(player);
-    }
-
-
-    public void endRound(int id) {
-        IGame myGame = find(id);
-        myGame.endRound();
-    }
-
-
-    public ArrayList<String> getAllTurnsOfPlayer(int id, Player p, ArrayList<String> allTurns) {
-        IGame myGame = find(id);
-        return myGame.getAllTurnsOfPlayer(p, allTurns);
-    }
 
 
     public void spectateGame(int id, User user) {
@@ -405,39 +293,12 @@ public class ActiveGamesManager
 
 
 
-    public void win(int id,User user) {
-        IGame myGame = find(id);
-        Player p = myGame.findPlayer(user);
-        myGame.win(p);
-    }
-
-
-    public void dealCard(int id, User usr) {
-        IGame myGame = find(id);
-        Player p = myGame.findPlayer(usr);
-        myGame.dealCard(p);
-    }
-
-
-
+    @Override
     public void call(int id, int amount, User usr) {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.call(amount,p);
     }
-
-
-    public boolean isLocked(int id) {
-        IGame myGame = find(id);
-        return myGame.isLocked();
-    }
-
-
-    public Player findPlayer(int id, User usr) {
-        IGame myGame = find(id);
-        return myGame.findPlayer(usr);
-    }
-
 
 
 }

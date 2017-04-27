@@ -14,8 +14,10 @@ public class PotLimitHoldem extends Game{
     }
 
     @Override
-    public void raise(int amount, Player player) {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh {
         if(amount<= super.getPot())
             super.raise(amount, player);
+        else
+            throw new NotAllowedNumHigh(super.getPot());
     }
 }
