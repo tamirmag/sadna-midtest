@@ -9,7 +9,7 @@ public interface IAccountManager {
 
     boolean isUserExists(String username);
 
-    User getUser(String username);
+    User getLoggedInUser(String username) throws UserNotExists, UserNotLoggedIn;
 
     UserManager register(String username, String password, String email, int wallet)
             throws UserAlreadyExists, PasswordNotValid, EmailNotValid, NegativeValue, UsernameNotValid;
@@ -17,6 +17,8 @@ public interface IAccountManager {
     boolean isValidEmail(String email);
 
     void logout(User u) throws AlreadyLoggedOut, UserNotExists;
+
+    void logout(String username) throws AlreadyLoggedOut, UserNotExists;
 
     UserManager login(String username, String password)
                     throws UsernameNotValid, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists;

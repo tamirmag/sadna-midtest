@@ -10,8 +10,6 @@ public class User {
     private String email;
     private int league;
     private Wallet wallet;
-
-
     private boolean isHighestRanking;
     private ArrayList<Player> existingPlayers = new ArrayList<>();
     private ArrayList<String> favoriteTurns = new ArrayList<>();

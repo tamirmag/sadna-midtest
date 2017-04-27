@@ -43,7 +43,15 @@ public class AccountManager implements IAccountManager {
     }
 
     @Override
-    public User getUser(String username) {
+    public User getLoggedInUser(String username) throws UserNotExists, UserNotLoggedIn {
+        if(!isUserExists(username)) throw new UserNotExists(username);
+        else if(!isUserLoggedIn(username)) throw new UserNotLoggedIn(username);
+        else return getUser(username);
+
+    }
+
+
+    private User getUser(String username) {
 
         for (User u : users) {
             if (u.getUsername().equals(username)) return u;
@@ -97,6 +105,18 @@ public class AccountManager implements IAccountManager {
             System.out.println("you have successfully logged out.");
         }
 
+    }
+
+    @Override
+    public void logout(String username) throws UserNotExists, AlreadyLoggedOut {
+        if (username == null) throw new UserNotExists("null");
+        else if(!isUserExists(username)) throw new UserNotExists(username);
+        else if(!isUserLoggedIn(username))throw new AlreadyLoggedOut(username);
+        else {
+            removeFromLoggedIn(username);
+            maximalRank = getMaximalRank();
+            ActionLogger.getInstance().writeToFile(username + " successfully logged out.");
+        }
     }
 
     @Override
@@ -248,6 +268,27 @@ public class AccountManager implements IAccountManager {
             }
         }
         return false;
+    }
+
+    private boolean isUserLoggedIn(String username)
+    {
+        for(User u : loggedInUsers)
+        {
+            if(u.getUsername().equals(username)) return true;
+        }
+        return false;
+    }
+
+    private void removeFromLoggedIn(String username)
+    {
+        for(User u : loggedInUsers)
+        {
+            if(u.getUsername().equals(username))
+            {
+                loggedInUsers.remove(u);
+                break;
+            }
+        }
     }
 }
 
