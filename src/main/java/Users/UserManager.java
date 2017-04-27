@@ -197,17 +197,18 @@ public class UserManager implements IUserManager {
 
     @Override
     public void moveUserToLeague(String username, int toLeague)
-            throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists {
+            throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists {
         if(!user.isHighestRanking()) return; //TODO : throw costume exception
         if (toLeague < 0) throw new NegativeValue(toLeague);
-        User u = AccountManager.getInstance().getUser(username);
-        int formerLeague = AccountManager.getInstance().getUser(username).getLeague();
+        AccountManager.getInstance().moveUserToLeague(username,toLeague);
+        //User u = AccountManager.getInstance().getUser(username);
+        /*int formerLeague = AccountManager.getInstance().getUser(username).getLeague();
         if (formerLeague == toLeague) throw new UserAlreadyInLeague(username, toLeague);
         AccountManager.getInstance().removeUserFromLeague(u);
         AccountManager.getInstance().getUser(username).setLeague(toLeague);
         AccountManager.getInstance().addUserToLeague(u);
-        System.out.println("Users " + u.getUsername() + " moved from league " + formerLeague + " to league " + toLeague);
-        ActionLogger.getInstance().writeToFile("Users " + u.getUsername() + " moved from league " + formerLeague + " to league " + toLeague);
+        System.out.println("Users " + u.getUsername() + " moved from league " + formerLeague + " to league " + toLeague);*/
+
     }
 
     @Override

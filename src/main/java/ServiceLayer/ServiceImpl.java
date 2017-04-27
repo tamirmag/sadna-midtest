@@ -8,10 +8,12 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 
-public class ServiceImpl implements ServiceInterface{
-    public String register(String name,String password,String email,int wallet){
+public class ServiceImpl implements ServiceInterface {
+
+    //done
+    public String register(String name, String password, String email, int wallet) {
         try {
-            IAccountManager.getInstance().register(name,password,email,0);
+            IAccountManager.getInstance().register(name, password, email, 0);
         } catch (UserAlreadyExists userAlreadyExists) {
             return "UserTests already exists";
         } catch (PasswordNotValid passwordNotValid) {
@@ -26,10 +28,11 @@ public class ServiceImpl implements ServiceInterface{
         return "Register Succeeded";
     }
 
-    public String login(String name,String password){
+    //done
+    public String login(String name, String password) {
 
         try {
-            IAccountManager.getInstance().login(name,password);
+            IAccountManager.getInstance().login(name, password);
         } catch (UsernameNotValid usernameNotValid) {
             return "username not valid";
         } catch (PasswordNotValid passwordNotValid) {
@@ -44,9 +47,10 @@ public class ServiceImpl implements ServiceInterface{
         return "login succeeded";
     }
 
+    //done
     public String logout(String name) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(name));
-        if(u.getUser() == null) return "user not exists";
+        if (u.getUser() == null) return "user not exists";
         try {
             IAccountManager.getInstance().logout(u.getUser());
         } catch (AlreadyLoggedOut alreadyLoggedOut) {
@@ -57,14 +61,14 @@ public class ServiceImpl implements ServiceInterface{
         return "Logout Succeeded";
     }
 
-
-    public String createGame(String username,String gameType,int BuyInPolicy,int ChipPolicy,
-                             int minimumBet,int minimalAmountOfPlayers,
-                             int maximalAmountOfPlayers,boolean spectatingMode) throws UserNotLoggedIn, UserNotExists {
+    //done
+    public String createGame(String username, String gameType, int BuyInPolicy, int ChipPolicy,
+                             int minimumBet, int minimalAmountOfPlayers,
+                             int maximalAmountOfPlayers, boolean spectatingMode) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         if (u.getUser() == null) return "user not exists";
         Preferences p = new Preferences();
-        if(gameType.equals("")) return "No game type was selected";
+        if (gameType.equals("")) return "No game type was selected";
         if (BuyInPolicy < 0) return "negative value of buy-in policy";
         else {
             p.setBuyInPolicy(BuyInPolicy);
@@ -88,50 +92,56 @@ public class ServiceImpl implements ServiceInterface{
             p.setMaxAmountPolicy(maximalAmountOfPlayers);
         }
         p.setSpectatePolicy(spectatingMode);
-        u.CreateGame(gameType ,p);
+        u.CreateGame(gameType, p);
         return "Game Creation Succeeded";
     }
 
-    public String joinGame(int gamenum,String username) throws UserNotLoggedIn, UserNotExists {
+    //done
+    public String joinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
-        if(u.getUser() == null) return "user not exists";
-        if(gamenum < 0 ) return "negative value of game number";
+        if (u.getUser() == null) return "user not exists";
+        if (gamenum < 0) return "negative value of game number";
         u.JoinGame(gamenum);
         return "Joining Game Succeeded";
         //return "";
     }
 
-    public String spectateGame(int gamenum,String username) throws UserNotLoggedIn, UserNotExists {
+    //done
+    public String spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
-        if(u.getUser() == null) return "user not exists";
-        ActiveGamesLogManager.getInstance().spectateGame(gamenum,u.getUser());
+        if (u.getUser() == null) return "user not exists";
+        ActiveGamesLogManager.getInstance().spectateGame(gamenum, u.getUser());
         return "spectate succeeded";
     }
 
-    public String viewReplay(int gamenum,String username) throws UserNotLoggedIn, UserNotExists {
+    //done
+    public String viewReplay(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
-        if(u.getUser() == null) return "user not exists";
+        if (u.getUser() == null) return "user not exists";
         u.viewReplay(gamenum);
         return "game replay viewed successfully";
     }
 
-    public String saveFavoriteTurn(int gamenum,String username,String turn) throws UserNotLoggedIn, UserNotExists {
+    //done
+    public String saveFavoriteTurn(int gamenum, String username, String turn) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
-        if(u.getUser() == null) return "user not exists";
+        if (u.getUser() == null) return "user not exists";
         u.addFavoriteTurn(turn);
         return "turn was successfully added";
 
     }
 
-    public String findActiveGamesByPotSize(int potSize,String username) throws UserNotLoggedIn, UserNotExists {
+    //done
+    public String findActiveGamesByPotSize(int potSize, String username) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
-        if(u.getUser() == null) return "user not exists";
+        if (u.getUser() == null) return "user not exists";
         ArrayList<IGame> games = u.findActiveGamesByPotSize(potSize);
-        if(games.size() >0) return "games were found";
+        if (games.size() > 0) return "games were found";
         else return "no games were found";
     }
 
-    public String setDefaultLeague(int league ,User u){
+    //done
+    public String setDefaultLeague(int league, User u) {
         try {
             IUserManager u1 = new UserManager(u);
             u1.setDefaultLeague(league);
@@ -141,24 +151,23 @@ public class ServiceImpl implements ServiceInterface{
         return "default league was changed";
     }
 
-    public String setCriteria(int criteria, User u){
-        try
-        {
+    //done
+    public String setCriteria(int criteria, User u) {
+        try {
             IUserManager u1 = new UserManager(u);
             u1.setCriteria();
-        }
-        catch (NotImplementedException ex)
-        {
+        } catch (NotImplementedException ex) {
             return "criteria was set";
         }
         return "criteria was set";
     }
 
-    public String moveToLeague(String username , User hu ,int league){
+    //done
+    public String moveToLeague(String username, User hu, int league) {
 
         try {
             IUserManager u1 = new UserManager(hu);
-            u1.moveUserToLeague(username ,league);
+            u1.moveUserToLeague(username, league);
         } catch (UserAlreadyInLeague userAlreadyInLeague) {
             return "user already in league";
         } catch (NegativeValue negativeValue) {
@@ -167,13 +176,16 @@ public class ServiceImpl implements ServiceInterface{
             return "user not in league";
         } catch (LeagueNotExists leagueNotExists) {
             return "league not exists";
+        } catch (UserNotExists userNotExists) {
+            userNotExists.printStackTrace();
         }
         return "user moved successfully";
     }
 
+    //done
     public String findSpectatableGames(String username) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
-        if(u.getUser() == null) return "user not exists";
+        if (u.getUser() == null) return "user not exists";
         ArrayList<IGame> games = u.findActiveGamesBySpectatingPolicy(true);
         return "found some games to spectate";
     }

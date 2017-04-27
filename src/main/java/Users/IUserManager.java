@@ -46,7 +46,7 @@ public interface IUserManager {
     void JoinGame(int gameNumber);
 
     void moveUserToLeague(String username, int toLeague)
-                    throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists;
+            throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists;
 
     void setCriteria() throws NotImplementedException;
 

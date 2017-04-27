@@ -180,7 +180,7 @@ public class AccountManager implements IAccountManager {
         loggedInUsers.get(loggedInUsers.indexOf(u)).setPassword(password);
     }
 
-    @Override
+  /*  @Override
     public void addUserToLeague(User u) throws UserAlreadyInLeague {
         int league = u.getLeague();
         if (leagues.get(league) != null && leagues.get(league).contains(u))
@@ -194,12 +194,33 @@ public class AccountManager implements IAccountManager {
 
     @Override
     public void removeUserFromLeague(User u) throws UserNotInLeague, LeagueNotExists {
-
         int league = u.getLeague();
         if (!leagues.containsKey(league) || leagues.get(league) == null) throw new LeagueNotExists(league);
         else if (!leagues.get(league).contains(u)) throw new UserNotInLeague(u.getUsername(), league);
         else leagues.get(league).remove(u);
         ActionLogger.getInstance().writeToFile(u.getUsername() + " was removed from league " + league);
+    }*/
+    @Override
+    public void moveUserToLeague(String username, int newLeague) throws UserNotInLeague, LeagueNotExists, UserAlreadyInLeague, UserNotExists {
+        if(!isUserExists(username)) throw new UserNotExists(username);
+        User u = getUser(username);
+        int league = u.getLeague();
+        if (newLeague == league) throw new UserAlreadyInLeague(username, newLeague);
+        if (!leagues.containsKey(league) || leagues.get(league) == null) throw new LeagueNotExists(league);
+        else if (!leagues.get(league).contains(u)) throw new UserNotInLeague(u.getUsername(), league);
+        else leagues.get(league).remove(u);
+
+        if (leagues.get(newLeague) != null && leagues.get(newLeague).contains(u))
+            throw new UserAlreadyInLeague(username, newLeague);
+        else if (!leagues.containsKey(newLeague) || leagues.get(newLeague) == null)
+        {
+            leagues.put(newLeague, new ArrayList<User>());
+            leagues.get(newLeague).add(u);
+        }
+        else {leagues.get(newLeague).add(u);}
+        u.setLeague(newLeague);
+        ActionLogger.getInstance().writeToFile(username + " was moved to league " + newLeague);
+
     }
 
     @Override
