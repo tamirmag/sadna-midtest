@@ -17,7 +17,7 @@ public interface IUserManager {
 
     void addFavoriteTurn(String turn);
 
-    void viewReplay(int gameNumber);
+    ArrayList<String> viewReplay(int gameNumber);
 
     void spectateGame(int gameNumber);
 

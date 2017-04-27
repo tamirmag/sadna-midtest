@@ -91,12 +91,13 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public void viewReplay(int gameNumber) {
+    public ArrayList<String> viewReplay(int gameNumber) {
         ArrayList<String> replay = FinishedGamesManager.getInstance().viewReplay(gameNumber);
-        for (String s : replay)
+        return replay;
+        /*for (String s : replay)
             for (char c : s.toCharArray()) {
                 user.getCharToPrint(c);
-            }
+            }*/
     }
 
     @Override

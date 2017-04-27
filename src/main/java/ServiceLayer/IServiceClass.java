@@ -23,7 +23,7 @@ public interface IServiceClass {
 
     void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists;
 
-    void viewReplay(int gamenum, String username) throws UserNotLoggedIn, UserNotExists;
+    ArrayList<String> viewReplay(int gamenum, String username) throws UserNotLoggedIn, UserNotExists;
 
     void saveFavoriteTurn(int gamenum, String username, String turn) throws UserNotLoggedIn, UserNotExists;
 

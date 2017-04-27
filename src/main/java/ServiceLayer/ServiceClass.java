@@ -4,6 +4,7 @@ package ServiceLayer;
 import Games.IGame;
 import Games.Preferences;
 import Users.*;
+
 import java.util.ArrayList;
 
 public class ServiceClass implements IServiceClass {
@@ -66,9 +67,9 @@ public class ServiceClass implements IServiceClass {
     }
 
     @Override
-    public void viewReplay(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
+    public ArrayList<String> viewReplay(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
-        u.viewReplay(gamenum);
+        return u.viewReplay(gamenum);
     }
 
     @Override
@@ -133,7 +134,6 @@ public class ServiceClass implements IServiceClass {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.fold(gameID);
     }
-
 
 
 }
