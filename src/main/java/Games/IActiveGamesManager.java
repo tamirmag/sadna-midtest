@@ -1,6 +1,6 @@
 package Games;
 
-import Users.NoMutchMany;
+import Users.NoMuchMany;
 import Users.User;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public interface IActiveGamesManager {
 
     void bet(int id, int amount, User usr);
 
-    void JoinGame(int id, User user) throws NoMutchMany;
+    void JoinGame(int id, User user) throws NoMuchMany;
 
     void spectateGame(int id, User user);
 

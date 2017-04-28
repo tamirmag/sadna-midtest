@@ -23,9 +23,9 @@ public class Wallet implements IWallet {
     }
 
     @Override
-    public void sub(int amount) throws NoMutchMany {
+    public void sub(int amount) throws NoMuchMany {
         if(amount > getAmountOfMoney())
-            throw new NoMutchMany(getAmountOfMoney(), amount);
+            throw new NoMuchMany(getAmountOfMoney(), amount);
         this.amountOfMoney -= amount;
     }
 }

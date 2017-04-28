@@ -1,7 +1,6 @@
 package Games;
+import Users.NoMuchMany;
 import Users.Wallet;
-import Games.Card;
-import Games.DeckManager;
 import Loggers.GameLogger;
 import Users.User;
 
@@ -72,12 +71,11 @@ public class Game implements IGame {
     }
 
     @Override
-    public boolean join(Player player)
-    {
+    public void join(Player player) throws CantJoin {
         if(locked)
-            return false;
+            throw new CantJoin(getId(), player.getName());
         players.add(player);
-        return true;
+
     }
 
     @Override
@@ -148,7 +146,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMany {
         this.currentMinimumBet += amount;
         player.wallet.sub(currentMinimumBet);;
         playerDesk.set(turnId, this.currentMinimumBet);
@@ -190,12 +188,12 @@ public class Game implements IGame {
     }
 
     @Override
-    public void bet(int amount, Player player) {
+    public void bet(int amount, Player player) throws NoMuchMany {
         call(amount,player);
     }
 
     @Override
-    public void call(int amount, Player player) {
+    public void call(int amount, Player player) throws NoMuchMany {
         if (desk.get(turnId).equals(player)) {
             if(amount >= currentMinimumBet) {
                 playerDesk.set(turnId, amount);
@@ -207,7 +205,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void check(Player player) {
+    public void check(Player player) throws NoMuchMany {
         if (desk.get(turnId).equals(player)) {
             playerDesk.set(turnId, currentMinimumBet);
             player.wallet.sub(currentMinimumBet);
@@ -227,7 +225,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void allIn(Player player) {
+    public void allIn(Player player) throws NoMuchMany {
         call(player.wallet.getAmountOfMoney(),player);
     }
 

@@ -1,6 +1,6 @@
 package Games;
 
-import Users.NoMutchMany;
+import Users.NoMuchMany;
 import Users.User;
 
 import java.util.ArrayList;
@@ -17,11 +17,11 @@ public interface IGame {
 
     void setMinimumPlayers(int num);
 
-    void check(Player player);
+    void check(Player player) throws NoMuchMany;
 
     void leaveGame(Player player, int userID);
 
-    void allIn(Player player);
+    void allIn(Player player) throws NoMuchMany;
 
 
 
@@ -43,7 +43,7 @@ public interface IGame {
 
     boolean isPlayerInGame(String name);
 
-    boolean join(Player player) throws NoMutchMany;
+    void join(Player player) throws NoMuchMany, CantJoin;
 
     int getPot();
 
@@ -72,7 +72,7 @@ public interface IGame {
 
     void spectateGame(User user);
 
-    void raise(int amount, Player player) throws NotAllowedNumHigh;
+    void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMany;
 
     void fold(Player player);
 
@@ -80,9 +80,9 @@ public interface IGame {
 
     void dealCard(Player player);
 
-    void bet(int amount, Player player);
+    void bet(int amount, Player player) throws NoMuchMany;
 
-    void call(int amount, Player player);
+    void call(int amount, Player player) throws NoMuchMany;
 
     boolean isLocked();
 

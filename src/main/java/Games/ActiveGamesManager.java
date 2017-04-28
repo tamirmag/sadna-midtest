@@ -1,12 +1,10 @@
 package Games;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
-import Users.NoMutchMany;
+import Users.NoMuchMany;
 import Users.User;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 
 public class ActiveGamesManager implements IActiveGamesManager {
     private static ActiveGamesManager instance = null;
@@ -143,7 +141,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void JoinGame(int id, User user) throws NoMutchMany {
+    public void JoinGame(int id, User user) throws NoMuchMany {
         IGame myGame=null;
         for (IGame game:games ) {
             if(game.getId() == id)

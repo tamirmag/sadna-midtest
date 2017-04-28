@@ -18,7 +18,7 @@ public class ChipPolicy extends Policy{
     }
 
     @Override
-    public boolean join(Player player) {
+    public void join(Player player) {
         player.wallet = new Wallet(chips);
         return this.policy.join(player);
     }

@@ -10,5 +10,5 @@ public interface IWallet {
 
     void add(int amount);
 
-    void sub(int amount) throws NoMutchMany;
+    void sub(int amount) throws NoMuchMany;
 }

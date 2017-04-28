@@ -15,7 +15,7 @@ public class MaxAmountPolicy extends Policy{
     }
 
 
-    public boolean join(Player player)
+    public void join(Player player)
     {
         if(this.policy.getPlayersNum() >= maxAmount)
             return false;

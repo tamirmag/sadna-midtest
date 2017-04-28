@@ -1,6 +1,6 @@
 package Games;
 
-import Users.NoMutchMany;
+import Users.NoMuchMany;
 import Users.User;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public boolean join(Player player) throws NoMutchMany {
+    public void join(Player player) throws NoMuchMany, CantJoin {
         return policy.join(player);
     }
 
