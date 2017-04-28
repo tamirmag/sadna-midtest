@@ -98,7 +98,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
     }
 
     @Override
-    public void raise(int id, int amount, User usr) throws NotAllowedNumHigh {
+    public void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMany {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.raise(amount,p);
@@ -118,7 +118,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void allIn(int id, User usr){
+    public void allIn(int id, User usr) throws NoMuchMany {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.allIn(p);
@@ -126,14 +126,14 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void check(int id, User usr){
+    public void check(int id, User usr) throws NoMuchMany {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.check(p);
     }
 
     @Override
-    public void bet(int id, int amount, User usr){
+    public void bet(int id, int amount, User usr) throws NoMuchMany {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.bet(amount, p);
@@ -141,7 +141,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void JoinGame(int id, User user) throws NoMuchMany {
+    public void JoinGame(int id, User user) throws NoMuchMany, CantJoin {
         IGame myGame=null;
         for (IGame game:games ) {
             if(game.getId() == id)
@@ -292,7 +292,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void call(int id, int amount, User usr) {
+    public void call(int id, int amount, User usr) throws NoMuchMany {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.call(amount,p);
