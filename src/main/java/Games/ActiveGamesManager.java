@@ -2,23 +2,25 @@ package Games;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import Users.NoMuchMany;
+import Loggers.GameLogger;
+import Loggers.IActiveGamesLogManager;
+import Users.NoMuchMoney;
 import Users.User;
 
 public class ActiveGamesManager implements IActiveGamesManager {
     private static ActiveGamesManager instance = null;
-    ArrayList<IGame> games = new ArrayList();
-    int index = 0;
+    private ArrayList<IGame> games;
+    private AtomicInteger index;
 
-    private ActiveGamesManager()
-    {
-
+    private ActiveGamesManager() {
+        games = new ArrayList();
+        index = new AtomicInteger(0);
     }
 
-    public static ActiveGamesManager getInstance()
-    {
-        if(instance == null) {
+    public static ActiveGamesManager getInstance() {
+        if (instance == null) {
             instance = new ActiveGamesManager();
         }
         return instance;
@@ -41,76 +43,75 @@ public class ActiveGamesManager implements IActiveGamesManager {
         p.name = user.getUsername();
         players.add(p);
         IGame game = null;
-        switch (type)
-        {
+        int i = this.index.incrementAndGet();
+        switch (type) {
             case "NoLimitHoldem":
-                game = new NoLimitHoldem(players, ++index, user.getLeague());
+                game = new NoLimitHoldem(players, i, user.getLeague());
                 break;
 
             case "LimitHoldem":
-                game = new LimitHoldem(players, ++index, user.getLeague());
+                game = new LimitHoldem(players, i, user.getLeague());
                 break;
 
             case "PotLimitHoldem":
-                game = new PotLimitHoldem(players, ++index, user.getLeague());
+                game = new PotLimitHoldem(players, i, user.getLeague());
                 break;
 
             default:
-                game = new Game(players, ++index, "Normal", user.getLeague());
+                game = new Game(players, i, "Normal", user.getLeague());
         }
-
         game = buildByPref(pref, game);
         games.add(game);
-        return  index;
+        return i;
     }
 
     private IGame buildByPref(Preferences pref, IGame game) {
-        if(pref.getBuyInPolicy() > 0)
+        if (pref.getBuyInPolicy() > 0)
             game = new BuyInPolicy(game, pref.getBuyInPolicy());
-        if(pref.getChipPolicy() > 0)
+        if (pref.getChipPolicy() > 0)
             game = new ChipPolicy(game, pref.getChipPolicy());
-        if(pref.getMaxAmountPolicy() > 0)
+        if (pref.getMaxAmountPolicy() > 0)
             game = new MaxAmountPolicy(game, pref.getMaxAmountPolicy());
-        if(pref.getMinAmountPolicy() > 0)
+        if (pref.getMinAmountPolicy() > 0)
             game = new MinAmountPolicy(game, pref.getMinAmountPolicy());
-        if(pref.getMinBetPolicy() > 0)
+        if (pref.getMinBetPolicy() > 0)
             game = new MinBetPolicy(game, pref.getMinBetPolicy());
-        if(pref.isSpectatePolicy())
+        if (pref.isSpectatePolicy())
             game = new SpectatePolicy(game, pref.isSpectatePolicy());
 
 
         return game;
     }
 
-    private IGame find(int id){
-        IGame myGame=null;
-        for (IGame game:games ) {
-            if(game.getId() == id)
+    private IGame find(int id) {
+        IGame myGame = null;
+        for (IGame game : games) {
+            if (game.getId() == id)
                 myGame = game;
         }
         return myGame;
     }
 
     @Override
-    public void startGame(int id){
+    public void startGame(int id) {
         IGame myGame = find(id);
         myGame.startGame();
     }
 
     @Override
-    public void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMany {
+    public void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
-        myGame.raise(amount,p);
+        myGame.raise(amount, p);
     }
 
-    public int getMinimumBet(int id){
+    public int getMinimumBet(int id) {
         IGame myGame = find(id);
         return myGame.getMinimumBet();
     }
 
     @Override
-    public void fold(int id, User usr){
+    public void fold(int id, User usr) {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.fold(p);
@@ -118,7 +119,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void allIn(int id, User usr) throws NoMuchMany {
+    public void allIn(int id, User usr) throws NoMuchMoney {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.allIn(p);
@@ -126,14 +127,14 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void check(int id, User usr) throws NoMuchMany {
+    public void check(int id, User usr) throws NoMuchMoney {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.check(p);
     }
 
     @Override
-    public void bet(int id, int amount, User usr) throws NoMuchMany {
+    public void bet(int id, int amount, User usr) throws NoMuchMoney {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.bet(amount, p);
@@ -141,12 +142,13 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void JoinGame(int id, User user) throws NoMuchMany, CantJoin {
-        IGame myGame=null;
-        for (IGame game:games ) {
-            if(game.getId() == id)
+    public void JoinGame(int id, User user) throws NoMuchMoney, CantJoin {
+        IGame myGame = null;
+        for (IGame game : games) {
+            if (game.getId() == id)
                 myGame = game;
         }
+
         Player p = new Player(user.getUsername(), user.getWallet());
         myGame.join(p);
     }
@@ -265,14 +267,11 @@ public class ActiveGamesManager implements IActiveGamesManager {
     }
 
 
-
     @Override
     public void publishMessage(int id, String msg, Player player) {
         IGame myGame = find(id);
         myGame.publishMessage(msg, player);
     }
-
-
 
 
     @Override
@@ -282,22 +281,31 @@ public class ActiveGamesManager implements IActiveGamesManager {
     }
 
 
-
     public void spectateGame(int id, User user) {
         IGame myGame = find(id);
         myGame.spectateGame(user);
     }
 
 
-
-
     @Override
-    public void call(int id, int amount, User usr) throws NoMuchMany {
+    public void call(int id, int amount, User usr) throws NoMuchMoney {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
-        myGame.call(amount,p);
+        myGame.call(amount, p);
     }
 
+    public void deleteAllActiveGames()
+    {
+        if(games != null)
+        {
+            for(IGame g : games )
+            {
+                int i = g.getId();
+                IActiveGamesLogManager.getInstance().RemoveGameLogger(i);
+            }
+            games.clear();
+        }
+    }
 
 }
 

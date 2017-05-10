@@ -1,7 +1,6 @@
 package Games;
 
-
-import Users.NoMuchMany;
+import Users.NoMuchMoney;
 import Users.User;
 
 public class BuyInPolicy extends Policy{
@@ -19,7 +18,7 @@ public class BuyInPolicy extends Policy{
         return cost;
     }
 
-    public void join(Player player) throws NoMuchMany, CantJoin {
+    public void join(Player player) throws NoMuchMoney, CantJoin {
         player.wallet.sub(cost);
         this.policy.join(player);
     }

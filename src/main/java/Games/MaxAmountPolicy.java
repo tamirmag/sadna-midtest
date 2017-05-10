@@ -1,5 +1,6 @@
 package Games;
 
+import Users.NoMuchMoney;
 import Users.User;
 
 /**
@@ -15,11 +16,9 @@ public class MaxAmountPolicy extends Policy{
     }
 
 
-    public void join(Player player)
-    {
-        if(this.policy.getPlayersNum() >= maxAmount)
-            return false;
-        return this.policy.join(player);
+    public void join(Player player) throws CantJoin, NoMuchMoney {
+        if(this.policy.getPlayersNum() >= maxAmount) throw new CantJoin(this.policy.getId() ,player.getName());
+        this.policy.join(player);
     }
 
     public boolean inMax(){

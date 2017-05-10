@@ -1,6 +1,6 @@
 package Games;
 
-import Users.NoMuchMany;
+import Users.NoMuchMoney;
 import Users.User;
 
 import java.util.ArrayList;
@@ -47,8 +47,8 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void join(Player player) throws NoMuchMany, CantJoin {
-        return policy.join(player);
+    public void join(Player player) throws NoMuchMoney, CantJoin {
+        policy.join(player);
     }
 
     @Override
@@ -83,12 +83,12 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void bet(int amount, Player player) {
+    public void bet(int amount, Player player) throws NoMuchMoney {
         this.policy.bet(amount, player);
     }
 
     @Override
-    public void call(int amount, Player player) {
+    public void call(int amount, Player player) throws NoMuchMoney {
         this.policy.call(amount, player);
     }
 
@@ -128,7 +128,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void allIn(Player player) { this.policy.allIn(player); }
+    public void allIn(Player player) throws NoMuchMoney { this.policy.allIn(player); }
 
     @Override
     public int getTurn() {
@@ -136,7 +136,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void check(Player player) {
+    public void check(Player player) throws NoMuchMoney {
         this.policy.check(player);
     }
 
@@ -166,7 +166,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney {
         this.policy.raise(amount, player);
     }
 

@@ -4,9 +4,6 @@ import Users.User;
 
 import java.util.ArrayList;
 
-/**
- * Created by רועי on 4/26/2017.
- */
 public interface IActiveGamesLogManager {
     static IActiveGamesLogManager getInstance() {
         return ActiveGamesLogManager.getInstance();
@@ -25,4 +22,5 @@ public interface IActiveGamesLogManager {
     void WriteToGameLogger(int gameNum, String message);
 
     void RemoveGameLogger(int gameNum);
+    void RemoveAllGameLoggers();
 }

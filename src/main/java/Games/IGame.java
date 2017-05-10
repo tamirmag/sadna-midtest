@@ -1,6 +1,6 @@
 package Games;
 
-import Users.NoMuchMany;
+import Users.NoMuchMoney;
 import Users.User;
 
 import java.util.ArrayList;
@@ -13,17 +13,16 @@ public interface IGame {
     int getTurn();
 
     void setMinimumBet(int bet);
+
     int getMinimumBet();
 
     void setMinimumPlayers(int num);
 
-    void check(Player player) throws NoMuchMany;
+    void check(Player player) throws NoMuchMoney;
 
     void leaveGame(Player player, int userID);
 
-    void allIn(Player player) throws NoMuchMany;
-
-
+    void allIn(Player player) throws NoMuchMoney;
 
     void setMaximumPlayers(int num);
 
@@ -43,13 +42,11 @@ public interface IGame {
 
     boolean isPlayerInGame(String name);
 
-    void join(Player player) throws NoMuchMany, CantJoin;
+    void join(Player player) throws NoMuchMoney, CantJoin;
 
     int getPot();
 
     boolean spectaAble();
-
-
 
     int getPlayersNum();
 
@@ -57,12 +54,11 @@ public interface IGame {
 
     void startGame();
 
-
     boolean inMax();
 
     String getType();
 
-    Hashtable<String ,ArrayList<String>> getAllTurnsByAllPlayers();
+    Hashtable<String, ArrayList<String>> getAllTurnsByAllPlayers();
 
     void endTurn(Player player);
 
@@ -72,7 +68,7 @@ public interface IGame {
 
     void spectateGame(User user);
 
-    void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMany;
+    void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney;
 
     void fold(Player player);
 
@@ -80,13 +76,14 @@ public interface IGame {
 
     void dealCard(Player player);
 
-    void bet(int amount, Player player) throws NoMuchMany;
+    void bet(int amount, Player player) throws NoMuchMoney;
 
-    void call(int amount, Player player) throws NoMuchMany;
+    void call(int amount, Player player) throws NoMuchMoney;
 
     boolean isLocked();
 
     Player findPlayer(User usr);
 
     boolean canJoin(User user);
+
 }

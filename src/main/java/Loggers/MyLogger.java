@@ -29,12 +29,10 @@ public abstract class MyLogger implements IMyLogger {
         String s = this.filepath + "\\" + this.filename;
         Path inputPath = Paths.get(s);
         fullPath = inputPath.toAbsolutePath();
-
     }
 
     @Override
     public synchronized void writeToFile(String message) {
-
         List<String> lines = Arrays.asList(message);
         try (FileWriter fw = new FileWriter(fullPath.toString(), true);
              BufferedWriter bw = new BufferedWriter(fw);
@@ -50,7 +48,6 @@ public abstract class MyLogger implements IMyLogger {
 
     @Override
     public ArrayList<String> getContentOfFile() {
-
         List<String> lines = new ArrayList<>();
         try {
             lines = Files.readAllLines(fullPath, Charset.defaultCharset());
@@ -80,5 +77,14 @@ public abstract class MyLogger implements IMyLogger {
     @Override
     public Path getFullPath() {
         return fullPath;
+    }
+
+    public void deleteFile()
+    {
+        try {
+            Files.delete(fullPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

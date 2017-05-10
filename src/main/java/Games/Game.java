@@ -1,5 +1,6 @@
 package Games;
-import Users.NoMuchMany;
+
+import Users.NoMuchMoney;
 import Users.Wallet;
 import Loggers.GameLogger;
 import Users.User;
@@ -146,7 +147,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMany {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney {
         this.currentMinimumBet += amount;
         player.wallet.sub(currentMinimumBet);;
         playerDesk.set(turnId, this.currentMinimumBet);
@@ -188,12 +189,12 @@ public class Game implements IGame {
     }
 
     @Override
-    public void bet(int amount, Player player) throws NoMuchMany {
+    public void bet(int amount, Player player) throws NoMuchMoney {
         call(amount,player);
     }
 
     @Override
-    public void call(int amount, Player player) throws NoMuchMany {
+    public void call(int amount, Player player) throws NoMuchMoney {
         if (desk.get(turnId).equals(player)) {
             if(amount >= currentMinimumBet) {
                 playerDesk.set(turnId, amount);
@@ -205,7 +206,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void check(Player player) throws NoMuchMany {
+    public void check(Player player) throws NoMuchMoney {
         if (desk.get(turnId).equals(player)) {
             playerDesk.set(turnId, currentMinimumBet);
             player.wallet.sub(currentMinimumBet);
@@ -225,12 +226,13 @@ public class Game implements IGame {
     }
 
     @Override
-    public void allIn(Player player) throws NoMuchMany {
+    public void allIn(Player player) throws NoMuchMoney {
         call(player.wallet.getAmountOfMoney(),player);
     }
 
     @Override
     public void terminateGame() {
+        logger.writeToFile("game ended");
     }
 
     @Override

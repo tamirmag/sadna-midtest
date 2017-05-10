@@ -1,5 +1,7 @@
 package ServiceLayer;
 
+import Games.CantJoin;
+import Games.NotAllowedNumHigh;
 import Users.*;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public interface IServiceClass {
                    int minimumBet, int minimalAmountOfPlayers,
                    int maximalAmountOfPlayers, boolean spectatingMode) throws UserNotLoggedIn, UserNotExists;
 
-    void joinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists;
+    void joinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin;
 
     void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists;
 
@@ -29,19 +31,28 @@ public interface IServiceClass {
 
     ArrayList<Integer> findActiveGamesByPotSize(int potSize, String username) throws UserNotLoggedIn, UserNotExists;
 
-    void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue;
+    void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;
 
-    void setCriteria(String username, int criteria) throws UserNotLoggedIn, UserNotExists, NegativeValue;
+    void setCriteria(String username, int criteria) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;
 
-    void moveToLeague(String username, String userToMove, int league) throws UserNotLoggedIn, UserNotExists, LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague;
+    void moveToLeague(String username, String userToMove, int league) throws UserNotLoggedIn, UserNotExists, LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking;
 
-    void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists;
+    void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney;
 
-    void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists;
+    void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney;
 
-    void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists;
+    void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney;
 
-    void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists;
+    void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney;
 
     void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists;
+
+    void terminateGame( int gameID) ;
+
+    void clearLoggedInUsers();
+
+    void clearUsers();
+
+    void clearAllFinishedGameLogs();
+
 }

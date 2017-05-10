@@ -1,4 +1,6 @@
 package Games;
+import Users.NoMuchMoney;
+
 import java.util.ArrayList;
 
 /**
@@ -12,7 +14,7 @@ public class LimitHoldem extends Game{
     }
 
     @Override
-    public void raise(int amount, Player player) {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney {
         if(super.getTurn() < 2)
             super.raise(super.getMinimumBet(), player);
         else
@@ -20,7 +22,7 @@ public class LimitHoldem extends Game{
     }
 
     @Override
-    public void bet(int amount, Player player) {
+    public void bet(int amount, Player player) throws NoMuchMoney {
         if(super.getTurn() < 2)
             super.bet(super.getMinimumBet(), player);
         else

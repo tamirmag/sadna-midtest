@@ -138,10 +138,9 @@ public class AccountManager implements IAccountManager {
             loggedInUsers.add(u);
             if (u.getLeague() > maximalRank) {
                 u.setHighestRanking(true);
-                return new UserManager(u);
             }
             ActionLogger.getInstance().writeToFile(u.getUsername() + " successfully logged in.");
-            return new UserManager(getUser(username));
+            return new UserManager(u);
         }
 
     }
@@ -217,10 +216,12 @@ public class AccountManager implements IAccountManager {
             leagues.put(newLeague, new ArrayList<User>());
             leagues.get(newLeague).add(u);
         }
-        else {leagues.get(newLeague).add(u);}
-        u.setLeague(newLeague);
-        ActionLogger.getInstance().writeToFile(username + " was moved to league " + newLeague);
+        else {
+            leagues.get(newLeague).add(u);
+        }
 
+        ActionLogger.getInstance().writeToFile(username + " was moved to league " + newLeague);
+        u.setLeague(newLeague);
     }
 
     @Override

@@ -150,7 +150,6 @@ public class LoginManagerTests {
         AccountManager.getInstance().setDefaultLeague(0);
         ActionLogger.getInstance().clearLog();
 
-
     }
 
 

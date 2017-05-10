@@ -2,30 +2,21 @@ package Acceptance;
 
 import java.util.ArrayList;
 
+import Games.CantJoin;
+import Games.NotAllowedNumHigh;
+import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceUser;
-import Users.AlreadyLoggedIn;
-import Users.AlreadyLoggedOut;
-import Users.EmailNotValid;
-import Users.LeagueNotExists;
-import Users.NegativeValue;
-import Users.PasswordNotValid;
-import Users.UserAlreadyExists;
-import Users.UserAlreadyInLeague;
-import Users.UserNotExists;
-import Users.UserNotInLeague;
-import Users.UserNotLoggedIn;
-import Users.UsernameAndPasswordNotMatch;
-import Users.UsernameNotValid;
+import Users.*;
 
 public class ProxyBridge implements Bridge{
 
-	private Bridge real;
+	private IServiceClass real;
 	
 	public ProxyBridge() {
 		real = null;
 	}
 
-	public void setRealBridge(Bridge implementation) {
+	public void setRealBridge(IServiceClass implementation) {
 		if (real == null)
 			real = implementation;
 	}
@@ -62,7 +53,7 @@ public class ProxyBridge implements Bridge{
 	}
 
 	@Override
-	public void joinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
+	public void joinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, CantJoin, NoMuchMoney {
 		real.joinGame(gamenum, username);
 		
 	}
@@ -90,40 +81,40 @@ public class ProxyBridge implements Bridge{
 
 	@Override
 	public void setDefaultLeague(String username, int defaultLeague)
-			throws UserNotLoggedIn, UserNotExists, NegativeValue {
+			throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
 		real.setDefaultLeague(username, defaultLeague);
 		
 	}
 
 	@Override
-	public void setCriteria(String username, int criteria) throws UserNotLoggedIn, UserNotExists, NegativeValue {
+	public void setCriteria(String username, int criteria) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
 		real.setCriteria(username, criteria);
 	}
 
 	@Override
 	public void moveToLeague(String username, String userToMove, int league) throws UserNotLoggedIn, UserNotExists,
-			LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague {
+			LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
 		real.moveToLeague(username, userToMove, league);
 		
 	}
 
 	@Override
-	public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+	public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
 		real.check(username, gameID);
 	}
 
 	@Override
-	public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists {
+	public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
 		real.bet(username, gameID, amount);
 	}
 
 	@Override
-	public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists {
+	public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney {
 		real.raise(username, gameID, amount);
 	}
 
 	@Override
-	public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+	public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
 		real.allIn(username, gameID);
 	}
 
@@ -131,7 +122,26 @@ public class ProxyBridge implements Bridge{
 	public void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
 		real.fold(username, gameID);
 	}
-	
+
+	@Override
+	public void terminateGame(int gameID) {
+		real.terminateGame(gameID);
+	}
+
+	@Override
+	public void clearLoggedInUsers() {
+		real.clearLoggedInUsers();
+	}
+
+	@Override
+	public void clearUsers() {
+		real.clearUsers();
+	}
+
+	@Override
+	public void clearAllFinishedGameLogs() {
+		real.clearAllFinishedGameLogs();
+	}
 
 
 }

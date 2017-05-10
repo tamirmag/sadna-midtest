@@ -1,8 +1,6 @@
 package Users;
 
-import Games.IGame;
-import Games.Player;
-import Games.Preferences;
+import Games.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ public interface IUserManager {
 
     void spectateGame(int gameNumber);
 
-    void CreateGame(String type, Preferences pref);
+    int CreateGame(String type, Preferences pref);
 
     ArrayList<IGame> findActiveGamesByPlayerName(String playerName);
 
@@ -43,23 +41,24 @@ public interface IUserManager {
 
     User getUser();
 
-    void JoinGame(int gameNumber);
+    void JoinGame(int gameNumber) throws  CantJoin, NoMuchMoney;
 
     void moveUserToLeague(String username, int toLeague)
-            throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists;
+            throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists, NotHighestRanking;
 
-    void setCriteria() throws NotImplementedException;
+    void setCriteria() throws NotImplementedException, NotHighestRanking;
 
-    void setDefaultLeague(int defaultLeague) throws NegativeValue;
+    void setDefaultLeague(int defaultLeague) throws NegativeValue, NotHighestRanking;
 
     //Game actions
-    void check(int gameID);
+    void check(int gameID) throws NoMuchMoney;
 
-    void bet(int gameID, int amount);
+    void bet(int gameID, int amount) throws NoMuchMoney;
 
-    void allIn(int gameID);
+    void allIn(int gameID) throws NoMuchMoney;
 
     void fold(int gameID);
 
-    void raise(int gameID, int amount);
+    void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney;
+
 }

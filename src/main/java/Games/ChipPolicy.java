@@ -1,5 +1,6 @@
 package Games;
 
+import Users.NoMuchMoney;
 import Users.Wallet;
 
 public class ChipPolicy extends Policy{
@@ -18,9 +19,9 @@ public class ChipPolicy extends Policy{
     }
 
     @Override
-    public void join(Player player) {
+    public void join(Player player) throws CantJoin, NoMuchMoney {
         player.wallet = new Wallet(chips);
-        return this.policy.join(player);
+         this.policy.join(player);
     }
 
 }

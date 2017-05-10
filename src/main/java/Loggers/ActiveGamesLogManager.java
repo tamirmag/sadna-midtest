@@ -2,9 +2,11 @@ package Loggers;
 
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 import Users.IAccountManager;
@@ -129,9 +131,31 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
     }
 
     @Override
-    public void RemoveGameLogger(int gameNum) {
+    public void RemoveGameLogger(int gameNum)  {
         for (GameLogger logger : ActiveGames) {
-            if (logger.getGameNumber() == gameNum) ActiveGames.remove(logger);
+            if (logger.getGameNumber() == gameNum)
+            {
+               logger.deleteFile();
+                ActiveGames.remove(logger);
+            }
+        }
+    }
+    @Override
+    public void RemoveAllGameLoggers()  {
+        if(ActiveGames !=null)
+        {
+            Iterator<GameLogger> iter = ActiveGames.iterator();
+            while(iter.hasNext())
+            {
+                GameLogger g = iter.next();
+                g.deleteFile();
+                iter.remove();
+            }
+           // for (GameLogger logger : ActiveGames) {
+           //    logger.deleteFile();
+            //    ActiveGames.remove(logger);
+            //}
+           // ActiveGames.clear();
         }
     }
 

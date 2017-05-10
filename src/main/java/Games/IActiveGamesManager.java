@@ -1,6 +1,7 @@
 package Games;
 
-import Users.NoMuchMany;
+
+import Users.NoMuchMoney;
 import Users.User;
 
 import java.util.ArrayList;
@@ -18,17 +19,17 @@ public interface IActiveGamesManager {
 
     void startGame(int id);
 
-    void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMany;
+    void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney;
 
     void fold(int id, User usr);
 
-    void allIn(int id, User usr) throws NoMuchMany;
+    void allIn(int id, User usr) throws NoMuchMoney;
 
-    void check(int id, User usr) throws NoMuchMany;
+    void check(int id, User usr) throws NoMuchMoney;
 
-    void bet(int id, int amount, User usr) throws NoMuchMany;
+    void bet(int id, int amount, User usr) throws NoMuchMoney;
 
-    void JoinGame(int id, User user) throws NoMuchMany, CantJoin;
+    void JoinGame(int id, User user) throws NoMuchMoney, CantJoin;
 
     void spectateGame(int id, User user);
 
@@ -58,5 +59,5 @@ public interface IActiveGamesManager {
 
     void terminateGame(int id);
 
-    void call(int id, int amount, User usr) throws NoMuchMany;
+    void call(int id, int amount, User usr) throws NoMuchMoney;
 }

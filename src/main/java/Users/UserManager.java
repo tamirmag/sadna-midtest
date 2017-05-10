@@ -1,9 +1,6 @@
 package Users;
 
-import Games.ActiveGamesManager;
-import Games.IGame;
-import Games.Player;
-import Games.Preferences;
+import Games.*;
 import Loggers.ActionLogger;
 import Loggers.FinishedGamesManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -106,11 +103,12 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public void CreateGame(String type, Preferences pref) {
-        ActiveGamesManager.getInstance().createGame(this.user, type, pref);
+    public int CreateGame(String type, Preferences pref) {
+        int i = ActiveGamesManager.getInstance().createGame(this.user, type, pref);
         Player p = new Player(this.user.getUsername(), this.user.getWallet());
         addPlayer(p);
         ActionLogger.getInstance().writeToFile(user.getUsername() + " created a new game");
+        return i;
     }
 
 
@@ -134,7 +132,6 @@ public class UserManager implements IUserManager {
 
     @Override
     public ArrayList<IGame> findActiveGamesByMinPlayersPolicy(int minimal) {
-
         return ActiveGamesManager.getInstance().findActiveGamesByMinimumBetPolicy(minimal);
     }
 
@@ -187,7 +184,7 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public void JoinGame(int gameNumber) {
+    public void JoinGame(int gameNumber) throws NoMuchMoney, CantJoin {
         ActiveGamesManager.getInstance().JoinGame(gameNumber, this.user);
         Player p = new Player(this.user.getUsername(), this.user.getWallet());
         addPlayer(p);
@@ -197,30 +194,22 @@ public class UserManager implements IUserManager {
     //highest ranking users operations
 
     @Override
-    public void moveUserToLeague(String username, int toLeague)
-            throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists {
-        if(!user.isHighestRanking()) return; //TODO : throw costume exception
+    public void moveUserToLeague(String username, int toLeague) throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists, NotHighestRanking {
+        if(!user.isHighestRanking()) throw new NotHighestRanking(user.getUsername());
         if (toLeague < 0) throw new NegativeValue(toLeague);
         AccountManager.getInstance().moveUserToLeague(username,toLeague);
-        //User u = AccountManager.getInstance().getUser(username);
-        /*int formerLeague = AccountManager.getInstance().getUser(username).getLeague();
-        if (formerLeague == toLeague) throw new UserAlreadyInLeague(username, toLeague);
-        AccountManager.getInstance().removeUserFromLeague(u);
-        AccountManager.getInstance().getUser(username).setLeague(toLeague);
-        AccountManager.getInstance().addUserToLeague(u);
-        System.out.println("Users " + u.getUsername() + " moved from league " + formerLeague + " to league " + toLeague);*/
 
     }
 
     @Override
-    public void setCriteria() throws NotImplementedException {
-        if(!user.isHighestRanking()) return;//TODO : throw costume exception
+    public void setCriteria() throws NotImplementedException, NotHighestRanking {
+        if(!user.isHighestRanking()) throw new NotHighestRanking(user.getUsername());
         throw new NotImplementedException();
     }
 
     @Override
-    public void setDefaultLeague(int defaultLeague) throws NegativeValue {
-        if(!user.isHighestRanking()) return;//TODO : throw costume exception
+    public void setDefaultLeague(int defaultLeague) throws NegativeValue, NotHighestRanking {
+        if(!user.isHighestRanking()) throw new NotHighestRanking(user.getUsername());
         int formerDefaultLeague = AccountManager.getInstance().getDefaultLeague();
         AccountManager.getInstance().setDefaultLeague(defaultLeague);
         System.out.println("default league changed to " + defaultLeague + " and all users from " + formerDefaultLeague + " moved to it.");
@@ -229,18 +218,15 @@ public class UserManager implements IUserManager {
 
     //Game actions
     @Override
-    public void check(int gameID)
-    {
+    public void check(int gameID) throws NoMuchMoney {
         ActiveGamesManager.getInstance().check(gameID , user);
     }
     @Override
-    public void bet(int gameID, int amount)
-    {
+    public void bet(int gameID, int amount) throws NoMuchMoney {
         ActiveGamesManager.getInstance().bet(gameID , amount,user);
     }
     @Override
-    public void allIn(int gameID)
-    {
+    public void allIn(int gameID) throws NoMuchMoney {
         ActiveGamesManager.getInstance().allIn(gameID , user);
     }
     @Override
@@ -248,9 +234,9 @@ public class UserManager implements IUserManager {
     {
         ActiveGamesManager.getInstance().fold(gameID , user);
     }
+
     @Override
-    public void raise(int gameID, int amount)
-    {
+    public void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney {
         ActiveGamesManager.getInstance().raise(gameID,amount , user);
     }
 

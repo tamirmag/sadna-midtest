@@ -14,4 +14,6 @@ public interface IMyLogger {
     String getFilename();
 
     Path getFullPath();
+
+    void deleteFile();
 }

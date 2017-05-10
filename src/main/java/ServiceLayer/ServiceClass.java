@@ -1,8 +1,8 @@
 package ServiceLayer;
 
 
-import Games.IGame;
-import Games.Preferences;
+import Games.*;
+import Loggers.IFinishedGamesManager;
 import Users.*;
 
 import java.util.ArrayList;
@@ -50,12 +50,12 @@ public class ServiceClass implements IServiceClass {
         p.setMinAmountPolicy(minimalAmountOfPlayers);
         p.setMaxAmountPolicy(maximalAmountOfPlayers);
         p.setSpectatePolicy(spectatingMode);
-        u.CreateGame(gameType, p);
-        return 0;
+        int i = u.CreateGame(gameType, p);
+        return i;
     }
 
     @Override
-    public void joinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
+    public void joinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.JoinGame(gamenum);
     }
@@ -88,43 +88,43 @@ public class ServiceClass implements IServiceClass {
     }
 
     @Override
-    public void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue {
+    public void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.setDefaultLeague(defaultLeague);
     }
 
     @Override
-    public void setCriteria(String username, int criteria) throws UserNotLoggedIn, UserNotExists, NegativeValue {
+    public void setCriteria(String username, int criteria) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.setCriteria();
     }
 
     @Override
-    public void moveToLeague(String username, String userToMove, int league) throws UserNotLoggedIn, UserNotExists, LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague {
+    public void moveToLeague(String username, String userToMove, int league) throws UserNotLoggedIn, UserNotExists, LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.moveUserToLeague(userToMove, league);
     }
 
     @Override
-    public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+    public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.check(gameID);
     }
 
     @Override
-    public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists {
+    public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.bet(gameID, amount);
     }
 
     @Override
-    public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists {
+    public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.raise(gameID, amount);
     }
 
     @Override
-    public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+    public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.allIn(gameID);
     }
@@ -133,6 +133,27 @@ public class ServiceClass implements IServiceClass {
     public void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.fold(gameID);
+    }
+
+    @Override
+    public void terminateGame( int gameID) {
+        IActiveGamesManager.getInstance().terminateGame(gameID);
+    }
+
+    @Override
+    public void clearLoggedInUsers()
+    {
+        IAccountManager.getInstance().clearLoggedInUsers();
+    }
+
+    @Override
+    public void clearUsers() {
+        IAccountManager.getInstance().clearUsers();
+    }
+
+    @Override
+    public void clearAllFinishedGameLogs() {
+        IFinishedGamesManager.getInstance().clearAllFinishedGames();
     }
 
 

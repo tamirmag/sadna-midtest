@@ -1,5 +1,7 @@
 package Games;
 
+import Users.NoMuchMoney;
+
 import java.util.ArrayList;
 
 /**
@@ -14,7 +16,7 @@ public class PotLimitHoldem extends Game{
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney {
         if(amount<= super.getPot())
             super.raise(amount, player);
         else
