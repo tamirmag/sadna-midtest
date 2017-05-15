@@ -4,18 +4,17 @@ import java.util.ArrayList;
 
 
 public class ActionLogger extends MyLogger implements IActionLogger {
-    private static ActionLogger instance = null;
-
+    private static final ActionLogger instance = new ActionLogger();
     private ActionLogger(){
         super( "ActionLog.txt" , "SystemLogs");
-
     }
 
     public static IActionLogger getInstance()
     {
+       /* semaphore.acquire();
         if(instance == null) {
             instance = new ActionLogger();
-        }
+        }*/
         return instance;
     }
     @Override

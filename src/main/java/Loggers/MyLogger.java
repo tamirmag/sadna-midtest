@@ -8,9 +8,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 public abstract class MyLogger implements IMyLogger {
     private String filename = null;
+    private static Semaphore filePermission = new Semaphore(1,true);
     private Path fullPath;
     private String filepath = "Logs";
 
@@ -25,48 +27,65 @@ public abstract class MyLogger implements IMyLogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         String s = this.filepath + "\\" + this.filename;
         Path inputPath = Paths.get(s);
         fullPath = inputPath.toAbsolutePath();
     }
 
     @Override
-    public synchronized void writeToFile(String message) {
-        List<String> lines = Arrays.asList(message);
-        try (FileWriter fw = new FileWriter(fullPath.toString(), true);
-             BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter out = new PrintWriter(bw)) {
-
-            for (String s : lines)
-                out.println(s);
-        } catch (IOException e) {
-            System.out.println("cannot write to a new file " + filename);
+    public void writeToFile(String message) {
+        try {
+            filePermission.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        {
+            List<String> lines = Arrays.asList(message);
+            try (FileWriter fw = new FileWriter(fullPath.toString(), true);
+                 BufferedWriter bw = new BufferedWriter(fw);
+                 PrintWriter out = new PrintWriter(bw)) {
+                for (String s : lines)
+                    out.println(s);
+            } catch (IOException e) {
+                System.out.println("cannot write to a new file " + filename);
+            }
+        }
+        filePermission.release();
     }
 
 
     @Override
     public ArrayList<String> getContentOfFile() {
+        try {
+            filePermission.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         List<String> lines = new ArrayList<>();
         try {
             lines = Files.readAllLines(fullPath, Charset.defaultCharset());
+            filePermission.release();
             return new ArrayList<>(lines);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+         filePermission.release();
         return new ArrayList<>(lines);
     }
 
     @Override
     public void clearLog() {
-        try (PrintWriter pw = new PrintWriter(fullPath.toString())) {
-            pw.close();
-
-        } catch (FileNotFoundException e) {
+        try {
+            filePermission.acquire();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        try (PrintWriter pw = new PrintWriter(fullPath.toString())) {
+            pw.close();
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        filePermission.release();
     }
 
     @Override
@@ -82,9 +101,15 @@ public abstract class MyLogger implements IMyLogger {
     public void deleteFile()
     {
         try {
+            filePermission.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
             Files.delete(fullPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        filePermission.release();
     }
 }
