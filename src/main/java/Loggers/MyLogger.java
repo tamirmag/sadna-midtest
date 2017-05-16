@@ -8,84 +8,77 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public abstract class MyLogger implements IMyLogger {
     private String filename = null;
-    private static Semaphore filePermission = new Semaphore(1,true);
     private Path fullPath;
     private String filepath = "Logs";
 
+    ReentrantReadWriteLock fileLock = new ReentrantReadWriteLock(true);
+    final Lock fileRead = fileLock.readLock();
+    final Lock fileWrite = fileLock.writeLock();
+
     public MyLogger(String filename, String filepath) {
-        this.filename = filename;
-        this.filepath = filepath;
-        File dir = new File(this.filepath);
-        dir.mkdirs();
-        File tmp = new File(dir, filename);
-        try {
-            tmp.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (this) {
+            this.filename = filename;
+            this.filepath = filepath;
+            File dir = new File(this.filepath);
+            dir.mkdirs();
+            File tmp = new File(dir, filename);
+            try {
+                tmp.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String s = this.filepath + "\\" + this.filename;
+            Path inputPath = Paths.get(s);
+            fullPath = inputPath.toAbsolutePath();
         }
-        String s = this.filepath + "\\" + this.filename;
-        Path inputPath = Paths.get(s);
-        fullPath = inputPath.toAbsolutePath();
     }
 
     @Override
     public void writeToFile(String message) {
-        try {
-            filePermission.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        fileWrite.lock();
+        List<String> lines = Arrays.asList(message);
+        try (FileWriter fw = new FileWriter(fullPath.toString(), true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            for (String s : lines) out.println(s);
+        } catch (IOException e) {
+            fileWrite.unlock();
+            System.out.println("cannot write to a new file " + filename);
         }
-        {
-            List<String> lines = Arrays.asList(message);
-            try (FileWriter fw = new FileWriter(fullPath.toString(), true);
-                 BufferedWriter bw = new BufferedWriter(fw);
-                 PrintWriter out = new PrintWriter(bw)) {
-                for (String s : lines)
-                    out.println(s);
-            } catch (IOException e) {
-                System.out.println("cannot write to a new file " + filename);
-            }
-        }
-        filePermission.release();
+        fileWrite.unlock();
     }
 
 
     @Override
     public ArrayList<String> getContentOfFile() {
-        try {
-            filePermission.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        fileRead.lock();
         List<String> lines = new ArrayList<>();
         try {
             lines = Files.readAllLines(fullPath, Charset.defaultCharset());
-            filePermission.release();
+            fileRead.unlock();
             return new ArrayList<>(lines);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-         filePermission.release();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fileRead.unlock();
         return new ArrayList<>(lines);
     }
 
     @Override
     public void clearLog() {
-        try {
-            filePermission.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        fileWrite.lock();
         try (PrintWriter pw = new PrintWriter(fullPath.toString())) {
             pw.close();
-        }catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
+            fileWrite.unlock();
             e.printStackTrace();
         }
-        filePermission.release();
+        fileWrite.unlock();
     }
 
     @Override
@@ -98,18 +91,14 @@ public abstract class MyLogger implements IMyLogger {
         return fullPath;
     }
 
-    public void deleteFile()
-    {
-        try {
-            filePermission.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void deleteFile() {
+        fileWrite.lock();
         try {
             Files.delete(fullPath);
         } catch (IOException e) {
+            fileWrite.unlock();
             e.printStackTrace();
         }
-        filePermission.release();
+        fileWrite.unlock();
     }
 }
