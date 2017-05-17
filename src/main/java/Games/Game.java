@@ -2,6 +2,7 @@ package Games;
 
 import Loggers.IActiveGamesLogManager;
 import Loggers.IFinishedGamesManager;
+import Users.IAccountManager;
 import Users.NoMuchMoney;
 import Users.Wallet;
 import Loggers.GameLogger;
@@ -234,6 +235,7 @@ public class Game implements IGame {
 
     @Override
     public void terminateGame() {
+        IAccountManager.getInstance().updateNumOfGames(players);
         logger.writeToFile("game ended");
         IActiveGamesLogManager.getInstance().RemoveGameLogger(logger.getGameNumber());
         IFinishedGamesManager.getInstance().addFinishedGameLog(logger);

@@ -55,4 +55,6 @@ public interface IServiceClass {
 
     void clearAllFinishedGameLogs();
 
+    void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists;
+
 }

@@ -92,7 +92,7 @@ public class AccountManager implements IAccountManager {
         usersRead.unlock();
         return ret;
     }
-    
+
     @Override
     public void updateNumOfGames(ArrayList<Player> players)
     {
