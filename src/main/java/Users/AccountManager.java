@@ -1,5 +1,6 @@
 package Users;
 
+import Games.Player;
 import Loggers.ActionLogger;
 import Loggers.IActionLogger;
 
@@ -90,6 +91,39 @@ public class AccountManager implements IAccountManager {
         }
         usersRead.unlock();
         return ret;
+    }
+    
+    @Override
+    public void updateNumOfGames(ArrayList<Player> players)
+    {
+        usersWrite.lock();
+        for(Player p : players)
+        {
+            User u= getUser(p.getName());
+            int numOfGames = u.getNumOfGames();
+            u.setNumOfGames(numOfGames+1);
+            if((numOfGames+1) %10 ==0)
+            {
+                int formerLeague = u.getLeague();
+                u.setLeague(formerLeague +1);
+                moveUserToLeague(u ,formerLeague+1);
+            }
+        }
+        usersWrite.unlock();
+    }
+
+    private void moveUserToLeague(User u, int newLeague) {
+        int league = u.getLeague();
+        leagueWrite.lock();
+
+        leagues.get(league).remove(u);
+        if (isLeagueNotExists(newLeague)) {
+            leagues.put(newLeague, new ArrayList<User>());
+        }
+        leagues.get(newLeague).add(u);
+
+        leagueWrite.unlock();
+        ActionLogger.getInstance().writeToFile(u.getUsername() + " was moved to league " + newLeague);
     }
 
     @Override

@@ -14,13 +14,13 @@ public class UserManager implements IUserManager {
 
     private User user;
 
-    public UserManager (User one) {
+    public UserManager(User one) {
         user = one;
     }
 
-    public UserManager(String username, String password, int league, String email, Wallet wallet) {
+   /* public UserManager(String username, String password, int league, String email, Wallet wallet) {
         user = new User(username, password, league, email, wallet);
-    }
+    }*/
 
     @Override
     public void logout() throws UserNotExists, AlreadyLoggedOut {
@@ -30,7 +30,6 @@ public class UserManager implements IUserManager {
     @Override
     public void editProfile(String username, String password, String email)
             throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists {
-
         editUsername(username);
         editEmail(email);
         editPassword(password);
@@ -38,7 +37,6 @@ public class UserManager implements IUserManager {
     }
 
     private void editUsername(String username) throws UsernameNotValid, UserAlreadyExists {
-
         if (username == null || username.equals("") || username.contains(" "))
             throw new UsernameNotValid(username);
         else if ((!user.getUsername().equals(username)) &&
@@ -53,7 +51,6 @@ public class UserManager implements IUserManager {
     }
 
     private void editEmail(String email) throws EmailNotValid {
-
         if (AccountManager.getInstance().isValidEmail(email)) {
             String prior = user.getUsername();
             AccountManager.getInstance().setEmail(user, email);
@@ -64,17 +61,14 @@ public class UserManager implements IUserManager {
     }
 
     private void editPassword(String password) throws PasswordNotValid {
-
         if (password == null || password.equals("") || password.contains(" "))
             throw new PasswordNotValid(password == null ? "null" : password);
         else {
             String prior = user.getUsername();
             AccountManager.getInstance().setPassword(user, password);
             user.setPassword(password);
-            System.out.println("password successfully changed.");
             ActionLogger.getInstance().writeToFile(prior + " successfully changed his username to " + password);
         }
-
     }
 
     @Override
@@ -100,7 +94,8 @@ public class UserManager implements IUserManager {
 
     @Override
     public void spectateGame(int gameNumber) {
-        /*TODO :finish implementing this function*/ActiveGamesLogManager.getInstance().spectateGame(gameNumber, user);
+        /*TODO :finish implementing this function*/
+        ActiveGamesLogManager.getInstance().spectateGame(gameNumber, user);
     }
 
     @Override
@@ -112,24 +107,20 @@ public class UserManager implements IUserManager {
         return i;
     }
 
-
     @Override
     public ArrayList<IGame> findActiveGamesByPlayerName(String playerName) {
         return new ArrayList<>(ActiveGamesManager.getInstance().findActiveGamesByPlayer(playerName));
     }
-
 
     @Override
     public ArrayList<IGame> findActiveGamesByPotSize(int potSize) {
         return ActiveGamesManager.getInstance().findActiveGamesByPotSize(potSize);
     }
 
-
     @Override
     public ArrayList<IGame> findActiveGamesBySpectatingPolicy(boolean spectatingAllowed) {
         return new ArrayList<>(ActiveGamesManager.getInstance().findSpectatableGames(user));
     }
-
 
     @Override
     public ArrayList<IGame> findActiveGamesByMinPlayersPolicy(int minimal) {
@@ -141,41 +132,30 @@ public class UserManager implements IUserManager {
         return ActiveGamesManager.getInstance().findActiveGamesByPlayersMaximumPolicy(maximal);
     }
 
-
     @Override
     public ArrayList<IGame> findActiveGamesByMinimumBetPolicy(int minimumBet) {
-
         return ActiveGamesManager.getInstance().findActiveGamesByMinimumBetPolicy(minimumBet);
     }
 
     @Override
     public ArrayList<IGame> findActiveGamesByChipPolicy(int numOfChips) {
-
         return ActiveGamesManager.getInstance().findActiveGamesByChipPolicy(numOfChips);
-
     }
-
 
     @Override
     public ArrayList<IGame> findActiveGamesByBuyInPolicy(int costOfJoin) {
-
         return ActiveGamesManager.getInstance().findActiveGamesByBuyInPolicy(costOfJoin);
-
     }
-
 
     @Override
     public ArrayList<IGame> findActiveGamesByGameTypePolicy(String gameTypePolicy) {
-
         return ActiveGamesManager.getInstance().findActiveGamesByGameTypePolicy(gameTypePolicy);
     }
-
 
     @Override
     public User getUser() {
         return user;
     }
-
     @Override
     public void JoinGame(int gameNumber) throws NoMuchMoney, CantJoin {
         ActiveGamesManager.getInstance().JoinGame(gameNumber, this.user);
@@ -187,31 +167,32 @@ public class UserManager implements IUserManager {
     //Game actions
     @Override
     public void check(int gameID) throws NoMuchMoney {
-        ActiveGamesManager.getInstance().check(gameID , user);
+        ActiveGamesManager.getInstance().check(gameID, user);
     }
+
     @Override
     public void bet(int gameID, int amount) throws NoMuchMoney {
-        ActiveGamesManager.getInstance().bet(gameID , amount,user);
+        ActiveGamesManager.getInstance().bet(gameID, amount, user);
     }
+
     @Override
     public void allIn(int gameID) throws NoMuchMoney {
-        ActiveGamesManager.getInstance().allIn(gameID , user);
+        ActiveGamesManager.getInstance().allIn(gameID, user);
     }
+
     @Override
-    public void fold(int gameID)
-    {
-        ActiveGamesManager.getInstance().fold(gameID , user);
+    public void fold(int gameID) {
+        ActiveGamesManager.getInstance().fold(gameID, user);
     }
 
     @Override
     public void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney {
-        ActiveGamesManager.getInstance().raise(gameID,amount , user);
+        ActiveGamesManager.getInstance().raise(gameID, amount, user);
     }
 
     @Override
-    public void startGame(int gameID)
-    {
-       IActiveGamesManager.getInstance().startGame(gameID);
+    public void startGame(int gameID) {
+        IActiveGamesManager.getInstance().startGame(gameID);
     }
 
 

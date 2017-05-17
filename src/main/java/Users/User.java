@@ -69,10 +69,6 @@ public class User {
         return existingPlayers;
     }
 
-    public void setExistingPlayers(ArrayList<Player> existingPlayers) {
-        this.existingPlayers = existingPlayers;
-    }
-
     public Wallet getWallet() {
         return wallet;
     }
@@ -94,9 +90,12 @@ public class User {
         this.numOfGames = numOfGames;
     }
 
-    //public boolean isHighestRanking() {return isHighestRanking;}
 
-    // public void setHighestRanking(boolean highestRanking) {isHighestRanking = highestRanking;}
+}
+
+//public boolean isHighestRanking() {return isHighestRanking;}
+
+// public void setHighestRanking(boolean highestRanking) {isHighestRanking = highestRanking;}
 
        /* public ArrayList<String> getFavoriteTurns() {
         return favoriteTurns;
@@ -106,4 +105,3 @@ public class User {
         this.favoriteTurns = favoriteTurns;
     }
     */
-}

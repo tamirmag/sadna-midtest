@@ -1,6 +1,10 @@
 package Users;
 
 
+import Games.Player;
+
+import java.util.ArrayList;
+
 public interface IAccountManager {
     static IAccountManager getInstance()
     {
@@ -44,6 +48,8 @@ public interface IAccountManager {
     void clearLeagues();
 
     int getUnknownLeague();
+
+    void updateNumOfGames(ArrayList<Player> players);
 
     //int getMaximalRank();
 
