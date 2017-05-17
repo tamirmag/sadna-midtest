@@ -33,9 +33,9 @@ public interface IAccountManager {
 
     void setPassword(User u, String password);
 
-    void setDefaultLeague(int league) throws NegativeValue;
+    //void setDefaultLeague(int league) throws NegativeValue;
 
-    int getDefaultLeague();
+    //int getDefaultLeague();
 
     void clearUsers();
 
@@ -43,7 +43,9 @@ public interface IAccountManager {
 
     void clearLeagues();
 
-    int getMaximalRank();
+    int getUnknownLeague();
 
-    void moveUserToLeague(String username, int newLeague) throws UserNotInLeague, LeagueNotExists, UserAlreadyInLeague, UserNotExists;
+    //int getMaximalRank();
+
+   // void moveUserToLeague(String username, int newLeague) throws UserNotInLeague, LeagueNotExists, UserAlreadyInLeague, UserNotExists;
 }

@@ -16,6 +16,14 @@ public abstract class MyLogger implements IMyLogger {
     private Path fullPath;
     private String filepath = "Logs";
 
+
+    public File getFile() {
+        return file;
+    }
+
+    private File file ;
+
+
     ReentrantReadWriteLock fileLock = new ReentrantReadWriteLock(true);
     final Lock fileRead = fileLock.readLock();
     final Lock fileWrite = fileLock.writeLock();
@@ -26,9 +34,9 @@ public abstract class MyLogger implements IMyLogger {
             this.filepath = filepath;
             File dir = new File(this.filepath);
             dir.mkdirs();
-            File tmp = new File(dir, filename);
+            file = new File(dir, filename);
             try {
-                tmp.createNewFile();
+                file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -94,7 +102,7 @@ public abstract class MyLogger implements IMyLogger {
     public void deleteFile() {
         fileWrite.lock();
         try {
-            Files.delete(fullPath);
+            Files.delete(file.toPath());
         } catch (IOException e) {
             fileWrite.unlock();
             e.printStackTrace();

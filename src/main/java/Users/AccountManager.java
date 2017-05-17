@@ -2,20 +2,28 @@ package Users;
 
 import Loggers.ActionLogger;
 import Loggers.IActionLogger;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 public class AccountManager implements IAccountManager {
 
-    private int defaultLeague;
+    final int UNKNOWN_RANK = 0;
+    // private int defaultLeague;
     private ArrayList<User> users;
     private ArrayList<User> loggedInUsers;
     private Hashtable<Integer, ArrayList<User>> leagues;
     private final String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-    private int maximalRank;
+    //private int maximalRank;
     private static final IAccountManager instance = new AccountManager();
 
     private ReentrantReadWriteLock usersLock = new ReentrantReadWriteLock(true);
@@ -33,8 +41,8 @@ public class AccountManager implements IAccountManager {
         users = new ArrayList<User>();
         loggedInUsers = new ArrayList<User>();
         leagues = new Hashtable<Integer, ArrayList<User>>();
-        maximalRank = 0;
-        leagues.put(defaultLeague, new ArrayList<User>());
+        // maximalRank = 0;
+        leagues.put(UNKNOWN_RANK, new ArrayList<User>());
     }
 
     public static IAccountManager getInstance() {
@@ -43,7 +51,11 @@ public class AccountManager implements IAccountManager {
            instance = new AccountManager();
         }*/
         return instance;
+    }
 
+    @Override
+    public int getUnknownLeague() {
+        return UNKNOWN_RANK;
     }
 
     @Override
@@ -65,9 +77,7 @@ public class AccountManager implements IAccountManager {
         if (!isUserExists(username)) throw new UserNotExists(username);
         else if (!isUserLoggedIn(username)) throw new UserNotLoggedIn(username);
         else return getUser(username);
-
     }
-
 
     private User getUser(String username) {
         usersRead.lock();
@@ -95,17 +105,17 @@ public class AccountManager implements IAccountManager {
         else if (wallet < 0)
             throw new NegativeValue(wallet);
         else {
-            User u = new User(username, password, defaultLeague, email, new Wallet(wallet));
+            User u = new User(username, password, UNKNOWN_RANK, email, new Wallet(wallet));
 
             leagueWrite.lock();
-            if (leagues.get(defaultLeague) == null) {
-                leagues.put(defaultLeague, new ArrayList<User>());
+            if (leagues.get(UNKNOWN_RANK) == null) {
+                leagues.put(UNKNOWN_RANK, new ArrayList<User>());
             }
             leagueWrite.unlock();
 
-            leagueRead.lock();
-            leagues.get(defaultLeague).add(u);
-            leagueRead.unlock();
+            leagueWrite.lock();
+            leagues.get(UNKNOWN_RANK).add(u);
+            leagueWrite.unlock();
 
             usersWrite.lock();
             users.add(u);
@@ -116,7 +126,6 @@ public class AccountManager implements IAccountManager {
             loggedInWrite.unlock();
 
             IActionLogger.getInstance().writeToFile("user " + username + " successfully registered.");
-            System.out.println("UserTests successfully registered.");
             return new UserManager(u);
         }
 
@@ -133,16 +142,12 @@ public class AccountManager implements IAccountManager {
         else if (!isUserExists(u.getUsername())) throw new UserNotExists(u.getUsername());
         else if (!isUserLoggedIn(u.getUsername())) throw new AlreadyLoggedOut(u.getUsername());
         else {
-
             loggedInWrite.lock();
             loggedInUsers.remove(u);
             loggedInWrite.unlock();
-
-            maximalRank = getMaximalRank();
+            //maximalRank = getMaximalRank();
             ActionLogger.getInstance().writeToFile(u.getUsername() + " successfully logged out.");
-            System.out.println("you have successfully logged out.");
         }
-
     }
 
     @Override
@@ -152,7 +157,7 @@ public class AccountManager implements IAccountManager {
         else if (!isUserLoggedIn(username)) throw new AlreadyLoggedOut(username);
         else {
             removeFromLoggedIn(username);
-            maximalRank = getMaximalRank();
+            // maximalRank = getMaximalRank();
             ActionLogger.getInstance().writeToFile(username + " successfully logged out.");
         }
     }
@@ -160,7 +165,6 @@ public class AccountManager implements IAccountManager {
     @Override
     public UserManager login(String username, String password)
             throws UsernameNotValid, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists {
-
         User user = null;
         if (username == null || username.equals("") || username.contains(" "))
             throw new UsernameNotValid(username);
@@ -174,9 +178,9 @@ public class AccountManager implements IAccountManager {
         else {
             User u = getUser(username);
             addLoggedInUser(u);
-            if (u.getLeague() > maximalRank) {
+           /* if (u.getLeague() > maximalRank) {
                 u.setHighestRanking(true);
-            }
+            }*/
             ActionLogger.getInstance().writeToFile(u.getUsername() + " successfully logged in.");
             return new UserManager(u);
         }
@@ -188,29 +192,25 @@ public class AccountManager implements IAccountManager {
         String username = u.getUsername();
         usersRead.lock();
         if (username == null || username.equals("") || username.contains(" ")) throw new UsernameNotValid(username);
-        else if (users.contains(u))
-        {
+        else if (users.contains(u)) {
             usersRead.unlock();
             throw new UserAlreadyExists(u.getUsername());
-        }
-        else
-        {
+        } else {
             usersRead.unlock();
             usersWrite.lock();
             users.add(u);
             usersWrite.unlock();
         }
-
     }
 
     @Override
     public void addLoggedInUser(User u) throws AlreadyLoggedIn {
         loggedInRead.lock();
         if (loggedInUsers.contains(u)) {
-
             loggedInRead.unlock();
             throw new AlreadyLoggedIn(u.getUsername());
         } else {
+            loggedInRead.unlock();
             loggedInWrite.lock();
             loggedInUsers.add(u);
             loggedInWrite.unlock();
@@ -271,38 +271,31 @@ public class AccountManager implements IAccountManager {
           else leagues.get(league).remove(u);
           ActionLogger.getInstance().writeToFile(u.getUsername() + " was removed from league " + league);
       }*/
-    @Override
+  /*  @Override
     public void moveUserToLeague(String username, int newLeague) throws UserNotInLeague, LeagueNotExists, UserAlreadyInLeague, UserNotExists {
         if (!isUserExists(username)) throw new UserNotExists(username);
         User u = getUser(username);
         int league = u.getLeague();
         if (newLeague == league) throw new UserAlreadyInLeague(username, newLeague);
         if (isLeagueNotExists(league)) throw new LeagueNotExists(league);
-        else if (isUserNotInLeague(league,u)) throw new UserNotInLeague(u.getUsername(), league);
-        else
-        {
+        else if (isUserNotInLeague(league, u)) throw new UserNotInLeague(u.getUsername(), league);
+        else {
             leagueWrite.lock();
             leagues.get(league).remove(u);
             leagueWrite.unlock();
         }
-
-        /*if (leagues.get(newLeague) != null && leagues.get(newLeague).contains(u))
-            throw new UserAlreadyInLeague(username, newLeague);*/
-
-        /*else*/
         leagueWrite.lock();
         if (isLeagueNotExists(newLeague)) {
             leagues.put(newLeague, new ArrayList<User>());
         }
-            leagues.get(newLeague).add(u);
+        leagues.get(newLeague).add(u);
         leagueWrite.unlock();
 
         ActionLogger.getInstance().writeToFile(username + " was moved to league " + newLeague);
         u.setLeague(newLeague);
     }
-
-    private boolean isLeagueNotExists(int league)
-    {
+*/
+    private boolean isLeagueNotExists(int league) {
         boolean ans = false;
         leagueRead.lock();
         ans = (!leagues.containsKey(league) || leagues.get(league) == null);
@@ -310,8 +303,7 @@ public class AccountManager implements IAccountManager {
         return ans;
     }
 
-    private  boolean isUserNotInLeague(int league , User user)
-    {
+    private boolean isUserNotInLeague(int league, User user) {
         boolean ans = false;
         leagueRead.lock();
         ans = (!leagues.get(league).contains(user));
@@ -320,7 +312,7 @@ public class AccountManager implements IAccountManager {
     }
 
 
-    @Override
+   /* @Override
     public void setDefaultLeague(int league) throws NegativeValue {
         if (league < 0) throw new NegativeValue(league);
         else {
@@ -332,7 +324,8 @@ public class AccountManager implements IAccountManager {
     @Override
     public int getDefaultLeague() {
         return defaultLeague;
-    }
+    }*/
+
 
     @Override
     public void clearUsers() {
@@ -355,35 +348,35 @@ public class AccountManager implements IAccountManager {
         leagueWrite.unlock();
     }
 
-    @Override
-    public int getMaximalRank() {
-        if (loggedInUsers.size() == 0) return maximalRank;
-        else {
-            int ret = loggedInUsers.get(0).getLeague();
-            for (User u : loggedInUsers) {
-                if (u.getLeague() > ret)
-                    ret = u.getLeague();
-            }
-            return ret;
-        }
-    }
+    /*  @Override
+      public int getMaximalRank() {
+          if (loggedInUsers.size() == 0) return maximalRank;
+          else {
+              int ret = loggedInUsers.get(0).getLeague();
+              for (User u : loggedInUsers) {
+                  if (u.getLeague() > ret)
+                      ret = u.getLeague();
+              }
+              return ret;
+          }
+      }
 
-    private void moveUsersFromDefaultLeague(int newLeague) throws NegativeValue {
-        if (newLeague < 0) throw new NegativeValue(newLeague);
-        else {
-            if (leagues.get(defaultLeague) == null) leagues.put(defaultLeague, new ArrayList<User>());
-            ArrayList<User> move = new ArrayList<User>(leagues.get(defaultLeague));
-            if (leagues.get(newLeague) == null) {
-                leagues.put(newLeague, new ArrayList<User>());
-            }
-            for (User u : move) {
-                leagues.get(newLeague).add(u);
-                u.setLeague(newLeague);
-            }
-            leagues.get(defaultLeague).clear();
-        }
-    }
-
+      private void moveUsersFromDefaultLeague(int newLeague) throws NegativeValue {
+          if (newLeague < 0) throw new NegativeValue(newLeague);
+          else {
+              if (leagues.get(UNKNOWN_RANK) == null) leagues.put(UNKNOWN_RANK, new ArrayList<User>());
+              ArrayList<User> move = new ArrayList<User>(leagues.get(UNKNOWN_RANK));
+              if (leagues.get(newLeague) == null) {
+                  leagues.put(newLeague, new ArrayList<User>());
+              }
+              for (User u : move) {
+                  leagues.get(newLeague).add(u);
+                  u.setLeague(newLeague);
+              }
+              leagues.get(UNKNOWN_RANK).clear();
+          }
+      }
+  */
     private boolean isPasswordCorrect(String username, String password) {
         usersRead.lock();
         boolean ans = false;
@@ -422,6 +415,100 @@ public class AccountManager implements IAccountManager {
         }
         loggedInWrite.unlock();
     }
+
+    private void organizeLeaguesHelper() {
+
+        int numOfUsersInLeague;
+        int numOfLeagues = 0;
+        ArrayList<User> allUsers = new ArrayList<>();
+        ArrayList<Integer> allLeagues = new ArrayList<>();
+        Hashtable<Integer, ArrayList<User>> tempLeagues = new Hashtable<Integer, ArrayList<User>>();
+
+
+        Iterator it = leagues.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry league = (Map.Entry) it.next();
+            allLeagues.add((Integer) league.getKey());
+            numOfLeagues++;
+            allUsers.addAll((ArrayList<User>) league.getValue());
+        }
+        numOfUsersInLeague = allUsers.size() / numOfLeagues;
+        int remainder = allUsers.size() % numOfLeagues;
+
+        if (numOfUsersInLeague < 2) {
+            //now I should check what league I should remain empty
+            int numOfLeaguesToSkip = 0;
+            while ((allUsers.size() / (numOfLeagues - numOfLeaguesToSkip)) < 2) numOfLeaguesToSkip++;
+
+            numOfUsersInLeague = (allUsers.size() / (numOfLeagues - numOfLeaguesToSkip));
+            remainder = (allUsers.size() % (numOfLeagues - numOfLeaguesToSkip));
+
+            int from = 0;
+            int to = numOfUsersInLeague;
+
+            it = leagues.entrySet().iterator();
+            while (it.hasNext()) {
+
+                Map.Entry league = (Map.Entry) it.next();
+                if (numOfLeaguesToSkip > 0) {
+                    tempLeagues.put((Integer) league.getKey(), new ArrayList<User>());
+                } else {
+                    ArrayList<User> temp = (ArrayList<User>) allUsers.subList(from, to);
+
+                    from += numOfUsersInLeague;
+                    if ((allUsers.size() - to) > remainder)
+                        to += numOfUsersInLeague;
+
+                    if (!it.hasNext()) {
+                        temp.addAll(new ArrayList<>(allUsers.subList(from, allUsers.size())));
+                    }
+                    tempLeagues.put((Integer) league.getKey(), temp);
+                    for (User u : temp) {
+                        u.setLeague((Integer) league.getKey());
+                    }
+                }
+                numOfLeaguesToSkip--;
+            }
+        } else {
+            int from = 0;
+            int to = numOfUsersInLeague;
+
+            it = leagues.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry league = (Map.Entry) it.next();
+                ArrayList<User> temp = (ArrayList<User>) allUsers.subList(from, to);
+
+                from += numOfUsersInLeague;
+                if ((allUsers.size() - to) > remainder)
+                    to += numOfUsersInLeague;
+
+                if (!it.hasNext()) {
+                    temp.addAll(new ArrayList<>(allUsers.subList(from, allUsers.size())));
+                }
+                tempLeagues.put((Integer) league.getKey(), temp);
+                for (User u : temp) {
+                    u.setLeague((Integer) league.getKey());
+                }
+            }
+        }
+
+        leagues = tempLeagues;
+    }
+
+    public void organizeLeagues() {
+        ScheduledExecutorService scheduledExecutorService =
+                Executors.newScheduledThreadPool(1);
+
+        ScheduledFuture scheduledFuture =
+                scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                    @Override
+                    public void run() {
+                        organizeLeaguesHelper();
+                    }
+                }, 0, 7, TimeUnit.DAYS);
+    }
+
+
 }
 
 

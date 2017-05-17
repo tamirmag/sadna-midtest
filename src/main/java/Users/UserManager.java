@@ -2,6 +2,7 @@ package Users;
 
 import Games.*;
 import Loggers.ActionLogger;
+import Loggers.ActiveGamesLogManager;
 import Loggers.FinishedGamesManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -81,11 +82,11 @@ public class UserManager implements IUserManager {
         user.getExistingPlayers().add(p);
     }
 
-    @Override
+  /*  @Override
     public void addFavoriteTurn(String turn) {
         user.getFavoriteTurns().add(turn);
         ActionLogger.getInstance().writeToFile(user.getUsername() + " added a new favorite turn");
-    }
+    }*/
 
     @Override
     public ArrayList<String> viewReplay(int gameNumber) {
@@ -99,7 +100,7 @@ public class UserManager implements IUserManager {
 
     @Override
     public void spectateGame(int gameNumber) {
-        //ActiveGamesLogManager.getInstance().spectateGame(gameNumber, user);
+        /*TODO :finish implementing this function*/ActiveGamesLogManager.getInstance().spectateGame(gameNumber, user);
     }
 
     @Override
@@ -169,14 +170,6 @@ public class UserManager implements IUserManager {
         return ActiveGamesManager.getInstance().findActiveGamesByGameTypePolicy(gameTypePolicy);
     }
 
-    private boolean isInteger(String input) {
-        try {
-            Integer.parseInt(input);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     @Override
     public User getUser() {
@@ -189,31 +182,6 @@ public class UserManager implements IUserManager {
         Player p = new Player(this.user.getUsername(), this.user.getWallet());
         addPlayer(p);
         ActionLogger.getInstance().writeToFile(user.getUsername() + " joined to game " + gameNumber);
-    }
-
-    //highest ranking users operations
-
-    @Override
-    public void moveUserToLeague(String username, int toLeague) throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists, NotHighestRanking {
-        if(!user.isHighestRanking()) throw new NotHighestRanking(user.getUsername());
-        if (toLeague < 0) throw new NegativeValue(toLeague);
-        AccountManager.getInstance().moveUserToLeague(username,toLeague);
-
-    }
-
-    @Override
-    public void setCriteria() throws NotImplementedException, NotHighestRanking {
-        if(!user.isHighestRanking()) throw new NotHighestRanking(user.getUsername());
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void setDefaultLeague(int defaultLeague) throws NegativeValue, NotHighestRanking {
-        if(!user.isHighestRanking()) throw new NotHighestRanking(user.getUsername());
-        int formerDefaultLeague = AccountManager.getInstance().getDefaultLeague();
-        AccountManager.getInstance().setDefaultLeague(defaultLeague);
-        System.out.println("default league changed to " + defaultLeague + " and all users from " + formerDefaultLeague + " moved to it.");
-        ActionLogger.getInstance().writeToFile("default league changed to " + defaultLeague + " by " + user.getUsername() + " and all users from " + formerDefaultLeague + " moved to it.");
     }
 
     //Game actions
@@ -240,7 +208,30 @@ public class UserManager implements IUserManager {
         ActiveGamesManager.getInstance().raise(gameID,amount , user);
     }
 
+    //highest ranking users operations
 
+ /*   @Override
+    public void moveUserToLeague(String username, int toLeague) throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists, NotHighestRanking {
+        if(!user.isHighestRanking()) throw new NotHighestRanking(user.getUsername());
+        if (toLeague < 0) throw new NegativeValue(toLeague);
+        AccountManager.getInstance().moveUserToLeague(username,toLeague);
+
+    }
+
+    @Override
+    public void setCriteria() throws NotImplementedException, NotHighestRanking {
+        if(!user.isHighestRanking()) throw new NotHighestRanking(user.getUsername());
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void setDefaultLeague(int defaultLeague) throws NegativeValue, NotHighestRanking {
+        if(!user.isHighestRanking()) throw new NotHighestRanking(user.getUsername());
+        int formerDefaultLeague = AccountManager.getInstance().getDefaultLeague();
+        AccountManager.getInstance().setDefaultLeague(defaultLeague);
+        System.out.println("default league changed to " + defaultLeague + " and all users from " + formerDefaultLeague + " moved to it.");
+        ActionLogger.getInstance().writeToFile("default league changed to " + defaultLeague + " by " + user.getUsername() + " and all users from " + formerDefaultLeague + " moved to it.");
+    }*/
 }
 
 

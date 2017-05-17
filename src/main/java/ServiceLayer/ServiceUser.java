@@ -7,13 +7,15 @@ public class ServiceUser {
     private String email;
     private ServiceWallet wallet;
     private int league;
+    private int numOfGames;
 
-    public ServiceUser(String username, String password, String email, ServiceWallet wallet, int league) {
+    public ServiceUser(String username, String password, String email, ServiceWallet wallet, int league, int numOfGames) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.wallet = wallet;
         this.league = league;
+        this.numOfGames = numOfGames;
     }
 
     public String getUsername() {
@@ -47,4 +49,12 @@ public class ServiceUser {
     public String getEmail() {return email;}
 
     public void setEmail(String email) {this.email = email;}
+
+    public int getNumOfGames() {
+        return numOfGames;
+    }
+
+    public void setNumOfGames(int numOfGames) {
+        this.numOfGames = numOfGames;
+    }
 }

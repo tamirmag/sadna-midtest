@@ -67,23 +67,17 @@ public class ProxyBridge implements Bridge{
 	public ArrayList<String> viewReplay(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
 		return real.viewReplay(gamenum, username);
 	}
-
+/*
 	@Override
 	public void saveFavoriteTurn(int gamenum, String username, String turn) throws UserNotLoggedIn, UserNotExists {
 		real.saveFavoriteTurn(gamenum, username, turn);
 	}
 
 	@Override
-	public ArrayList<Integer> findActiveGamesByPotSize(int potSize, String username)
-			throws UserNotLoggedIn, UserNotExists {
-		return real.findActiveGamesByPotSize(potSize, username);
-	}
-
-	@Override
 	public void setDefaultLeague(String username, int defaultLeague)
 			throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
 		real.setDefaultLeague(username, defaultLeague);
-		
+
 	}
 
 	@Override
@@ -95,8 +89,14 @@ public class ProxyBridge implements Bridge{
 	public void moveToLeague(String username, String userToMove, int league) throws UserNotLoggedIn, UserNotExists,
 			LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
 		real.moveToLeague(username, userToMove, league);
-		
+
+	}*/
+	@Override
+	public ArrayList<Integer> findActiveGamesByPotSize(int potSize, String username)
+			throws UserNotLoggedIn, UserNotExists {
+		return real.findActiveGamesByPotSize(potSize, username);
 	}
+
 
 	@Override
 	public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {

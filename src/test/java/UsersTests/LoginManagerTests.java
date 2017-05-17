@@ -5,7 +5,7 @@ import Users.*;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
 
 public class LoginManagerTests {
 
@@ -119,17 +119,6 @@ public class LoginManagerTests {
     }
 
     @Test
-    public void checkHighestRankUser() throws UsernameNotValid, UserAlreadyExists, NegativeValue, EmailNotValid, PasswordNotValid, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, LeagueNotExists, NotHighestRanking, UserAlreadyInLeague, UserNotInLeague, AlreadyLoggedOut {
-        zerbib.setHighestRanking(true);
-        IAccountManager.getInstance().addUser(zerbib);
-        UserManager roy1 = IAccountManager.getInstance().register(roy.getUsername(), roy.getPassword(), roy.getEmail(), roy.getWallet().getAmountOfMoney());
-        UserManager zerbib1 = IAccountManager.getInstance().login(zerbib.getUsername(), zerbib.getPassword());
-        zerbib1.moveUserToLeague("roy" ,100);
-        assertEquals(roy1.getUser().getLeague(), 100);
-
-    }
-
-    @Test
     public void logInLogOut() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn {
         UserManager u = IAccountManager.getInstance().register(roy.getUsername(), roy.getPassword(), roy.getEmail(), roy.getWallet().getAmountOfMoney());
         u.logout();
@@ -140,17 +129,26 @@ public class LoginManagerTests {
     }
 
 
-
-
     @After
     public void inTheEndOfEveryTest() throws NegativeValue {
         IAccountManager.getInstance().clearLoggedInUsers();
         IAccountManager.getInstance().clearUsers();
         IAccountManager.getInstance().clearLeagues();
-        AccountManager.getInstance().setDefaultLeague(0);
+       // AccountManager.getInstance().setDefaultLeague(0);
         ActionLogger.getInstance().clearLog();
 
     }
+
+       /* @Test
+    public void checkHighestRankUser() throws UsernameNotValid, UserAlreadyExists, NegativeValue, EmailNotValid, PasswordNotValid, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, LeagueNotExists, NotHighestRanking, UserAlreadyInLeague, UserNotInLeague, AlreadyLoggedOut {
+        zerbib.setHighestRanking(true);
+        IAccountManager.getInstance().addUser(zerbib);
+        UserManager roy1 = IAccountManager.getInstance().register(roy.getUsername(), roy.getPassword(), roy.getEmail(), roy.getWallet().getAmountOfMoney());
+        UserManager zerbib1 = IAccountManager.getInstance().login(zerbib.getUsername(), zerbib.getPassword());
+        zerbib1.moveUserToLeague("roy" ,100);
+        assertEquals(roy1.getUser().getLeague(), 100);
+
+    }*/
 
 
 

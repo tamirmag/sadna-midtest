@@ -10,9 +10,10 @@ public class User {
     private String email;
     private int league;
     private Wallet wallet;
-    private boolean isHighestRanking;
+    private int numOfGames;
+    // private boolean isHighestRanking;
     private ArrayList<Player> existingPlayers = new ArrayList<>();
-    private ArrayList<String> favoriteTurns = new ArrayList<>();
+    // private ArrayList<String> favoriteTurns = new ArrayList<>();
 
     public User(String username, String password, int league, String email, Wallet wallet) {
         this.username = username;
@@ -20,6 +21,7 @@ public class User {
         this.league = league;
         this.email = email;
         this.wallet = wallet;
+        this.numOfGames = 0;
     }
 
     @Override
@@ -71,14 +73,6 @@ public class User {
         this.existingPlayers = existingPlayers;
     }
 
-    public ArrayList<String> getFavoriteTurns() {
-        return favoriteTurns;
-    }
-
-    public void setFavoriteTurns(ArrayList<String> favoriteTurns) {
-        this.favoriteTurns = favoriteTurns;
-    }
-
     public Wallet getWallet() {
         return wallet;
     }
@@ -87,12 +81,29 @@ public class User {
         this.wallet = wallet;
     }
 
-    public boolean isHighestRanking() {return isHighestRanking;}
-
-    public void setHighestRanking(boolean highestRanking) {isHighestRanking = highestRanking;}
-
     @Override
     public boolean equals(Object other) {
         return username.equals(((User) other).username) && password.equals(((User) other).password);
     }
+
+    public int getNumOfGames() {
+        return numOfGames;
+    }
+
+    public void setNumOfGames(int numOfGames) {
+        this.numOfGames = numOfGames;
+    }
+
+    //public boolean isHighestRanking() {return isHighestRanking;}
+
+    // public void setHighestRanking(boolean highestRanking) {isHighestRanking = highestRanking;}
+
+       /* public ArrayList<String> getFavoriteTurns() {
+        return favoriteTurns;
+    }
+
+    public void setFavoriteTurns(ArrayList<String> favoriteTurns) {
+        this.favoriteTurns = favoriteTurns;
+    }
+    */
 }

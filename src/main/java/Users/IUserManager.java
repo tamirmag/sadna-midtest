@@ -13,7 +13,7 @@ public interface IUserManager {
 
     void addPlayer(Player p);
 
-    void addFavoriteTurn(String turn);
+    //void addFavoriteTurn(String turn);
 
     ArrayList<String> viewReplay(int gameNumber);
 
@@ -43,12 +43,12 @@ public interface IUserManager {
 
     void JoinGame(int gameNumber) throws  CantJoin, NoMuchMoney;
 
-    void moveUserToLeague(String username, int toLeague)
-            throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists, NotHighestRanking;
+   // void moveUserToLeague(String username, int toLeague)
+     //       throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists, NotHighestRanking;
 
-    void setCriteria() throws NotImplementedException, NotHighestRanking;
+    //void setCriteria() throws NotImplementedException, NotHighestRanking;
 
-    void setDefaultLeague(int defaultLeague) throws NegativeValue, NotHighestRanking;
+   // void setDefaultLeague(int defaultLeague) throws NegativeValue, NotHighestRanking;
 
     //Game actions
     void check(int gameID) throws NoMuchMoney;

@@ -11,8 +11,8 @@ public class ServiceClass implements IServiceClass {
     @Override
     public ServiceUser register(String username, String password, String email, int wallet) throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
         IAccountManager.getInstance().register(username, password, email, wallet);
-        int league = IAccountManager.getInstance().getDefaultLeague();
-        return new ServiceUser(username, password, email, new ServiceWallet(wallet), league);
+        int league = IAccountManager.getInstance().getUnknownLeague();
+        return new ServiceUser(username, password, email, new ServiceWallet(wallet), league, 0);
     }
 
     @Override
@@ -21,7 +21,8 @@ public class ServiceClass implements IServiceClass {
         int league = u.getUser().getLeague();
         ServiceWallet wallet = new ServiceWallet(u.getUser().getWallet().getAmountOfMoney());
         String email = u.getUser().getEmail();
-        return new ServiceUser(username, password, email, wallet, league);
+        int numOfGames = u.getUser().getNumOfGames();
+        return new ServiceUser(username, password, email, wallet, league, numOfGames);
     }
 
     @Override
@@ -72,11 +73,11 @@ public class ServiceClass implements IServiceClass {
         return u.viewReplay(gamenum);
     }
 
-    @Override
+   /* @Override
     public void saveFavoriteTurn(int gamenum, String username, String turn) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.addFavoriteTurn(turn);
-    }
+    }*/
 
     @Override
     public ArrayList<Integer> findActiveGamesByPotSize(int potSize, String username) throws UserNotLoggedIn, UserNotExists {
@@ -87,7 +88,7 @@ public class ServiceClass implements IServiceClass {
         return ret;
     }
 
-    @Override
+   /* @Override
     public void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.setDefaultLeague(defaultLeague);
@@ -103,7 +104,7 @@ public class ServiceClass implements IServiceClass {
     public void moveToLeague(String username, String userToMove, int league) throws UserNotLoggedIn, UserNotExists, LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.moveUserToLeague(userToMove, league);
-    }
+    }*/
 
     @Override
     public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
@@ -138,6 +139,7 @@ public class ServiceClass implements IServiceClass {
     @Override
     public void terminateGame( int gameID) {
         IActiveGamesManager.getInstance().terminateGame(gameID);
+        //TODO : add new function to the Account Manager that increments the numOfGames of the players;
     }
 
     @Override

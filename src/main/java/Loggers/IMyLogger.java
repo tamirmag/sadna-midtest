@@ -1,5 +1,6 @@
 package Loggers;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
@@ -16,4 +17,6 @@ public interface IMyLogger {
     Path getFullPath();
 
     void deleteFile();
+
+    File getFile();
 }
