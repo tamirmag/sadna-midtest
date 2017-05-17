@@ -61,4 +61,6 @@ public interface IUserManager {
 
     void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney;
 
+    void startGame(int gameID);
+
 }

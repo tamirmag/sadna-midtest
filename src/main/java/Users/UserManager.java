@@ -208,6 +208,13 @@ public class UserManager implements IUserManager {
         ActiveGamesManager.getInstance().raise(gameID,amount , user);
     }
 
+    @Override
+    public void startGame(int gameID)
+    {
+       IActiveGamesManager.getInstance().startGame(gameID);
+    }
+
+
     //highest ranking users operations
 
  /*   @Override
