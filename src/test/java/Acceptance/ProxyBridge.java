@@ -143,5 +143,10 @@ public class ProxyBridge implements Bridge{
 		real.clearAllFinishedGameLogs();
 	}
 
+	@Override
+	public void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists
+	{
+		real.startGame(username,gameID);
+	}
 
 }
