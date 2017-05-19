@@ -52,7 +52,7 @@ public interface IGame {
 
     void terminateGame();
 
-    void startGame();
+    void startGame() throws NoMuchMoney;
 
     boolean inMax();
 

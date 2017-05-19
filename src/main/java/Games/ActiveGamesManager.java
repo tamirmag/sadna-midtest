@@ -93,7 +93,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
     }
 
     @Override
-    public void startGame(int id) {
+    public void startGame(int id) throws NoMuchMoney {
         IGame myGame = find(id);
         myGame.startGame();
     }
@@ -109,6 +109,11 @@ public class ActiveGamesManager implements IActiveGamesManager {
         IGame myGame = find(id);
         return myGame.getMinimumBet();
     }
+
+    public boolean isLocked(int id){
+        IGame myGame = find(id);
+        return myGame.isLocked();
+    };
 
     @Override
     public void fold(int id, User usr) {

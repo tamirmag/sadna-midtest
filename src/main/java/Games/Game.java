@@ -33,7 +33,7 @@ public class Game implements IGame {
     private int dealerId = 0;
     private int turnId = 0; //number of current playing player
     private int turn = 0; // number of round
-    private boolean up = false; // if somones raised in this round
+    private boolean up = true; // if somones raised in this round
     //    private int minimumBet;
     private int currentMinimumBet;
     //   private int maxPlayers;
@@ -133,7 +133,7 @@ public class Game implements IGame {
 
     @Override
     public int getMinimumBet(){
-        return currentMinimumBet;
+        return 5;
     }
 
     @Override
@@ -236,21 +236,31 @@ public class Game implements IGame {
     }
 
     @Override
-    public void startGame() {
+    public void startGame() throws NoMuchMoney {
         locked = true;
         playerDesk = new ArrayList<Integer>();
         for (Player p:players) {
             desk.add(p);
             playerDesk.add(0);
         }
+        blinedBet();
+    }
+
+    private void blinedBet() throws NoMuchMoney {
+        Player smallBlind = desk.get(dealerId);
+        Player bigBlind = desk.get(dealerId+1);
+        call(getMinimumBet()/2, smallBlind);
+        call(getMinimumBet(), bigBlind);
     }
 
     @Override
     public void endTurn(Player player) {
         if (desk.get(turnId).equals(player)) {
             this.turnId = this.turnId + 1;
-            if (this.turnId == desk.size())
+
+            if (this.turnId == desk.size()) {
                 endRound();
+            }
         }
     }
 

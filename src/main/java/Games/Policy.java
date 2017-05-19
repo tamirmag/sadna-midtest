@@ -103,7 +103,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void startGame() {
+    public void startGame() throws NoMuchMoney {
         this.policy.startGame();
     }
 

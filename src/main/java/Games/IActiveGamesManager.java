@@ -17,7 +17,7 @@ public interface IActiveGamesManager {
 
     int createGame(User user, String type, Preferences pref);
 
-    void startGame(int id);
+    void startGame(int id) throws NoMuchMoney;
 
     void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney;
 
