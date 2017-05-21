@@ -24,7 +24,7 @@ public class AccountManager implements IAccountManager {
     private Hashtable<Integer, ArrayList<User>> leagues;
     private final String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
     private static final IAccountManager instance = new AccountManager();
-
+    int i =0;
     private ReentrantReadWriteLock usersLock = new ReentrantReadWriteLock(true);
     private ReentrantReadWriteLock loggedInLock = new ReentrantReadWriteLock(true);
     private ReentrantReadWriteLock leaguesLock = new ReentrantReadWriteLock(true);
