@@ -19,12 +19,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class AccountManager implements IAccountManager {
 
     final int UNKNOWN_RANK = 0;
-    // private int defaultLeague;
     private ArrayList<User> users;
     private ArrayList<User> loggedInUsers;
     private Hashtable<Integer, ArrayList<User>> leagues;
     private final String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-    //private int maximalRank;
     private static final IAccountManager instance = new AccountManager();
 
     private ReentrantReadWriteLock usersLock = new ReentrantReadWriteLock(true);
@@ -42,7 +40,6 @@ public class AccountManager implements IAccountManager {
         users = new ArrayList<User>();
         loggedInUsers = new ArrayList<User>();
         leagues = new Hashtable<Integer, ArrayList<User>>();
-        // maximalRank = 0;
         leagues.put(UNKNOWN_RANK, new ArrayList<User>());
     }
 
