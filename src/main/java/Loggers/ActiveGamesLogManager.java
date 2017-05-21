@@ -166,8 +166,6 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
             Iterator<GameLogger> iter = ActiveGames.iterator();
             while (iter.hasNext()) {
                 GameLogger g = iter.next();
-                System.out.println("deleting active game " + g.getFilename());
-
                File f = g.getFile();
                 try {
                     Files.delete(f.toPath());

@@ -27,9 +27,6 @@ public class FinishedGamesManager implements IFinishedGamesManager {
     final Lock usersRead = usersLock.readLock();
 
     public static FinishedGamesManager getInstance() {
-        // if (instance == null) {
-        //    instance = new FinishedGamesManager();
-
         return instance;
     }
 
@@ -77,20 +74,6 @@ public class FinishedGamesManager implements IFinishedGamesManager {
         }
     }
 
-   /* @Override
-    public void saveFavoriteTurn(User user, IGame game, int turn) {
-        ArrayList<String> all_turns_of_user = new ArrayList<>();
-        Hashtable<String, ArrayList<String>> temp = game.getAllTurnsByAllPlayers();
-
-        usersRead.lock();
-        for (Player p : user.getExistingPlayers())
-            all_turns_of_user.addAll(temp.get(p.getName()));
-        if (turn >= 1) {
-            String chosenTurn = all_turns_of_user.get(turn - 1);
-            user.getFavoriteTurns().add(chosenTurn);
-        }
-        usersRead.unlock();
-    }*/
 
     private boolean isFinishedGameExists(int num) {
         filesRead.lock();
@@ -108,21 +91,14 @@ public class FinishedGamesManager implements IFinishedGamesManager {
         filesWrite.unlock();
 
     }
+
     @Override
     public void deleteAllFinishedGameLogs() {
-     /*   if (finishedGames != null) {
-            for (GameLogger g : finishedGames) {
-                g.deleteFile();
-            }
-            finishedGames.clear();
-        }*/
-
         filesWrite.lock();
         if (finishedGames != null) {
             Iterator<GameLogger> iter = finishedGames.iterator();
             while (iter.hasNext()) {
                 GameLogger g = iter.next();
-                System.out.println("deleting finished game " + g.getFilename());
                 iter.remove();
                 g.deleteFile();
             }
@@ -130,3 +106,17 @@ public class FinishedGamesManager implements IFinishedGamesManager {
         filesWrite.unlock();
     }
 }
+   /* @Override
+    public void saveFavoriteTurn(User user, IGame game, int turn) {
+        ArrayList<String> all_turns_of_user = new ArrayList<>();
+        Hashtable<String, ArrayList<String>> temp = game.getAllTurnsByAllPlayers();
+
+        usersRead.lock();
+        for (Player p : user.getExistingPlayers())
+            all_turns_of_user.addAll(temp.get(p.getName()));
+        if (turn >= 1) {
+            String chosenTurn = all_turns_of_user.get(turn - 1);
+            user.getFavoriteTurns().add(chosenTurn);
+        }
+        usersRead.unlock();
+    }*/

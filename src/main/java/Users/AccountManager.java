@@ -47,10 +47,6 @@ public class AccountManager implements IAccountManager {
     }
 
     public static IAccountManager getInstance() {
-        /*if(instance==null)
-        {
-           instance = new AccountManager();
-        }*/
         return instance;
     }
 
@@ -94,19 +90,16 @@ public class AccountManager implements IAccountManager {
     }
 
     @Override
-    public void updateNumOfGames(ArrayList<Player> players)
-    {
+    public void updateNumOfGames(ArrayList<Player> players) {
         usersWrite.lock();
-        for(Player p : players)
-        {
-            User u= getUser(p.getName());
+        for (Player p : players) {
+            User u = getUser(p.getName());
             int numOfGames = u.getNumOfGames();
-            u.setNumOfGames(numOfGames+1);
-            if((numOfGames+1) %10 ==0)
-            {
+            u.setNumOfGames(numOfGames + 1);
+            if ((numOfGames + 1) % 10 == 0) {
                 int formerLeague = u.getLeague();
-                u.setLeague(formerLeague +1);
-                moveUserToLeague(u ,formerLeague+1);
+                u.setLeague(formerLeague + 1);
+                moveUserToLeague(u, formerLeague + 1);
             }
         }
         usersWrite.unlock();
@@ -285,50 +278,6 @@ public class AccountManager implements IAccountManager {
         loggedInWrite.unlock();
     }
 
-    /*  @Override
-      public void addUserToLeague(User u) throws UserAlreadyInLeague {
-          int league = u.getLeague();
-          if (leagues.get(league) != null && leagues.get(league).contains(u))
-              throw new UserAlreadyInLeague(u.getUsername(), league);
-          else if (!leagues.containsKey(league) || leagues.get(league) == null) {
-              leagues.put(league, new ArrayList<User>());
-              leagues.get(league).add(u);
-          } else leagues.get(league).add(u);
-          ActionLogger.getInstance().writeToFile(u.getUsername() + " was moved to league " + league);
-      }
-
-      @Override
-      public void removeUserFromLeague(User u) throws UserNotInLeague, LeagueNotExists {
-          int league = u.getLeague();
-          if (!leagues.containsKey(league) || leagues.get(league) == null) throw new LeagueNotExists(league);
-          else if (!leagues.get(league).contains(u)) throw new UserNotInLeague(u.getUsername(), league);
-          else leagues.get(league).remove(u);
-          ActionLogger.getInstance().writeToFile(u.getUsername() + " was removed from league " + league);
-      }*/
-  /*  @Override
-    public void moveUserToLeague(String username, int newLeague) throws UserNotInLeague, LeagueNotExists, UserAlreadyInLeague, UserNotExists {
-        if (!isUserExists(username)) throw new UserNotExists(username);
-        User u = getUser(username);
-        int league = u.getLeague();
-        if (newLeague == league) throw new UserAlreadyInLeague(username, newLeague);
-        if (isLeagueNotExists(league)) throw new LeagueNotExists(league);
-        else if (isUserNotInLeague(league, u)) throw new UserNotInLeague(u.getUsername(), league);
-        else {
-            leagueWrite.lock();
-            leagues.get(league).remove(u);
-            leagueWrite.unlock();
-        }
-        leagueWrite.lock();
-        if (isLeagueNotExists(newLeague)) {
-            leagues.put(newLeague, new ArrayList<User>());
-        }
-        leagues.get(newLeague).add(u);
-        leagueWrite.unlock();
-
-        ActionLogger.getInstance().writeToFile(username + " was moved to league " + newLeague);
-        u.setLeague(newLeague);
-    }
-*/
     private boolean isLeagueNotExists(int league) {
         boolean ans = false;
         leagueRead.lock();
@@ -344,21 +293,6 @@ public class AccountManager implements IAccountManager {
         leagueRead.unlock();
         return ans;
     }
-
-
-   /* @Override
-    public void setDefaultLeague(int league) throws NegativeValue {
-        if (league < 0) throw new NegativeValue(league);
-        else {
-            moveUsersFromDefaultLeague(league);
-            defaultLeague = league;
-        }
-    }
-
-    @Override
-    public int getDefaultLeague() {
-        return defaultLeague;
-    }*/
 
 
     @Override
@@ -382,35 +316,6 @@ public class AccountManager implements IAccountManager {
         leagueWrite.unlock();
     }
 
-    /*  @Override
-      public int getMaximalRank() {
-          if (loggedInUsers.size() == 0) return maximalRank;
-          else {
-              int ret = loggedInUsers.get(0).getLeague();
-              for (User u : loggedInUsers) {
-                  if (u.getLeague() > ret)
-                      ret = u.getLeague();
-              }
-              return ret;
-          }
-      }
-
-      private void moveUsersFromDefaultLeague(int newLeague) throws NegativeValue {
-          if (newLeague < 0) throw new NegativeValue(newLeague);
-          else {
-              if (leagues.get(UNKNOWN_RANK) == null) leagues.put(UNKNOWN_RANK, new ArrayList<User>());
-              ArrayList<User> move = new ArrayList<User>(leagues.get(UNKNOWN_RANK));
-              if (leagues.get(newLeague) == null) {
-                  leagues.put(newLeague, new ArrayList<User>());
-              }
-              for (User u : move) {
-                  leagues.get(newLeague).add(u);
-                  u.setLeague(newLeague);
-              }
-              leagues.get(UNKNOWN_RANK).clear();
-          }
-      }
-  */
     private boolean isPasswordCorrect(String username, String password) {
         usersRead.lock();
         boolean ans = false;
@@ -541,8 +446,98 @@ public class AccountManager implements IAccountManager {
                     }
                 }, 0, 7, TimeUnit.DAYS);
     }
-
-
 }
+
+
+    /*  @Override
+      public void addUserToLeague(User u) throws UserAlreadyInLeague {
+          int league = u.getLeague();
+          if (leagues.get(league) != null && leagues.get(league).contains(u))
+              throw new UserAlreadyInLeague(u.getUsername(), league);
+          else if (!leagues.containsKey(league) || leagues.get(league) == null) {
+              leagues.put(league, new ArrayList<User>());
+              leagues.get(league).add(u);
+          } else leagues.get(league).add(u);
+          ActionLogger.getInstance().writeToFile(u.getUsername() + " was moved to league " + league);
+      }
+
+      @Override
+      public void removeUserFromLeague(User u) throws UserNotInLeague, LeagueNotExists {
+          int league = u.getLeague();
+          if (!leagues.containsKey(league) || leagues.get(league) == null) throw new LeagueNotExists(league);
+          else if (!leagues.get(league).contains(u)) throw new UserNotInLeague(u.getUsername(), league);
+          else leagues.get(league).remove(u);
+          ActionLogger.getInstance().writeToFile(u.getUsername() + " was removed from league " + league);
+      }*/
+  /*  @Override
+    public void moveUserToLeague(String username, int newLeague) throws UserNotInLeague, LeagueNotExists, UserAlreadyInLeague, UserNotExists {
+        if (!isUserExists(username)) throw new UserNotExists(username);
+        User u = getUser(username);
+        int league = u.getLeague();
+        if (newLeague == league) throw new UserAlreadyInLeague(username, newLeague);
+        if (isLeagueNotExists(league)) throw new LeagueNotExists(league);
+        else if (isUserNotInLeague(league, u)) throw new UserNotInLeague(u.getUsername(), league);
+        else {
+            leagueWrite.lock();
+            leagues.get(league).remove(u);
+            leagueWrite.unlock();
+        }
+        leagueWrite.lock();
+        if (isLeagueNotExists(newLeague)) {
+            leagues.put(newLeague, new ArrayList<User>());
+        }
+        leagues.get(newLeague).add(u);
+        leagueWrite.unlock();
+
+        ActionLogger.getInstance().writeToFile(username + " was moved to league " + newLeague);
+        u.setLeague(newLeague);
+    }
+*/
+   /* @Override
+    public void setDefaultLeague(int league) throws NegativeValue {
+        if (league < 0) throw new NegativeValue(league);
+        else {
+            moveUsersFromDefaultLeague(league);
+            defaultLeague = league;
+        }
+    }
+
+    @Override
+    public int getDefaultLeague() {
+        return defaultLeague;
+    }*/
+
+    /*  @Override
+      public int getMaximalRank() {
+          if (loggedInUsers.size() == 0) return maximalRank;
+          else {
+              int ret = loggedInUsers.get(0).getLeague();
+              for (User u : loggedInUsers) {
+                  if (u.getLeague() > ret)
+                      ret = u.getLeague();
+              }
+              return ret;
+          }
+      }
+
+      private void moveUsersFromDefaultLeague(int newLeague) throws NegativeValue {
+          if (newLeague < 0) throw new NegativeValue(newLeague);
+          else {
+              if (leagues.get(UNKNOWN_RANK) == null) leagues.put(UNKNOWN_RANK, new ArrayList<User>());
+              ArrayList<User> move = new ArrayList<User>(leagues.get(UNKNOWN_RANK));
+              if (leagues.get(newLeague) == null) {
+                  leagues.put(newLeague, new ArrayList<User>());
+              }
+              for (User u : move) {
+                  leagues.get(newLeague).add(u);
+                  u.setLeague(newLeague);
+              }
+              leagues.get(UNKNOWN_RANK).clear();
+          }
+      }
+  */
+
+
+
 
 
