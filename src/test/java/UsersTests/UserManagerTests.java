@@ -53,7 +53,7 @@ public class UserManagerTests {
         u.editProfile(roy.getUsername(),roy.getPassword() ,INVALID_EMAIL);
 
     }
-    @Test
+  /*  @Test
     public void setDefaultLeague() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserAlreadyInLeague, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, NotHighestRanking {
         zerbib.setHighestRanking(true);
         IAccountManager.getInstance().addUser(zerbib);
@@ -78,7 +78,7 @@ public class UserManagerTests {
         UserManager zerbib1 = IAccountManager.getInstance().login(zerbib.getUsername(), zerbib.getPassword());
         zerbib1.moveUserToLeague("roy", 100);
         zerbib1.moveUserToLeague("roy", 100);
-    }
+    }*/
 
 
     @Before
@@ -91,7 +91,7 @@ public class UserManagerTests {
         AccountManager.getInstance().clearLoggedInUsers();
         AccountManager.getInstance().clearUsers();
         AccountManager.getInstance().clearLeagues();
-        AccountManager.getInstance().setDefaultLeague(0);
+        //AccountManager.getInstance().setDefaultLeague(0);
         ActionLogger.getInstance().clearLog();
     }
 
