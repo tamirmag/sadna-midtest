@@ -10,6 +10,7 @@ import Loggers.IErrorLogger;
 import Loggers.IFinishedGamesManager;
 import Users.*;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import ServiceLayer.ServiceUser;
@@ -24,10 +25,21 @@ public class acctests {
         bridge.clearUsers();
         IActionLogger.getInstance().clearLog();
         IErrorLogger.getInstance().clearLog();
+        bridge.clearAllFinishedGameLogs();
+    }
+
+    @AfterClass
+    public static void afterAllTests() throws AlreadyLoggedOut, UserNotExists {
+        bridge.clearLoggedInUsers();
+        bridge.clearUsers();
+        IActionLogger.getInstance().clearLog();
+        IErrorLogger.getInstance().clearLog();
         IFinishedGamesManager.getInstance().deleteAllFinishedGameLogs();
         IActiveGamesLogManager.getInstance().RemoveAllGameLoggers();
         bridge.clearAllFinishedGameLogs();
     }
+
+
     @Before
     public void atStart() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists {
       //  u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
@@ -267,19 +279,6 @@ public class acctests {
     }
 
     @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInSaveFavoriteTurn() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
-        // bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.logout("moshe");
-        bridge.saveFavoriteTurn(22, "moshe", "favoriteTurn1");
-    }
-
-    @Test(expected = UserNotExists.class)
-    public void UserNotExistsSaveFavoriteTurn() throws UserNotLoggedIn, UserNotExists {
-        bridge.saveFavoriteTurn(22, "moshe1", "favoriteTurn1");
-    }
-
-    @Test(expected = UserNotLoggedIn.class)
     public void UserNotLoggedInFindActiveGamesByPotSize() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
         // bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
@@ -291,78 +290,6 @@ public class acctests {
     public void UserNotExistsFindActiveGamesByPotSize() throws UserNotLoggedIn, UserNotExists {
         bridge.findActiveGamesByPotSize(100, "moshe1");
     }
-
-    @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInSetDefaultLeague() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NotHighestRanking, AlreadyLoggedOut {
-        bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.logout("moshe");
-        bridge.setDefaultLeague("moshe", 1);
-    }
-
-    @Test(expected = UserNotExists.class)
-    public void UserNotExistsSetDefaultLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
-        bridge.setDefaultLeague("moshe1", 1);
-    }
-
-    @Test(expected = NotHighestRanking.class)
-    public void NegativeValueSetDefaultLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, NotHighestRanking, AlreadyLoggedOut {
-        bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.logout("moshe");
-        bridge.login("moshe", "1111");
-        bridge.setDefaultLeague("moshe", -12);
-    }
-
-    @Test(expected = NotHighestRanking.class)
-    public void UserNotLoggedInSetCriteria() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NotHighestRanking, UsernameAndPasswordNotMatch, AlreadyLoggedIn, AlreadyLoggedOut {
-        bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.logout("moshe");
-        bridge.login("moshe", "1111");
-        bridge.setCriteria("moshe", 1);
-    }
-
-    @Test(expected = UserNotExists.class)
-    public void UserNotExistsSetCriteria() throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
-        bridge.setCriteria("moshe1", 1);
-    }
-
-    //@Test(expected = NegativeValue.class)
-    public void NegativeValueSetCriteria() throws UserNotLoggedIn, UserNotExists, NegativeValue, EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, NotHighestRanking {
-        //bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.login("moshe", "1111");
-        bridge.setCriteria("moshe", -12);
-    }
-
-    //  @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInMoveToLeague() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, LeagueNotExists, UserAlreadyInLeague, UserNotInLeague, UsernameAndPasswordNotMatch, AlreadyLoggedIn, AlreadyLoggedOut, NotHighestRanking {
-        //bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.login("moshe", "1111");
-        bridge.setDefaultLeague("moshe", 1);
-        bridge.logout("moshe");
-        bridge.moveToLeague("moshe", "moshe", 2);
-    }
-
-    //  @Test(expected = UserNotExists.class)
-    public void UserNotExistsMoveToLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, LeagueNotExists, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
-        bridge.moveToLeague("moshe", "moshe", 2);
-    }
-
-    //  @Test(expected = NegativeValue.class)
-    public void NegativeValueMoveToLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, LeagueNotExists, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
-        bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.login("moshe", "1111");
-        bridge.setDefaultLeague("moshe", 1);
-        bridge.moveToLeague("moshe", "moshe", -2);
-    }
-
-    //	    @Test(expected = NegativeValue.class)
-    public void UserAlreadyInLeagueMoveToLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, LeagueNotExists, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
-        bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.login("moshe", "1111");
-        bridge.setDefaultLeague("moshe", 1);
-        bridge.moveToLeague("moshe", "moshe", 1);
-    }
-
-///	    void moveToLeague(String username, String userToMove, int league)  LeagueNotExists , UserNotInLeague;
 
 
     @Test(expected = UserNotLoggedIn.class)
@@ -432,6 +359,92 @@ public class acctests {
     public void UserNotExistsFold() throws UserNotLoggedIn, UserNotExists, NegativeValue {
         bridge.fold("moshe1", 2122);
     }
+
+
+ /*   @Test(expected = UserNotLoggedIn.class)
+    public void UserNotLoggedInSetDefaultLeague() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NotHighestRanking, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.setDefaultLeague("moshe", 1);
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsSetDefaultLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
+        bridge.setDefaultLeague("moshe1", 1);
+    }
+
+    @Test(expected = NotHighestRanking.class)
+    public void NegativeValueSetDefaultLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, NotHighestRanking, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.login("moshe", "1111");
+        bridge.setDefaultLeague("moshe", -12);
+    }
+
+    @Test(expected = NotHighestRanking.class)
+    public void UserNotLoggedInSetCriteria() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NotHighestRanking, UsernameAndPasswordNotMatch, AlreadyLoggedIn, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.login("moshe", "1111");
+        bridge.setCriteria("moshe", 1);
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsSetCriteria() throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking {
+        bridge.setCriteria("moshe1", 1);
+    }
+
+    @Test(expected = NegativeValue.class)
+    public void NegativeValueSetCriteria() throws UserNotLoggedIn, UserNotExists, NegativeValue, EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, NotHighestRanking {
+
+        bridge.login("moshe", "1111");
+        bridge.setCriteria("moshe", -12);
+    }
+
+    @Test(expected = UserNotLoggedIn.class)
+    public void UserNotLoggedInMoveToLeague() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, LeagueNotExists, UserAlreadyInLeague, UserNotInLeague, UsernameAndPasswordNotMatch, AlreadyLoggedIn, AlreadyLoggedOut, NotHighestRanking {
+
+        bridge.login("moshe", "1111");
+        bridge.setDefaultLeague("moshe", 1);
+        bridge.logout("moshe");
+        bridge.moveToLeague("moshe", "moshe", 2);
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsMoveToLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, LeagueNotExists, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
+        bridge.moveToLeague("moshe", "moshe", 2);
+    }
+
+    @Test(expected = NegativeValue.class)
+    public void NegativeValueMoveToLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, LeagueNotExists, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.login("moshe", "1111");
+        bridge.setDefaultLeague("moshe", 1);
+        bridge.moveToLeague("moshe", "moshe", -2);
+    }
+
+    @Test(expected = NegativeValue.class)
+    public void UserAlreadyInLeagueMoveToLeague() throws UserNotLoggedIn, UserNotExists, NegativeValue, EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, LeagueNotExists, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.login("moshe", "1111");
+        bridge.setDefaultLeague("moshe", 1);
+        bridge.moveToLeague("moshe", "moshe", 1);
+    }
+
+*/
+     /*  @Test(expected = UserNotLoggedIn.class)
+    public void UserNotLoggedInSaveFavoriteTurn() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        // bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.saveFavoriteTurn(22, "moshe", "favoriteTurn1");
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsSaveFavoriteTurn() throws UserNotLoggedIn, UserNotExists {
+        bridge.saveFavoriteTurn(22, "moshe1", "favoriteTurn1");
+    }*/
+
 
 
 }

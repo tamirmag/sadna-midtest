@@ -27,15 +27,15 @@ public interface IServiceClass {
 
     ArrayList<String> viewReplay(int gamenum, String username) throws UserNotLoggedIn, UserNotExists;
 
-    void saveFavoriteTurn(int gamenum, String username, String turn) throws UserNotLoggedIn, UserNotExists;
+  //  void saveFavoriteTurn(int gamenum, String username, String turn) throws UserNotLoggedIn, UserNotExists;
 
     ArrayList<Integer> findActiveGamesByPotSize(int potSize, String username) throws UserNotLoggedIn, UserNotExists;
 
-    void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;
+    //void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;
 
-    void setCriteria(String username, int criteria) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;
+   // void setCriteria(String username, int criteria) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;
 
-    void moveToLeague(String username, String userToMove, int league) throws UserNotLoggedIn, UserNotExists, LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking;
+    //void moveToLeague(String username, String userToMove, int league) throws UserNotLoggedIn, UserNotExists, LeagueNotExists, NegativeValue, UserAlreadyInLeague, UserNotInLeague, NotHighestRanking;
 
     void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney;
 
@@ -54,5 +54,7 @@ public interface IServiceClass {
     void clearUsers();
 
     void clearAllFinishedGameLogs();
+
+    void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists;
 
 }

@@ -2,7 +2,7 @@ package Loggers;
 
 
 public class ErrorLogger extends MyLogger implements IErrorLogger {
-    private static ErrorLogger instance = null;
+    private static final ErrorLogger instance = new ErrorLogger();
     private ErrorLogger(){
         super( "ErrorLog.txt","SystemLogs");
 
@@ -10,9 +10,9 @@ public class ErrorLogger extends MyLogger implements IErrorLogger {
 
     public static IErrorLogger getInstance()
     {
-        if(instance == null) {
+      /*  if(instance == null) {
             instance = new ErrorLogger();
-        }
+        }*/
         return instance;
     }
 
