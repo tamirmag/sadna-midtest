@@ -39,6 +39,8 @@ public interface Bridge extends IServiceClass {
     void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney;
 
     void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists;
+
+    void editProfile(String username, String password, String email) throws EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists;
 }
 
 //void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;

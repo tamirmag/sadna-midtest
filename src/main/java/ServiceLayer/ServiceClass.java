@@ -10,9 +10,18 @@ import java.util.ArrayList;
 public class ServiceClass implements IServiceClass {
     @Override
     public ServiceUser register(String username, String password, String email, int wallet) throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
+        System.out.println("register sucsess!! and Mor is a king!");
         IAccountManager.getInstance().register(username, password, email, wallet);
         int league = IAccountManager.getInstance().getUnknownLeague();
         return new ServiceUser(username, password, email, new ServiceWallet(wallet), league, 0);
+    }
+
+    @Override
+    public void editProfile(String username, String password, String email) throws EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists {
+        //UserManager.getInstance().editProfile(username, password, email);
+        System.out.println("im in service class");
+        IUserManager u= new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        u.editProfile(username,password,email);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class GameTests {
         AccountManager.getInstance().clearUsers();
         AccountManager.getInstance().clearLeagues();
         ActionLogger.getInstance().clearLog();
-        AccountManager.getInstance().setDefaultLeague(0);
+        //AccountManager.getInstance().setDefaultLeague(0);
     }
 
     @Test

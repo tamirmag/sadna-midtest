@@ -2,19 +2,13 @@ package ServerClient;
 //package ServiceLayer;
 
 import java.util.ArrayList;
+
+import Games.CantJoin;
+import Games.NotAllowedNumHigh;
 import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceClass;
 import ServiceLayer.ServiceUser;
-import Users.AlreadyLoggedIn;
-import Users.AlreadyLoggedOut;
-import Users.EmailNotValid;
-import Users.NegativeValue;
-import Users.PasswordNotValid;
-import Users.UserAlreadyExists;
-import Users.UserNotExists;
-import Users.UserNotLoggedIn;
-import Users.UsernameAndPasswordNotMatch;
-import Users.UsernameNotValid;
+import Users.*;
 
 public class Handler {
 
@@ -42,7 +36,7 @@ public class Handler {
 				minimumBet, minimalAmountOfPlayers, maximalAmountOfPlayers, spectatingMode);
 	}
 
-	public void handleJoinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
+	public void handleJoinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, CantJoin, NoMuchMoney {
 		s.joinGame(gamenum, username);
 	}
 
@@ -58,19 +52,19 @@ public class Handler {
 		return s.findActiveGamesByPotSize(potSize, username);
 	}
 
-	public void handleCheck(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+	public void handleCheck(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
 		s.check(username, gameID);
 	}
 
-	public void handleBet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists {
+	public void handleBet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
 		s.bet(username, gameID, amount);
 	}
 
-	public void handleRaise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists {
+	public void handleRaise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney {
 		s.raise(username, gameID, amount);
 	}
 
-	public void handleAllIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+	public void handleAllIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
 		s.allIn(username, gameID);
 	}
 

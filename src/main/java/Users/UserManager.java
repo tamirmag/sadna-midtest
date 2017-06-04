@@ -4,6 +4,7 @@ import Games.*;
 import Loggers.ActionLogger;
 import Loggers.ActiveGamesLogManager;
 import Loggers.FinishedGamesManager;
+import ServiceLayer.ServiceClass;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -18,6 +19,10 @@ public class UserManager implements IUserManager {
         user = one;
     }
 
+   /* public static ServiceClass getInstance() { ////added in 4.6.2017
+        return instance;
+    }*/
+
    /* public UserManager(String username, String password, int league, String email, Wallet wallet) {
         user = new User(username, password, league, email, wallet);
     }*/
@@ -30,6 +35,7 @@ public class UserManager implements IUserManager {
     @Override
     public void editProfile(String username, String password, String email)
             throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists {
+        System.out.println("edited!!");
         editUsername(username);
         editEmail(email);
         editPassword(password);

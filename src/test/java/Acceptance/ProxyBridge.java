@@ -125,6 +125,10 @@ public class ProxyBridge implements Bridge {
         real.startGame(username, gameID);
     }
 
+    @Override
+    public void editProfile(String username, String password, String email) throws EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists{
+        real.editProfile(username,password,email);
+    }
 }
 
     /*

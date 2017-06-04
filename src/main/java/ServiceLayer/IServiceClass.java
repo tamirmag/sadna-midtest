@@ -11,6 +11,8 @@ public interface IServiceClass {
 
     ServiceUser register(String username, String password, String email, int wallet) throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid;
 
+    void editProfile(String username, String password, String email) throws EmailNotValid, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists;
+
     ServiceUser login(String username, String password) throws UsernameAndPasswordNotMatch, AlreadyLoggedIn, UsernameNotValid, PasswordNotValid, UserNotExists;
 
     void logout(String username) throws UserNotExists, AlreadyLoggedOut;

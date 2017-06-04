@@ -122,6 +122,7 @@ public class AccountManager implements IAccountManager {
     @Override
     public UserManager register(String username, String password, String email, int wallet)
             throws UserAlreadyExists, PasswordNotValid, EmailNotValid, NegativeValue, UsernameNotValid {
+        System.out.println("new user- I'm HERE!!\n");
         if (username == null || username.equals("") || username.contains(" "))
             throw new UsernameNotValid(username);
         else if (isUserExists(username)) throw new UserAlreadyExists(username);
