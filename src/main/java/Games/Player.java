@@ -9,6 +9,7 @@ public class Player {
     String name;
     ArrayList<Card> hand = new ArrayList<Card>();
     public Wallet wallet;
+    private int ligue;
 
     public Player(String name, Wallet wallet)
     {

@@ -24,7 +24,7 @@ public class BuyInPolicy extends Policy{
     }
 
     @Override
-    public boolean canJoin(User user) {
+    public boolean canJoin(User user) throws NotYourLeague {
         if(user.getWallet().getAmountOfMoney() > cost)
            return super.canJoin(user);
         else

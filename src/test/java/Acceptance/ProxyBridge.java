@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Games.CantJoin;
 import Games.NotAllowedNumHigh;
+import Games.NotYourTurn;
 import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceUser;
 import Users.*;
@@ -76,27 +77,27 @@ public class ProxyBridge implements Bridge {
 
 
     @Override
-    public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
+    public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn {
         real.check(username, gameID);
     }
 
     @Override
-    public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
+    public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn {
         real.bet(username, gameID, amount);
     }
 
     @Override
-    public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney {
+    public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
         real.raise(username, gameID, amount);
     }
 
     @Override
-    public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
+    public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn {
         real.allIn(username, gameID);
     }
 
     @Override
-    public void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+    public void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn {
         real.fold(username, gameID);
     }
 
@@ -121,7 +122,7 @@ public class ProxyBridge implements Bridge {
     }
 
     @Override
-    public void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+    public void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney {
         real.startGame(username, gameID);
     }
 

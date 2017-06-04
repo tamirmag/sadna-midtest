@@ -28,7 +28,7 @@ public class Game implements IGame {
     }
 
     private int id;
-    private int legue;
+    private int league;
     private DeckManager deck = new DeckManager();
     private ArrayList<Player> desk = new ArrayList<Player>(); // players that not yet fold
     private ArrayList<Card> flop = new ArrayList<Card>(); // cards on desk
@@ -47,15 +47,14 @@ public class Game implements IGame {
     private String type = "nurmal";
     private GameLogger logger;
 
-    public Game(ArrayList<Player> players, int id, String type, int legue) {
+    public Game(ArrayList<Player> players, int id, int league) {
         this.players = players;
         currentMinimumBet = 0;
         //      maxPlayers = 0;
         pot = 0;
         this.id = id;
-        this.type = type;
         logger = new GameLogger(id);
-        this.legue = legue;
+        this.league = league;
     }
 
 
@@ -150,15 +149,19 @@ public class Game implements IGame {
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney {
-        this.currentMinimumBet += amount;
-        player.wallet.sub(currentMinimumBet);;
-        playerDesk.set(turnId, this.currentMinimumBet);
-        endTurn(player);
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
+        if (desk.get(turnId).equals(player)) {
+            this.currentMinimumBet += amount;
+            player.wallet.sub(currentMinimumBet);
+            ;
+            playerDesk.set(turnId, this.currentMinimumBet);
+            endTurn(player);
+        }else
+            throw new NotYourTurn();
     }
 
     @Override
-    public void fold(Player player) {
+    public void fold(Player player) throws NotYourTurn {
         if (desk.get(turnId).equals(player)) {
             desk.remove(turnId);
             if(desk.size() == 1){
@@ -167,7 +170,8 @@ public class Game implements IGame {
             if (this.turnId == desk.size())
                 endRound();
 
-        }
+        }else
+            throw new NotYourTurn();
     }
 
     @Override
@@ -192,12 +196,15 @@ public class Game implements IGame {
     }
 
     @Override
-    public void bet(int amount, Player player) throws NoMuchMoney {
+    public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn {
+        if (desk.get(turnId).equals(player)) {
         call(amount,player);
+        }else
+            throw new NotYourTurn();
     }
 
     @Override
-    public void call(int amount, Player player) throws NoMuchMoney {
+    public void call(int amount, Player player) throws NoMuchMoney, NotYourTurn {
         if (desk.get(turnId).equals(player)) {
             if(amount >= currentMinimumBet) {
                 playerDesk.set(turnId, amount);
@@ -205,16 +212,18 @@ public class Game implements IGame {
                 currentMinimumBet = amount;
                 endTurn(player);
             }
-        }
+        }else
+            throw new NotYourTurn();
     }
 
     @Override
-    public void check(Player player) throws NoMuchMoney {
+    public void check(Player player) throws NoMuchMoney, NotYourTurn {
         if (desk.get(turnId).equals(player)) {
             playerDesk.set(turnId, currentMinimumBet);
             player.wallet.sub(currentMinimumBet);
             endTurn(player);
-        }
+        }else
+            throw new NotYourTurn();
     }
 
     @Override
@@ -229,8 +238,11 @@ public class Game implements IGame {
     }
 
     @Override
-    public void allIn(Player player) throws NoMuchMoney {
+    public void allIn(Player player) throws NoMuchMoney, NotYourTurn {
+        if (desk.get(turnId).equals(player)) {
         call(player.wallet.getAmountOfMoney(),player);
+        }else
+            throw new NotYourTurn();
     }
 
     @Override
@@ -242,7 +254,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void startGame() throws NoMuchMoney {
+    public void startGame() throws NoMuchMoney, NotYourTurn {
         locked = true;
         playerDesk = new ArrayList<Integer>();
         for (Player p:players) {
@@ -252,7 +264,7 @@ public class Game implements IGame {
         blinedBet();
     }
 
-    private void blinedBet() throws NoMuchMoney {
+    private void blinedBet() throws NoMuchMoney, NotYourTurn {
         Player smallBlind = desk.get(dealerId);
         Player bigBlind = desk.get(dealerId+1);
         call(getMinimumBet()/2, smallBlind);
@@ -363,8 +375,17 @@ public class Game implements IGame {
 
 
     @Override
-    public boolean canJoin(User user) {
-        return user.getLeague() == legue;
+    public boolean canJoin(User user) throws NotYourLeague {
+        if((user.getLeague() != 0)){
+            if(league != user.getLeague()){
+                throw new NotYourLeague(league, user.getLeague());
+            }
+        }else{
+            if(user.getNumOfGames() > 10){
+                throw new NotYourLeague(league, user.getLeague());
+            }
+        }
+        return true;
     }
 
 }

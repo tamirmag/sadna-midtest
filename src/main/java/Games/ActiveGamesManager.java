@@ -44,28 +44,20 @@ public class ActiveGamesManager implements IActiveGamesManager {
         players.add(p);
         IGame game = null;
         int i = this.index.incrementAndGet();
-        switch (type) {
-            case "NoLimitHoldem":
-                game = new NoLimitHoldem(players, i, user.getLeague());
-                break;
-
-            case "LimitHoldem":
-                game = new LimitHoldem(players, i, user.getLeague());
-                break;
-
-            case "PotLimitHoldem":
-                game = new PotLimitHoldem(players, i, user.getLeague());
-                break;
-
-            default:
-                game = new Game(players, i, "Normal", user.getLeague());
-        }
+        game = new Game(players, i,user.getLeague());
         game = buildByPref(pref, game);
         games.add(game);
         return i;
     }
 
     private IGame buildByPref(Preferences pref, IGame game) {
+        if (pref.isNoLimitHoldem())
+            game = new NoLimitHoldem(game);
+        if (pref.isLimitHoldem())
+            game = new LimitHoldem(game);
+        if (pref.isPotLimitHoldem())
+            game = new PotLimitHoldem(game);
+
         if (pref.getBuyInPolicy() > 0)
             game = new BuyInPolicy(game, pref.getBuyInPolicy());
         if (pref.getChipPolicy() > 0)
@@ -93,13 +85,13 @@ public class ActiveGamesManager implements IActiveGamesManager {
     }
 
     @Override
-    public void startGame(int id) throws NoMuchMoney {
+    public void startGame(int id) throws NoMuchMoney, NotYourTurn {
         IGame myGame = find(id);
         myGame.startGame();
     }
 
     @Override
-    public void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney {
+    public void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.raise(amount, p);
@@ -110,13 +102,15 @@ public class ActiveGamesManager implements IActiveGamesManager {
         return myGame.getMinimumBet();
     }
 
-    public boolean isLocked(int id){
+    public boolean isLocked(int id) {
         IGame myGame = find(id);
         return myGame.isLocked();
-    };
+    }
+
+    ;
 
     @Override
-    public void fold(int id, User usr) {
+    public void fold(int id, User usr) throws NotYourTurn {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.fold(p);
@@ -124,7 +118,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void allIn(int id, User usr) throws NoMuchMoney {
+    public void allIn(int id, User usr) throws NoMuchMoney, NotYourTurn {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.allIn(p);
@@ -132,14 +126,14 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void check(int id, User usr) throws NoMuchMoney {
+    public void check(int id, User usr) throws NoMuchMoney, NotYourTurn {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.check(p);
     }
 
     @Override
-    public void bet(int id, int amount, User usr) throws NoMuchMoney {
+    public void bet(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.bet(amount, p);
@@ -160,7 +154,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public List<IGame> findAllActiveGames(User user) {
+    public List<IGame> findAllActiveGames(User user) throws NotYourLeague {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
             if (game.canJoin(user))
@@ -293,18 +287,15 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void call(int id, int amount, User usr) throws NoMuchMoney {
+    public void call(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.call(amount, p);
     }
 
-    public void deleteAllActiveGames()
-    {
-        if(games != null)
-        {
-            for(IGame g : games )
-            {
+    public void deleteAllActiveGames() {
+        if (games != null) {
+            for (IGame g : games) {
                 int i = g.getId();
                 IActiveGamesLogManager.getInstance().RemoveGameLogger(i);
             }

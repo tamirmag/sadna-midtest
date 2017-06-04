@@ -1,9 +1,6 @@
 package GamesTests;
 
-import Games.ActiveGamesManager;
-import Games.CantJoin;
-import Games.IGame;
-import Games.Preferences;
+import Games.*;
 import Loggers.ActionLogger;
 import Users.*;
 import org.junit.After;
@@ -46,7 +43,6 @@ public class GameTests {
         AccountManager.getInstance().clearUsers();
         AccountManager.getInstance().clearLeagues();
         ActionLogger.getInstance().clearLog();
-        AccountManager.getInstance().setDefaultLeague(0);
     }
 
     @Test
@@ -72,7 +68,7 @@ public class GameTests {
     }
 
     @Test
-    public void startGameTest() throws CantJoin, NoMuchMoney {
+    public void startGameTest() throws CantJoin, NoMuchMoney, NotYourTurn {
         int game  = man.createGame(roy,"NoLimitHoldem", new Preferences());
         man.JoinGame(game, tamir);
         man.startGame(game);
@@ -80,14 +76,11 @@ public class GameTests {
     }
 
     @Test
-    public void foldGameTest() throws CantJoin, NoMuchMoney {
+    public void foldGameTest() throws CantJoin, NoMuchMoney, NotYourTurn {
         int game  = man.createGame(roy,"NoLimitHoldem", new Preferences());
         man.JoinGame(game, tamir);
         man.startGame(game);
-   //     man.call(game, 3, roy);
         man.fold(game, roy);
-  //      System.out.println("tamir " + tamir.getWallet().getAmountOfMoney());
-  //      System.out.println("roy " + roy.getWallet().getAmountOfMoney());
         assertTrue(tamir.getWallet().getAmountOfMoney() == 100+man.getMinimumBet(game)/2);
     }
 

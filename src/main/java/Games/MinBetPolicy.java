@@ -10,7 +10,7 @@ public class MinBetPolicy extends Policy{
     int minimumBet;
 
     @Override
-    public void bet(int amount, Player player) throws NoMuchMoney {
+    public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn {
         if(amount >= minimumBet)
             this.policy.call(amount,player);
     }

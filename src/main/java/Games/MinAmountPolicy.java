@@ -21,7 +21,7 @@ public class MinAmountPolicy extends Policy{
         return minAmount;
     }
 
-    public void startGame() throws NoMuchMoney {
+    public void startGame() throws NoMuchMoney, NotYourTurn {
         if(this.policy.getPlayersNum() >= minAmount)
             this.policy.startGame();
     }
