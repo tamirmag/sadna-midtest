@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Games.CantJoin;
 import Games.NotAllowedNumHigh;
+import Games.NotYourTurn;
 import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceUser;
 import Users.*;
@@ -30,15 +31,15 @@ public interface Bridge extends IServiceClass {
 
     ArrayList<Integer> findActiveGamesByPotSize(int potSize, String username) throws UserNotLoggedIn, UserNotExists;
 
-    void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney;
+    void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
 
-    void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney;
+    void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
 
-    void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney;
+    void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, NotYourTurn;
 
-    void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney;
+    void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
 
-    void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists;
+    void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn;
 }
 
 //void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;

@@ -51,16 +51,16 @@ public interface IUserManager {
    // void setDefaultLeague(int defaultLeague) throws NegativeValue, NotHighestRanking;
 
     //Game actions
-    void check(int gameID) throws NoMuchMoney;
+    void check(int gameID) throws NoMuchMoney, NotYourTurn;
 
-    void bet(int gameID, int amount) throws NoMuchMoney;
+    void bet(int gameID, int amount) throws NoMuchMoney, NotYourTurn;
 
-    void allIn(int gameID) throws NoMuchMoney;
+    void allIn(int gameID) throws NoMuchMoney, NotYourTurn;
 
-    void fold(int gameID);
+    void fold(int gameID) throws NotYourTurn;
 
-    void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney;
+    void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn;
 
-    void startGame(int gameID);
+    void startGame(int gameID) throws NotYourTurn, NoMuchMoney;
 
 }

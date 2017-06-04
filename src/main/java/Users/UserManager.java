@@ -166,32 +166,32 @@ public class UserManager implements IUserManager {
 
     //Game actions
     @Override
-    public void check(int gameID) throws NoMuchMoney {
+    public void check(int gameID) throws NoMuchMoney, NotYourTurn {
         ActiveGamesManager.getInstance().check(gameID, user);
     }
 
     @Override
-    public void bet(int gameID, int amount) throws NoMuchMoney {
+    public void bet(int gameID, int amount) throws NoMuchMoney, NotYourTurn {
         ActiveGamesManager.getInstance().bet(gameID, amount, user);
     }
 
     @Override
-    public void allIn(int gameID) throws NoMuchMoney {
+    public void allIn(int gameID) throws NoMuchMoney, NotYourTurn {
         ActiveGamesManager.getInstance().allIn(gameID, user);
     }
 
     @Override
-    public void fold(int gameID) {
+    public void fold(int gameID) throws NotYourTurn {
         ActiveGamesManager.getInstance().fold(gameID, user);
     }
 
     @Override
-    public void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney {
+    public void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
         ActiveGamesManager.getInstance().raise(gameID, amount, user);
     }
 
     @Override
-    public void startGame(int gameID) {
+    public void startGame(int gameID) throws NotYourTurn, NoMuchMoney {
         IActiveGamesManager.getInstance().startGame(gameID);
     }
 

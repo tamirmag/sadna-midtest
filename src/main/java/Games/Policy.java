@@ -83,12 +83,12 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void bet(int amount, Player player) throws NoMuchMoney {
+    public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn {
         this.policy.bet(amount, player);
     }
 
     @Override
-    public void call(int amount, Player player) throws NoMuchMoney {
+    public void call(int amount, Player player) throws NoMuchMoney, NotYourTurn {
         this.policy.call(amount, player);
     }
 
@@ -103,7 +103,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void startGame() {
+    public void startGame() throws NoMuchMoney, NotYourTurn {
         this.policy.startGame();
     }
 
@@ -128,7 +128,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void allIn(Player player) throws NoMuchMoney { this.policy.allIn(player); }
+    public void allIn(Player player) throws NoMuchMoney, NotYourTurn { this.policy.allIn(player); }
 
     @Override
     public int getTurn() {
@@ -136,7 +136,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void check(Player player) throws NoMuchMoney {
+    public void check(Player player) throws NoMuchMoney, NotYourTurn {
         this.policy.check(player);
     }
 
@@ -166,12 +166,12 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
         this.policy.raise(amount, player);
     }
 
     @Override
-    public void fold(Player player) {
+    public void fold(Player player) throws NotYourTurn {
         this.policy.fold(player);
     }
 
@@ -191,5 +191,5 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public boolean canJoin(User user) { return this.policy.canJoin(user); }
+    public boolean canJoin(User user) throws NotYourLeague { return this.policy.canJoin(user); }
 }

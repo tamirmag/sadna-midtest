@@ -10,6 +10,33 @@ public class Preferences {
     private int minAmountPolicy = 0;
     private int minBetPolicy = 0;
     private boolean SpectatePolicy = false;
+    private boolean NoLimitHoldem = false;
+    private boolean LimitHoldem = false;
+    private boolean PotLimitHoldem = false;
+
+    public void setNoLimitHoldem(boolean noLimitHoldem) {
+        NoLimitHoldem = noLimitHoldem;
+    }
+
+    public void setLimitHoldem(boolean limitHoldem) {
+        LimitHoldem = limitHoldem;
+    }
+
+    public void setPotLimitHoldem(boolean potLimitHoldem) {
+        PotLimitHoldem = potLimitHoldem;
+    }
+
+    public boolean isNoLimitHoldem() {
+        return NoLimitHoldem;
+    }
+
+    public boolean isLimitHoldem() {
+        return LimitHoldem;
+    }
+
+    public boolean isPotLimitHoldem() {
+        return PotLimitHoldem;
+    }
 
     public int getBuyInPolicy() {
         return buyInPolicy;

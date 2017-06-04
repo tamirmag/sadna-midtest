@@ -85,31 +85,31 @@ public class ServiceClass implements IServiceClass {
 
 
     @Override
-    public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
+    public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.check(gameID);
     }
 
     @Override
-    public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
+    public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.bet(gameID, amount);
     }
 
     @Override
-    public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney {
+    public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.raise(gameID, amount);
     }
 
     @Override
-    public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney {
+    public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.allIn(gameID);
     }
 
     @Override
-    public void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+    public void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.fold(gameID);
     }
@@ -135,7 +135,7 @@ public class ServiceClass implements IServiceClass {
         IFinishedGamesManager.getInstance().clearAllFinishedGames();
     }
 
-    public void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists {
+    public void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.startGame(gameID);
     }

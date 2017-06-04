@@ -30,7 +30,7 @@ public class MaxAmountPolicy extends Policy{
     }
 
     @Override
-    public boolean canJoin(User user) {
+    public boolean canJoin(User user) throws NotYourLeague {
         if(this.policy.getPlayersNum() < maxAmount)
             return super.canJoin(user);
         else

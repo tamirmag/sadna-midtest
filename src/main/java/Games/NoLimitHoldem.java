@@ -5,12 +5,11 @@ import java.util.ArrayList;
 /**
  * Created by tamir on 16/04/2017.
  */
-public class NoLimitHoldem extends Game{
+public class NoLimitHoldem extends Policy{
 
-    public NoLimitHoldem(ArrayList<Player> players, int id, int legue)
+    public NoLimitHoldem(IGame policy)
     {
-        super(players, id, "NoLimitHoldem", legue);
+        this.policy = policy;
     }
-
 
 }

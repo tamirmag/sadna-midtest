@@ -1,9 +1,6 @@
 package GamesTests;
 
-import Games.ActiveGamesManager;
-import Games.CantJoin;
-import Games.IGame;
-import Games.Preferences;
+import Games.*;
 import Loggers.ActionLogger;
 import Users.*;
 import org.junit.After;
@@ -21,26 +18,22 @@ import static org.junit.Assert.assertTrue;
  */
 public class GameTests {
 
-    ActiveGamesManager man = ActiveGamesManager.getInstance();
-    static User roy = new User("roy", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-    static User tamir = new User("tamir", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-    static User nofar = new User("nofar", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-    static User mor = new User("mor", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-    static User yoni = new User("yoni", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+    ActiveGamesManager man;
+    static User roy;
+    static User tamir;
+    static User nofar;
+    static User mor;
+    static User yoni;
 
 
     @Before
     public void inTheBeginningOfEveryTest() throws NegativeValue, UserAlreadyExists, UsernameNotValid, PasswordNotValid, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn {
-    /*    AccountManager.getInstance().register(roy2.getUsername(), roy2.getPassword(), roy2.getEmail(), roy2.getWallet().getAmountOfMoney());
-        AccountManager.getInstance().register(tamir2.getUsername(), tamir2.getPassword(), tamir2.getEmail(), tamir2.getWallet().getAmountOfMoney());
-        AccountManager.getInstance().register(nofar2.getUsername(), nofar2.getPassword(), nofar2.getEmail(), nofar2.getWallet().getAmountOfMoney());
-        AccountManager.getInstance().register(mor2.getUsername(), mor2.getPassword(), mor2.getEmail(), mor2.getWallet().getAmountOfMoney());
-        AccountManager.getInstance().register(yoni2.getUsername(), yoni2.getPassword(), yoni2.getEmail(), yoni2.getWallet().getAmountOfMoney());
-        roy = AccountManager.getInstance().login(roy2.getUsername(), roy2.getPassword());
-        tamir = AccountManager.getInstance().login(tamir2.getUsername(), tamir2.getPassword());
-        nofar = AccountManager.getInstance().login(nofar2.getUsername(), nofar2.getPassword());
-        mor = AccountManager.getInstance().login(mor2.getUsername(), mor2.getPassword());
-        yoni = AccountManager.getInstance().login(yoni2.getUsername(), yoni2.getPassword());*/
+        man = ActiveGamesManager.getInstance();
+        roy = new User("roy", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        tamir = new User("tamir", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        nofar = new User("nofar", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        mor = new User("mor", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        yoni = new User("yoni", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
 
     }
 
@@ -50,7 +43,6 @@ public class GameTests {
         AccountManager.getInstance().clearUsers();
         AccountManager.getInstance().clearLeagues();
         ActionLogger.getInstance().clearLog();
-        AccountManager.getInstance().setDefaultLeague(0);
     }
 
     @Test
@@ -73,6 +65,23 @@ public class GameTests {
                 ourGames.add(game);
         }
         assertTrue(ourGames.contains(game));
+    }
+
+    @Test
+    public void startGameTest() throws CantJoin, NoMuchMoney, NotYourTurn {
+        int game  = man.createGame(roy,"NoLimitHoldem", new Preferences());
+        man.JoinGame(game, tamir);
+        man.startGame(game);
+        assertTrue(man.isLocked(game));
+    }
+
+    @Test
+    public void foldGameTest() throws CantJoin, NoMuchMoney, NotYourTurn {
+        int game  = man.createGame(roy,"NoLimitHoldem", new Preferences());
+        man.JoinGame(game, tamir);
+        man.startGame(game);
+        man.fold(game, roy);
+        assertTrue(tamir.getWallet().getAmountOfMoney() == 100+man.getMinimumBet(game)/2);
     }
 
 }

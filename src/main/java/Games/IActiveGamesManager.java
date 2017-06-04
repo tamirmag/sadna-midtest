@@ -17,23 +17,23 @@ public interface IActiveGamesManager {
 
     int createGame(User user, String type, Preferences pref);
 
-    void startGame(int id);
+    void startGame(int id) throws NoMuchMoney, NotYourTurn;
 
-    void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney;
+    void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn;
 
-    void fold(int id, User usr);
+    void fold(int id, User usr) throws NotYourTurn;
 
-    void allIn(int id, User usr) throws NoMuchMoney;
+    void allIn(int id, User usr) throws NoMuchMoney, NotYourTurn;
 
-    void check(int id, User usr) throws NoMuchMoney;
+    void check(int id, User usr) throws NoMuchMoney, NotYourTurn;
 
-    void bet(int id, int amount, User usr) throws NoMuchMoney;
+    void bet(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn;
 
     void JoinGame(int id, User user) throws NoMuchMoney, CantJoin;
 
     void spectateGame(int id, User user);
 
-    List<IGame> findAllActiveGames(User user);
+    List<IGame> findAllActiveGames(User user) throws NotYourLeague;
 
     List<IGame> findActiveGamesByPlayer(String name);
 
@@ -59,5 +59,5 @@ public interface IActiveGamesManager {
 
     void terminateGame(int id);
 
-    void call(int id, int amount, User usr) throws NoMuchMoney;
+    void call(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn;
 }
