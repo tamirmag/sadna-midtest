@@ -31,7 +31,7 @@ public interface IAccountManager {
 
     void addLoggedInUser(User u) throws AlreadyLoggedIn;
 
-    void setUsername(User u, String username) throws UsernameNotValid, UserNotExists;
+    void setUsername(User u, String username) throws UsernameNotValid, UserNotExists, UserAlreadyExists;
 
     void setEmail(User u, String email) throws EmailNotValid;
 

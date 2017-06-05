@@ -39,4 +39,6 @@ public interface IUsersDB {
     void organizeLeagues();
 
     void deleteAllUsers();
+
+    void changeDataStore(String newDataStore);
 }

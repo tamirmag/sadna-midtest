@@ -24,7 +24,7 @@ public class UserManager implements IUserManager {
 
     @Override
     public void logout() throws UserNotExists, AlreadyLoggedOut {
-        AccountManager.getInstance().logout(user);
+        AccountManager.getInstance().logout(user.getUsername());
     }
 
     @Override
@@ -41,12 +41,13 @@ public class UserManager implements IUserManager {
             throw new UsernameNotValid(username);
         else if ((!user.getUsername().equals(username)) &&
                 AccountManager.getInstance().isUserExists(username)) throw new UserAlreadyExists(username);
+        else if(user.getUsername().equals(username)) return;
         else {
             String prior = user.getUsername();
             AccountManager.getInstance().setUsername(user, username);
             user.setUsername(username);
             ActionLogger.getInstance().writeToFile(prior + " successfully changed his username to " + username);
-            System.out.println("username successfully changed.");
+
         }
     }
 
@@ -56,7 +57,7 @@ public class UserManager implements IUserManager {
             AccountManager.getInstance().setEmail(user, email);
             user.setEmail(email);
             ActionLogger.getInstance().writeToFile(prior + " successfully changed his email to " + email);
-            System.out.println("email successfully changed.");
+
         } else throw new EmailNotValid(email == null ? "null" : email);
     }
 
@@ -75,12 +76,6 @@ public class UserManager implements IUserManager {
     public void addPlayer(Player p) {
         user.getExistingPlayers().add(p);
     }
-
-  /*  @Override
-    public void addFavoriteTurn(String turn) {
-        user.getFavoriteTurns().add(turn);
-        ActionLogger.getInstance().writeToFile(user.getUsername() + " added a new favorite turn");
-    }*/
 
     @Override
     public ArrayList<String> viewReplay(int gameNumber) {
@@ -156,6 +151,7 @@ public class UserManager implements IUserManager {
     public User getUser() {
         return user;
     }
+
     @Override
     public void JoinGame(int gameNumber) throws NoMuchMoney, CantJoin {
         ActiveGamesManager.getInstance().JoinGame(gameNumber, this.user);
@@ -194,7 +190,14 @@ public class UserManager implements IUserManager {
     public void startGame(int gameID) throws NotYourTurn, NoMuchMoney {
         IActiveGamesManager.getInstance().startGame(gameID);
     }
+}
 
+
+  /*  @Override
+    public void addFavoriteTurn(String turn) {
+        user.getFavoriteTurns().add(turn);
+        ActionLogger.getInstance().writeToFile(user.getUsername() + " added a new favorite turn");
+    }*/
 
     //highest ranking users operations
 
@@ -220,6 +223,6 @@ public class UserManager implements IUserManager {
         System.out.println("default league changed to " + defaultLeague + " and all users from " + formerDefaultLeague + " moved to it.");
         ActionLogger.getInstance().writeToFile("default league changed to " + defaultLeague + " by " + user.getUsername() + " and all users from " + formerDefaultLeague + " moved to it.");
     }*/
-}
+
 
 

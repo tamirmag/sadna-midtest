@@ -2,6 +2,8 @@ package Acceptance;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+
+import DB.IUsersDB;
 import Games.CantJoin;
 import Games.NotAllowedNumHigh;
 import Games.NotYourTurn;
@@ -10,41 +12,42 @@ import Loggers.IActiveGamesLogManager;
 import Loggers.IErrorLogger;
 import Loggers.IFinishedGamesManager;
 import Users.*;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import ServiceLayer.ServiceUser;
 
 public class acctests {
     static Bridge bridge = Driver.getBridge();
     static ServiceUser u;
 
+    @BeforeClass
+    public static void configure()
+    {
+        IUsersDB.getInstance().changeDataStore("tests");
+    }
+
     @After
     public void afterAnyTest() throws AlreadyLoggedOut, UserNotExists {
-        bridge.clearLoggedInUsers();
         bridge.clearUsers();
         IActionLogger.getInstance().clearLog();
         IErrorLogger.getInstance().clearLog();
         bridge.clearAllFinishedGameLogs();
     }
 
+    @Before
+    public void beforeAnyTest() throws AlreadyLoggedOut, UserNotExists
+    {
+            bridge.clearUsers();
+    }
+
     @AfterClass
     public static void afterAllTests() throws AlreadyLoggedOut, UserNotExists {
-        bridge.clearLoggedInUsers();
         bridge.clearUsers();
         IActionLogger.getInstance().clearLog();
         IErrorLogger.getInstance().clearLog();
         IFinishedGamesManager.getInstance().deleteAllFinishedGameLogs();
         IActiveGamesLogManager.getInstance().RemoveAllGameLoggers();
         bridge.clearAllFinishedGameLogs();
-    }
-
-
-    @Before
-    public void atStart() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists {
-      //  u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
-      //  bridge.logout("moshe");
+        IUsersDB.getInstance().changeDataStore("system");
     }
 
     @Test
@@ -217,7 +220,7 @@ public class acctests {
     }
 
     @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedIncreateGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+    public void UserNotLoggedInCreateGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         bridge.createGame("moshe", "NoLimitHoldem", 2, 2, 10, 2, 5, true);
@@ -268,7 +271,6 @@ public class acctests {
 
     @Test(expected = UserNotLoggedIn.class)
     public void UserNotLoggedInViewReplay() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
-        //bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         bridge.viewReplay(22, "moshe");
@@ -310,9 +312,9 @@ public class acctests {
     @Test(expected = UserNotLoggedIn.class)
     public void UserNotLoggedInBet() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, AlreadyLoggedOut, NotYourTurn {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.logout("moshe");
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
-        bridge.bet("moshe", 2122, 20);
+        bridge.logout("moshe");
+        bridge.bet("moshe", num, 20);
     }
 
     @Test(expected = UserNotExists.class)

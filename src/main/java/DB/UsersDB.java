@@ -29,6 +29,12 @@ public class UsersDB implements IUsersDB {
     }
 
     @Override
+    public void changeDataStore(String newDataStore)
+    {
+        datastore = morphia.createDatastore(m, newDataStore);
+    }
+
+    @Override
     public boolean isExistUser(String username) {
         final Query<User> query = datastore.createQuery(User.class).filter("username =", username);
         List<User> users = query.asList();
@@ -40,6 +46,7 @@ public class UsersDB implements IUsersDB {
     public User getUser(String username) {
         final Query<User> query = datastore.createQuery(User.class).filter("username =", username);
         List<User> users = query.asList();
+        if(users.size() == 0) return null;
         return users.get(0);
     }
 
