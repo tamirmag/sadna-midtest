@@ -46,7 +46,7 @@ public class ProxyBridge implements Bridge {
     }
 
     @Override
-    public int createGame(String username, String gameType, int BuyInPolicy, int ChipPolicy, int minimumBet,
+    public int createGame(String username,String gameType,  int BuyInPolicy, int ChipPolicy, int minimumBet,
                           int minimalAmountOfPlayers, int maximalAmountOfPlayers, boolean spectatingMode)
             throws UserNotLoggedIn, UserNotExists {
         return real.createGame(username, gameType, BuyInPolicy, ChipPolicy,

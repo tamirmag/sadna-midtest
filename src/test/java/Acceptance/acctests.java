@@ -361,6 +361,17 @@ public class acctests {
         bridge.fold("moshe1", 2122);
     }
 
+    @Test
+    public void fold1() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, NotYourTurn {
+        bridge.register("slava", "1111", "slava@gmail.com", 200);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        ServiceUser u1 = bridge.login("moshe", "1111");
+        int i = bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
+        bridge.joinGame(i, "moshe");
+        bridge.startGame("slava" , i);
+        bridge.fold("moshe" ,i);
+    }
 
  /*   @Test(expected = UserNotLoggedIn.class)
     public void UserNotLoggedInSetDefaultLeague() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NotHighestRanking, AlreadyLoggedOut {

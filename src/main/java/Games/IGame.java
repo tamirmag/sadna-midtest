@@ -86,4 +86,5 @@ public interface IGame {
 
     boolean canJoin(User user) throws NotYourLeague;
 
+    void sendMessage(String from, String to, String data);
 }

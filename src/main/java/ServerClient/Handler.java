@@ -33,7 +33,7 @@ public class Handler {
 
 	public int handleCreateGame(String username, String gameType, int buyInPolicy, int chipPolicy, int minimumBet,
 			int minimalAmountOfPlayers, int maximalAmountOfPlayers, boolean spectatingMode) throws UserNotLoggedIn, UserNotExists {
-		return s.createGame(username, gameType, buyInPolicy, chipPolicy,
+		return s.createGame(username,gameType, buyInPolicy, chipPolicy,
 				minimumBet, minimalAmountOfPlayers, maximalAmountOfPlayers, spectatingMode);
 	}
 
