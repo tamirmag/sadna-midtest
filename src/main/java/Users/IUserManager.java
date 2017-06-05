@@ -9,7 +9,7 @@ public interface IUserManager {
     void logout() throws UserNotExists, AlreadyLoggedOut;
 
     void editProfile(String username, String password, String email)
-            throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists;
+            throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists, UserNotExists;
 
     void addPlayer(Player p);
 

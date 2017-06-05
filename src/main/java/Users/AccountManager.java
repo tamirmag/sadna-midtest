@@ -1,5 +1,6 @@
 package Users;
 
+import DB.IUsersDB;
 import Games.Player;
 import Loggers.ActionLogger;
 import Loggers.IActionLogger;
@@ -12,6 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -24,7 +26,7 @@ public class AccountManager implements IAccountManager {
     private Hashtable<Integer, ArrayList<User>> leagues;
     private final String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
     private static final IAccountManager instance = new AccountManager();
-    int i =0;
+    AtomicInteger usersCounter = new AtomicInteger(0);
     private ReentrantReadWriteLock usersLock = new ReentrantReadWriteLock(true);
     private ReentrantReadWriteLock loggedInLock = new ReentrantReadWriteLock(true);
     private ReentrantReadWriteLock leaguesLock = new ReentrantReadWriteLock(true);
@@ -47,6 +49,126 @@ public class AccountManager implements IAccountManager {
         return instance;
     }
 
+    public UserManager register1(String username, String password, String email, int wallet)
+            throws UserAlreadyExists, PasswordNotValid, EmailNotValid, NegativeValue, UsernameNotValid {
+        if (username == null || username.equals("") || username.contains(" "))
+            throw new UsernameNotValid(username);
+        else if (isUserExists1(username)) throw new UserAlreadyExists(username);
+        else if (password == null || password.equals("") || password.contains(" "))
+            throw new PasswordNotValid(password == null ? "null" : password);
+        else if (!isValidEmail(email))
+            throw new EmailNotValid(email == null ? "null" : email);
+        else if (wallet < 0)
+            throw new NegativeValue(wallet);
+        else {
+            User u = new User(usersCounter.getAndIncrement(),username, password, UNKNOWN_RANK, email, new Wallet(wallet));
+            IUsersDB.getInstance().register(u);
+            IActionLogger.getInstance().writeToFile("user " + username + " successfully registered.");
+            return new UserManager(u);
+        }
+    }
+
+    public boolean isUserExists1(String username)
+    {
+        return IUsersDB.getInstance().isExistUser(username);
+    }
+
+    public boolean isLoggedIn(String username)
+    {
+        return IUsersDB.getInstance().isLoggedIn(username);
+    }
+
+    public void logout1(String username) throws UserNotExists, AlreadyLoggedOut {
+        if (username == null) throw new UserNotExists("null");
+        else if (!isUserExists1(username)) throw new UserNotExists(username);
+        else if (!isLoggedIn(username)) throw new AlreadyLoggedOut(username);
+        else {
+            IUsersDB.getInstance().logout(username);
+            ActionLogger.getInstance().writeToFile(username + " successfully logged out.");
+        }
+    }
+
+    public User getUser1(String username)
+    {
+        return IUsersDB.getInstance().getUser(username);
+    }
+
+    public boolean isUsernameAndPasswordMatch(String username , String password)
+    {
+        return IUsersDB.getInstance().isUsernameAndPasswordMatch(username , password);
+    }
+
+    public UserManager login1(String username, String password)
+            throws UsernameNotValid, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists {
+        if (username == null || username.equals("") || username.contains(" "))
+            throw new UsernameNotValid(username);
+        else if (!isUserExists1(username)) throw new UserNotExists(username);
+        else if (password == null || password.equals("") || password.contains(" "))
+            throw new PasswordNotValid(password == null ? "null" : password);
+        else if (!isUsernameAndPasswordMatch(username, password))
+            throw new UsernameAndPasswordNotMatch(username, password);
+        else if (isLoggedIn(username))
+            throw new AlreadyLoggedIn(username);
+        else {
+            User u = IUsersDB.getInstance().login(username);
+            ActionLogger.getInstance().writeToFile(u.getUsername() + " successfully logged in.");
+            return new UserManager(u);
+        }
+    }
+
+    public void setUsername1(User u, String username) throws UsernameNotValid, UserNotExists {
+        if (username == null || username.equals("") || username.contains(" "))
+            throw new UsernameNotValid(username);
+        else if (!isUserExists1(username)) throw new UserNotExists(username);
+        else
+        {
+            IUsersDB.getInstance().setUsername(u.getUsername() , username);
+        }
+    }
+
+
+    public void setEmail1(User u, String email) throws EmailNotValid {
+        if (!isValidEmail(email))
+            throw new EmailNotValid(email == null ? "null" : email);
+        else{
+            IUsersDB.getInstance().setEmail(u.getUsername() , email);
+        }
+    }
+
+
+    public void setPassword1(User u, String password) throws PasswordNotValid {
+        if (password == null || password.equals("") || password.contains(" "))
+            throw new PasswordNotValid(password == null ? "null" : password);
+        else{
+            IUsersDB.getInstance().setPassword(u.getUsername() , password);
+        }
+    }
+
+    public void moveUserToLeague1(String username ,int newLeague)
+    {
+        IUsersDB.getInstance().moveUserToLeague(username , newLeague);
+    }
+
+    public void updateNumOfGames1(ArrayList<Player> players) {
+        for (Player p : players) {
+            User u = getUser1(p.getName());
+            int numOfGames = u.getNumOfGames();
+            u.setNumOfGames(numOfGames + 1);
+            if ((numOfGames + 1) % 10 == 0) {
+                int formerLeague = u.getLeague();
+                moveUserToLeague1(u.getUsername(), formerLeague + 1);
+            }
+        }
+    }
+
+
+    public void organizeLeaguesHelper1()
+    {
+        IUsersDB.getInstance().organizeLeagues();
+    }
+
+
+    /*************************************************************************************************/
     @Override
     public int getUnknownLeague() {
         return UNKNOWN_RANK;
@@ -129,7 +251,7 @@ public class AccountManager implements IAccountManager {
         else if (wallet < 0)
             throw new NegativeValue(wallet);
         else {
-            User u = new User(username, password, UNKNOWN_RANK, email, new Wallet(wallet));
+            User u = new User(usersCounter.getAndIncrement(),username, password, UNKNOWN_RANK, email, new Wallet(wallet));
 
             leagueWrite.lock();
             if (leagues.get(UNKNOWN_RANK) == null) {

@@ -4,6 +4,10 @@ package Users;
 public class Wallet implements IWallet {
     private int amountOfMoney=0;
 
+    public Wallet()
+    {
+
+    }
     public Wallet(int amountOfMoney) {
         this.amountOfMoney = amountOfMoney;
     }

@@ -55,6 +55,7 @@ public class Game implements IGame {
         this.id = id;
         logger = new GameLogger(id);
         this.league = league;
+
     }
 
 
@@ -75,6 +76,7 @@ public class Game implements IGame {
 
     @Override
     public void join(Player player) throws CantJoin {
+        System.out.println("ma "+ player.getName());
         if(locked)
             throw new CantJoin(getId(), player.getName());
         players.add(player);
@@ -255,10 +257,12 @@ public class Game implements IGame {
 
     @Override
     public void startGame() throws NoMuchMoney, NotYourTurn {
+        System.out.println("shit");
         locked = true;
         playerDesk = new ArrayList<Integer>();
         for (Player p:players) {
             desk.add(p);
+            System.out.println(p.getName() + desk.size());
             playerDesk.add(0);
         }
         blinedBet();

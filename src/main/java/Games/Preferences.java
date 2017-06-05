@@ -1,8 +1,5 @@
 package Games;
 
-/**
- * Created by tamir on 21/04/2017.
- */
 public class Preferences {
     private int buyInPolicy = 0;
     private int chipPolicy = 0;

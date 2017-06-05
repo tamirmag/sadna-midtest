@@ -29,14 +29,14 @@ public class UserManager implements IUserManager {
 
     @Override
     public void editProfile(String username, String password, String email)
-            throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists {
+            throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists, UserNotExists {
         editUsername(username);
         editEmail(email);
         editPassword(password);
 
     }
 
-    private void editUsername(String username) throws UsernameNotValid, UserAlreadyExists {
+    private void editUsername(String username) throws UsernameNotValid, UserAlreadyExists, UserNotExists {
         if (username == null || username.equals("") || username.contains(" "))
             throw new UsernameNotValid(username);
         else if ((!user.getUsername().equals(username)) &&

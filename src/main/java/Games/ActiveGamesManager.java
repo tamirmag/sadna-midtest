@@ -87,6 +87,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
     @Override
     public void startGame(int id) throws NoMuchMoney, NotYourTurn {
         IGame myGame = find(id);
+
         myGame.startGame();
     }
 

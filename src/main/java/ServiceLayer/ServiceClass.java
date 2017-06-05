@@ -43,6 +43,7 @@ public class ServiceClass implements IServiceClass {
     public int createGame(String username, String gameType, int BuyInPolicy, int ChipPolicy,
                           int minimumBet, int minimalAmountOfPlayers,
                           int maximalAmountOfPlayers, boolean spectatingMode) throws UserNotLoggedIn, UserNotExists {
+
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         Preferences p = new Preferences();
         p.setBuyInPolicy(BuyInPolicy);

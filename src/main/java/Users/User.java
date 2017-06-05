@@ -1,21 +1,40 @@
 package Users;
 
 import Games.Player;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 import java.util.ArrayList;
 
+@Entity
 public class User {
+    @Id
+    private int id;
     private String username;
     private String password;
     private String email;
     private int league;
     private Wallet wallet;
     private int numOfGames;
-    // private boolean isHighestRanking;
-    private ArrayList<Player> existingPlayers = new ArrayList<>();
-    // private ArrayList<String> favoriteTurns = new ArrayList<>();
 
-    public User(String username, String password, int league, String email, Wallet wallet) {
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public User()
+    {
+
+    }
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    private boolean loggedIn;
+    private ArrayList<Player> existingPlayers = new ArrayList<>();
+
+
+    public User(int id ,String username, String password, int league, String email, Wallet wallet) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.league = league;

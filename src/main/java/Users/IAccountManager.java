@@ -31,15 +31,11 @@ public interface IAccountManager {
 
     void addLoggedInUser(User u) throws AlreadyLoggedIn;
 
-    void setUsername(User u, String username);
+    void setUsername(User u, String username) throws UsernameNotValid, UserNotExists;
 
-    void setEmail(User u, String email);
+    void setEmail(User u, String email) throws EmailNotValid;
 
-    void setPassword(User u, String password);
-
-    //void setDefaultLeague(int league) throws NegativeValue;
-
-    //int getDefaultLeague();
+    void setPassword(User u, String password) throws PasswordNotValid;
 
     void clearUsers();
 
