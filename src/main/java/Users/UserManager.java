@@ -99,7 +99,7 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public int CreateGame( Preferences pref) {
+    public int CreateGame(Preferences pref) {
         int i = ActiveGamesManager.getInstance().createGame(this.user, pref);
         Player p = new Player(this.user.getUsername(), this.user.getWallet());
         addPlayer(p);

@@ -18,7 +18,7 @@ public interface IServiceClass {
 
     ArrayList<Integer> findSpectatableGames(String username) throws UserNotLoggedIn, UserNotExists;
 
-    int createGame(String username, int BuyInPolicy, int ChipPolicy,
+    int createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
                    int minimumBet, int minimalAmountOfPlayers,
                    int maximalAmountOfPlayers, boolean spectatingMode) throws UserNotLoggedIn, UserNotExists;
 

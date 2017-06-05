@@ -10,8 +10,8 @@ import static org.junit.Assert.assertEquals;
 
 public class LoginManagerTests {
 
-    static User roy = new User("roy", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-    static User zerbib = new User("zerbib", "123456", 7, "rzarviv@gmail.com", new Wallet(100));
+    static User roy = new User(1,"roy", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+    static User zerbib = new User(2,"zerbib", "123456", 7, "rzarviv@gmail.com", new Wallet(100));
 
     @Test
     public void checkSuccessLogin() throws UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, UserAlreadyExists, AlreadyLoggedIn, UserNotExists {
@@ -134,21 +134,10 @@ public class LoginManagerTests {
         IAccountManager.getInstance().clearLoggedInUsers();
         IAccountManager.getInstance().clearUsers();
         IAccountManager.getInstance().clearLeagues();
-        // AccountManager.getInstance().setDefaultLeague(0);
         ActionLogger.getInstance().clearLog();
 
     }
 
-       /* @Test
-    public void checkHighestRankUser() throws UsernameNotValid, UserAlreadyExists, NegativeValue, EmailNotValid, PasswordNotValid, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, LeagueNotExists, NotHighestRanking, UserAlreadyInLeague, UserNotInLeague, AlreadyLoggedOut {
-        zerbib.setHighestRanking(true);
-        IAccountManager.getInstance().addUser(zerbib);
-        UserManager roy1 = IAccountManager.getInstance().register(roy.getUsername(), roy.getPassword(), roy.getEmail(), roy.getWallet().getAmountOfMoney());
-        UserManager zerbib1 = IAccountManager.getInstance().login(zerbib.getUsername(), zerbib.getPassword());
-        zerbib1.moveUserToLeague("roy" ,100);
-        assertEquals(roy1.getUser().getLeague(), 100);
-
-    }*/
 
 
 }
