@@ -19,7 +19,7 @@ public interface IUserManager {
 
     void spectateGame(int gameNumber);
 
-    int CreateGame(String type, Preferences pref);
+    int CreateGame( Preferences pref);
 
     ArrayList<IGame> findActiveGamesByPlayerName(String playerName);
 

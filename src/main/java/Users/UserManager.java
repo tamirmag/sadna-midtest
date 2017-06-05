@@ -99,8 +99,8 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public int CreateGame(String type, Preferences pref) {
-        int i = ActiveGamesManager.getInstance().createGame(this.user, type, pref);
+    public int CreateGame( Preferences pref) {
+        int i = ActiveGamesManager.getInstance().createGame(this.user, pref);
         Player p = new Player(this.user.getUsername(), this.user.getWallet());
         addPlayer(p);
         ActionLogger.getInstance().writeToFile(user.getUsername() + " created a new game");

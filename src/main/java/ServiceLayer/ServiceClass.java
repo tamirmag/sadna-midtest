@@ -40,7 +40,7 @@ public class ServiceClass implements IServiceClass {
     }
 
     @Override
-    public int createGame(String username, String gameType, int BuyInPolicy, int ChipPolicy,
+    public int createGame(String username, int BuyInPolicy, int ChipPolicy,
                           int minimumBet, int minimalAmountOfPlayers,
                           int maximalAmountOfPlayers, boolean spectatingMode) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
@@ -51,7 +51,7 @@ public class ServiceClass implements IServiceClass {
         p.setMinAmountPolicy(minimalAmountOfPlayers);
         p.setMaxAmountPolicy(maximalAmountOfPlayers);
         p.setSpectatePolicy(spectatingMode);
-        int i = u.CreateGame(gameType, p);
+        int i = u.CreateGame( p);
         return i;
     }
 

@@ -24,6 +24,8 @@ public class GameTests {
     static User nofar;
     static User mor;
     static User yoni;
+    Preferences p;
+
 
 
     @Before
@@ -34,6 +36,7 @@ public class GameTests {
         nofar = new User("nofar", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
         mor = new User("mor", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
         yoni = new User("yoni", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        p = new Preferences();
 
     }
 
@@ -47,16 +50,18 @@ public class GameTests {
 
     @Test
     public void createGameTest() {
-        int game  = man.createGame(roy,"NoLimitHoldem", new Preferences());
+        p.setNoLimitHoldem(true);
+        int game  = man.createGame(roy, p);
         assertTrue(game > 0);
-        int game2  = man.createGame(roy,"NoLimitHoldem", new Preferences());
+        int game2  = man.createGame(roy, p);
         assertTrue(game2 > game);
 
     }
 
     @Test
     public void joinGameTest() throws CantJoin, NoMuchMoney {
-        int game  = man.createGame(roy,"NoLimitHoldem", new Preferences());
+        p.setNoLimitHoldem(true);
+        int game  = man.createGame(roy, p);
         man.JoinGame(game, tamir);
         List<IGame> games = man.findActiveGamesByPlayer(tamir.getUsername());
         List<Integer> ourGames = new ArrayList<Integer>();
@@ -69,7 +74,8 @@ public class GameTests {
 
     @Test
     public void startGameTest() throws CantJoin, NoMuchMoney, NotYourTurn {
-        int game  = man.createGame(roy,"NoLimitHoldem", new Preferences());
+        p.setNoLimitHoldem(true);
+        int game  = man.createGame(roy, p);
         man.JoinGame(game, tamir);
         man.startGame(game);
         assertTrue(man.isLocked(game));
@@ -77,11 +83,17 @@ public class GameTests {
 
     @Test
     public void foldGameTest() throws CantJoin, NoMuchMoney, NotYourTurn {
-        int game  = man.createGame(roy,"NoLimitHoldem", new Preferences());
+        p.setNoLimitHoldem(true);
+        int game  = man.createGame(roy, p);
         man.JoinGame(game, tamir);
         man.startGame(game);
         man.fold(game, roy);
         assertTrue(tamir.getWallet().getAmountOfMoney() == 100+man.getMinimumBet(game)/2);
+    }
+
+    @Test
+    public void roytest(){
+
     }
 
 }

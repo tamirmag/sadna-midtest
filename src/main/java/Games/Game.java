@@ -26,13 +26,14 @@ public class Game implements IGame {
         // TODO implement
         //log.addToLog(msg);
     }
-
+    private Chat chat;
     private int id;
     private int league;
     private DeckManager deck = new DeckManager();
     private ArrayList<Player> desk = new ArrayList<Player>(); // players that not yet fold
     private ArrayList<Card> flop = new ArrayList<Card>(); // cards on desk
     private ArrayList<Player> players; //all players in the room
+    private ArrayList<String> spectators; //all spectators in the room
     private int dealerId = 0;
     private int turnId = 0; //number of current playing player
     private int turn = 0; // number of round
@@ -55,6 +56,8 @@ public class Game implements IGame {
         this.id = id;
         logger = new GameLogger(id);
         this.league = league;
+        this.spectators = new ArrayList<>();
+        chat = new Chat();
     }
 
 
@@ -328,7 +331,7 @@ public class Game implements IGame {
 
     @Override
     public void spectateGame(User user) {
-
+        spectators.add(user.getUsername());
     }
 
     @Override
@@ -386,6 +389,11 @@ public class Game implements IGame {
             }
         }
         return true;
+    }
+
+    @Override
+    public void sendMessage(String from, String to, String data) {
+        chat.sendMessage(from, to, data);
     }
 
 }

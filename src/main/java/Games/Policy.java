@@ -192,4 +192,9 @@ public abstract class Policy implements IGame {
 
     @Override
     public boolean canJoin(User user) throws NotYourLeague { return this.policy.canJoin(user); }
+
+    @Override
+    public void sendMessage(String from, String to, String data){
+        this.policy.sendMessage(from, to,data);
+    }
 }
