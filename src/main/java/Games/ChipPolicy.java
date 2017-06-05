@@ -11,6 +11,7 @@ public class ChipPolicy extends Policy{
         this.policy = policy;
         this.chips = chips;
         this.policy.setChipNum(chips);
+        this.id = this.policy.getId();
     }
 
     @Override

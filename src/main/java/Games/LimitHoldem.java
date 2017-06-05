@@ -11,6 +11,7 @@ public class LimitHoldem extends Policy{
     public LimitHoldem(IGame policy)
     {
         this.policy = policy;
+        this.id = this.policy.getId();
     }
 
     @Override

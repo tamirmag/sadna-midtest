@@ -12,6 +12,7 @@ import java.util.Hashtable;
 public abstract class Policy implements IGame {
 
     IGame policy;
+    int id;
 
     @Override
     public void setMinimumBet(int bet) {

@@ -13,6 +13,7 @@ public class SpectatePolicy extends Policy{
     public SpectatePolicy(IGame policy, boolean spectate) {
         this.policy = policy;
         this.spectate = spectate;
+        this.id = this.policy.getId();
     }
 
     @Override

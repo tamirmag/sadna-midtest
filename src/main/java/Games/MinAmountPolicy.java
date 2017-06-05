@@ -14,6 +14,7 @@ public class MinAmountPolicy extends Policy{
 
         this.policy = policy;
         this.minAmount = minAmount;
+        this.id = this.policy.getId();
     }
 
 

@@ -10,6 +10,7 @@ public class NoLimitHoldem extends Policy{
     public NoLimitHoldem(IGame policy)
     {
         this.policy = policy;
+        this.id = this.policy.getId();
     }
 
 }

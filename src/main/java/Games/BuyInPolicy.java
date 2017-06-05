@@ -10,6 +10,7 @@ public class BuyInPolicy extends Policy{
     public BuyInPolicy(IGame policy, int cost) {
         this.policy = policy;
         this.cost = cost;
+        this.id = this.policy.getId();
     }
 
 

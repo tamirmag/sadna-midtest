@@ -14,6 +14,7 @@ public class MaxAmountPolicy extends Policy{
 
         this.policy = policy;
         this.maxAmount = maxAmount;
+        this.id = this.policy.getId();
     }
 
 

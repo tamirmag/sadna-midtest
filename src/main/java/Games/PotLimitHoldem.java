@@ -11,6 +11,7 @@ public class PotLimitHoldem extends Policy {
 
     public PotLimitHoldem(IGame policy) {
         this.policy = policy;
+        this.id = this.policy.getId();
     }
 
     @Override
