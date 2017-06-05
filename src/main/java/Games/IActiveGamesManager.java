@@ -15,7 +15,7 @@ public interface IActiveGamesManager {
 
     void publishMessage(String msg, int gameNumber, Player player);
 
-    int createGame(User user, String type, Preferences pref);
+    int createGame(User user, Preferences pref);
 
     void startGame(int id) throws NoMuchMoney, NotYourTurn;
 
@@ -60,4 +60,6 @@ public interface IActiveGamesManager {
     void terminateGame(int id);
 
     void call(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn;
+
+    void sendMessage(int id, String from, String to, String data);
 }

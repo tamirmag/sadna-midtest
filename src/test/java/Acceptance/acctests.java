@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ServiceLayer.ServiceUser;
 
-public class acctests {
+public class acctests {/*
     static Bridge bridge = Driver.getBridge();
     static ServiceUser u;
 
@@ -446,6 +446,6 @@ public class acctests {
         bridge.saveFavoriteTurn(22, "moshe1", "favoriteTurn1");
     }*/
 
-
+//*/
 
 }

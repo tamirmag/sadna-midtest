@@ -36,7 +36,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
     }
 
     @Override
-    public int createGame(User user, String type, Preferences pref) {
+    public int createGame(User user, Preferences pref) {
         ArrayList<Player> players = new ArrayList<Player>();
         Player p = new Player(user.getUsername(), user.getWallet());
         p.wallet = user.getWallet();
@@ -291,6 +291,12 @@ public class ActiveGamesManager implements IActiveGamesManager {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.call(amount, p);
+    }
+
+    @Override
+    public void sendMessage(int id, String from, String to, String data) {
+        IGame myGame = find(id);
+        myGame.sendMessage(from, to, data);
     }
 
     public void deleteAllActiveGames() {
