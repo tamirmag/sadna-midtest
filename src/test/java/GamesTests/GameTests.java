@@ -31,11 +31,11 @@ public class GameTests {
     @Before
     public void inTheBeginningOfEveryTest() throws NegativeValue, UserAlreadyExists, UsernameNotValid, PasswordNotValid, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn {
         man = ActiveGamesManager.getInstance();
-        roy = new User("roy", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-        tamir = new User("tamir", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-        nofar = new User("nofar", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-        mor = new User("mor", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-        yoni = new User("yoni", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        roy = new User(1,"roy", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        tamir = new User(2,"tamir", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        nofar = new User(3,"nofar", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        mor = new User(4,"mor", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+        yoni = new User(5,"yoni", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
         p = new Preferences();
 
     }

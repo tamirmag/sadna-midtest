@@ -21,7 +21,7 @@ public class UsersDB implements IUsersDB {
         morphia = new Morphia();
         morphia.mapPackage("Users");
         m = new MongoClient("localhost", 27017);
-        datastore = morphia.createDatastore(m, "users");
+        datastore = morphia.createDatastore(m, "system");
     }
 
     public static UsersDB getInstance() {

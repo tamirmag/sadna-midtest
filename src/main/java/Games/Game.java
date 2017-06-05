@@ -165,6 +165,7 @@ public class Game implements IGame {
 
     @Override
     public void fold(Player player) throws NotYourTurn {
+
         if (desk.get(turnId).equals(player)) {
             desk.remove(turnId);
             if(desk.size() == 1){

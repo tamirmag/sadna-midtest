@@ -53,21 +53,28 @@ public class ActiveGamesManager implements IActiveGamesManager {
     private IGame buildByPref(Preferences pref, IGame game) {
         if (pref.isNoLimitHoldem())
             game = new NoLimitHoldem(game);
+
         if (pref.isLimitHoldem())
             game = new LimitHoldem(game);
+
         if (pref.isPotLimitHoldem())
             game = new PotLimitHoldem(game);
 
         if (pref.getBuyInPolicy() > 0)
             game = new BuyInPolicy(game, pref.getBuyInPolicy());
+
         if (pref.getChipPolicy() > 0)
             game = new ChipPolicy(game, pref.getChipPolicy());
+
         if (pref.getMaxAmountPolicy() > 0)
             game = new MaxAmountPolicy(game, pref.getMaxAmountPolicy());
+
         if (pref.getMinAmountPolicy() > 0)
             game = new MinAmountPolicy(game, pref.getMinAmountPolicy());
+
         if (pref.getMinBetPolicy() > 0)
             game = new MinBetPolicy(game, pref.getMinBetPolicy());
+
         if (pref.isSpectatePolicy())
             game = new SpectatePolicy(game, pref.isSpectatePolicy());
 
@@ -87,7 +94,6 @@ public class ActiveGamesManager implements IActiveGamesManager {
     @Override
     public void startGame(int id) throws NoMuchMoney, NotYourTurn {
         IGame myGame = find(id);
-
         myGame.startGame();
     }
 

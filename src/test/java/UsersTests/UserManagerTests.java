@@ -10,8 +10,8 @@ import static org.junit.Assert.*;
 public class UserManagerTests {
 
     static UserManager u;
-    static User roy = new User("roy", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
-    static User zerbib = new User("zerbib","123456",7,"rzarviv@gmail.com",new Wallet(100));
+    static User roy = new User(1,"roy", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
+    static User zerbib = new User(2,"zerbib","123456",7,"rzarviv@gmail.com",new Wallet(100));
     @Test
     public void setUserName () throws UserAlreadyExists, UsernameNotValid, PasswordNotValid, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn {
         u.editProfile("roy1" , roy.getPassword(),roy.getEmail());

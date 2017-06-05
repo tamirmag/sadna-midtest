@@ -10,9 +10,10 @@ public class MinAmountPolicy extends Policy{
     int minAmount;
 
 
-    public MinAmountPolicy(IGame policy, int maxAmount) {
+    public MinAmountPolicy(IGame policy, int minAmount) {
+
         this.policy = policy;
-        this.minAmount = getMinimumBet();
+        this.minAmount = minAmount;
     }
 
 

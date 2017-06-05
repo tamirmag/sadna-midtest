@@ -11,6 +11,7 @@ public class MaxAmountPolicy extends Policy{
     int maxAmount;
 
     public MaxAmountPolicy(IGame policy, int maxAmount) {
+
         this.policy = policy;
         this.maxAmount = maxAmount;
     }
