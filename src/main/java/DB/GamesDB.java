@@ -35,8 +35,10 @@ public class GamesDB implements IGamesDB{
     @Override
     public IGame getGame(int id) {
         final Query<IGame> query = datastore.createQuery(IGame.class).filter("id =", id);
-        List<IGame> users = query.asList();
-        return users.get(0);
+        List<IGame> games = query.asList();
+        if(games.size() == 0)
+            return null;
+        return games.get(0);
     }
 
     @Override
