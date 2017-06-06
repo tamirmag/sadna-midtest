@@ -81,10 +81,6 @@ public class UserManager implements IUserManager {
     public ArrayList<String> viewReplay(int gameNumber) {
         ArrayList<String> replay = FinishedGamesManager.getInstance().viewReplay(gameNumber);
         return replay;
-        /*for (String s : replay)
-            for (char c : s.toCharArray()) {
-                user.getCharToPrint(c);
-            }*/
     }
 
     @Override
@@ -104,42 +100,42 @@ public class UserManager implements IUserManager {
 
     @Override
     public ArrayList<IGame> findActiveGamesByPlayerName(String playerName) {
-        return new ArrayList<>(ActiveGamesManager.getInstance().findActiveGamesByPlayer(playerName));
+        return new ArrayList<>(IActiveGamesManager.getInstance().findActiveGamesByPlayer(playerName));
     }
 
     @Override
     public ArrayList<IGame> findActiveGamesByPotSize(int potSize) {
-        return ActiveGamesManager.getInstance().findActiveGamesByPotSize(potSize);
+        return IActiveGamesManager.getInstance().findActiveGamesByPotSize(potSize);
     }
 
     @Override
     public ArrayList<IGame> findActiveGamesBySpectatingPolicy(boolean spectatingAllowed) {
-        return new ArrayList<>(ActiveGamesManager.getInstance().findSpectatableGames(user));
+        return new ArrayList<>(IActiveGamesManager.getInstance().findSpectatableGames(user));
     }
 
     @Override
     public ArrayList<IGame> findActiveGamesByMinPlayersPolicy(int minimal) {
-        return ActiveGamesManager.getInstance().findActiveGamesByPlayersMinimumPolicy(minimal);
+        return IActiveGamesManager.getInstance().findActiveGamesByPlayersMinimumPolicy(minimal);
     }
 
     @Override
     public ArrayList<IGame> findActiveGamesByMaxPlayersPolicy(int maximal) {
-        return ActiveGamesManager.getInstance().findActiveGamesByPlayersMaximumPolicy(maximal);
+        return IActiveGamesManager.getInstance().findActiveGamesByPlayersMaximumPolicy(maximal);
     }
 
     @Override
     public ArrayList<IGame> findActiveGamesByMinimumBetPolicy(int minimumBet) {
-        return ActiveGamesManager.getInstance().findActiveGamesByMinimumBetPolicy(minimumBet);
+        return IActiveGamesManager.getInstance().findActiveGamesByMinimumBetPolicy(minimumBet);
     }
 
     @Override
     public ArrayList<IGame> findActiveGamesByChipPolicy(int numOfChips) {
-        return ActiveGamesManager.getInstance().findActiveGamesByChipPolicy(numOfChips);
+        return IActiveGamesManager.getInstance().findActiveGamesByChipPolicy(numOfChips);
     }
 
     @Override
     public ArrayList<IGame> findActiveGamesByBuyInPolicy(int costOfJoin) {
-        return ActiveGamesManager.getInstance().findActiveGamesByBuyInPolicy(costOfJoin);
+        return IActiveGamesManager.getInstance().findActiveGamesByBuyInPolicy(costOfJoin);
     }
 
     @Override
