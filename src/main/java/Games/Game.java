@@ -161,13 +161,16 @@ public class Game implements IGame {
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount {
         if (desk.get(turnId).equals(player)) {
+            if(amount >= currentMinimumBet){
             this.currentMinimumBet += amount;
             player.wallet.sub(currentMinimumBet);
-            ;
+
             playerDesk.set(turnId, this.currentMinimumBet);
-            endTurn(player);
+            endTurn(player);}else{
+                throw new NotLegalAmount(amount, currentMinimumBet);
+            }
         }else
             throw new NotYourTurn();
     }
@@ -209,7 +212,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn {
+    public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         if (desk.get(turnId).equals(player)) {
         call(amount,player);
         }else
@@ -217,13 +220,15 @@ public class Game implements IGame {
     }
 
     @Override
-    public void call(int amount, Player player) throws NoMuchMoney, NotYourTurn {
+    public void call(int amount, Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         if (desk.get(turnId).equals(player)) {
             if(inStart || amount >= currentMinimumBet) {
                 playerDesk.set(turnId, amount);
                 player.wallet.sub(amount);
                 currentMinimumBet = amount;
                 endTurn(player);
+            }else{
+                throw new NotLegalAmount(amount, currentMinimumBet);
             }
         }else
             throw new NotYourTurn();
@@ -251,7 +256,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void allIn(Player player) throws NoMuchMoney, NotYourTurn {
+    public void allIn(Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         if (desk.get(turnId).equals(player)) {
         call(player.wallet.getAmountOfMoney(),player);
         }else
@@ -267,7 +272,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public void startGame() throws NoMuchMoney, NotYourTurn {
+    public void startGame() throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         locked = true;
         playerDesk = new ArrayList<Integer>();
         for (Player p:players) {
@@ -278,7 +283,7 @@ public class Game implements IGame {
         inStart = false;
     }
 
-    private void blinedBet() throws NoMuchMoney, NotYourTurn {
+    private void blinedBet() throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         Player smallBlind = desk.get(dealerId);
         Player bigBlind = desk.get(dealerId+1);
         call(getMinimumBet()/2, smallBlind);

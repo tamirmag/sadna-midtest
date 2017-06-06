@@ -3,10 +3,7 @@ package ServerClient;
 
 import java.util.ArrayList;
 
-import Games.CantJoin;
-import Games.NotAllowedNumHigh;
-import Games.NotYourTurn;
-import Games.SpectatingNotAllowed;
+import Games.*;
 import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceClass;
 import ServiceLayer.ServiceUser;
@@ -58,15 +55,15 @@ public class Handler {
 		s.check(username, gameID);
 	}
 
-	public void handleBet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney {
+	public void handleBet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, NotLegalAmount {
 		s.bet(username, gameID, amount);
 	}
 
-	public void handleRaise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotAllowedNumHigh, NotYourTurn {
+	public void handleRaise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotAllowedNumHigh, NotYourTurn, NotLegalAmount {
 		s.raise(username, gameID, amount);
 	}
 
-	public void handleAllIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney {
+	public void handleAllIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, NotLegalAmount {
 		s.allIn(username, gameID);
 	}
 

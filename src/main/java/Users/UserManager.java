@@ -163,12 +163,12 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public void bet(int gameID, int amount) throws NoMuchMoney, NotYourTurn {
+    public void bet(int gameID, int amount) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         ActiveGamesManager.getInstance().bet(gameID, amount, user);
     }
 
     @Override
-    public void allIn(int gameID) throws NoMuchMoney, NotYourTurn {
+    public void allIn(int gameID) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         ActiveGamesManager.getInstance().allIn(gameID, user);
     }
 
@@ -178,12 +178,12 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
+    public void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount {
         ActiveGamesManager.getInstance().raise(gameID, amount, user);
     }
 
     @Override
-    public void startGame(int gameID) throws NotYourTurn, NoMuchMoney {
+    public void startGame(int gameID) throws NotYourTurn, NoMuchMoney, NotLegalAmount {
         IActiveGamesManager.getInstance().startGame(gameID);
     }
 }

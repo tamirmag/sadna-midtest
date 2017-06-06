@@ -94,13 +94,13 @@ public class ActiveGamesManager implements IActiveGamesManager {
     }
 
     @Override
-    public void startGame(int id) throws NoMuchMoney, NotYourTurn {
+    public void startGame(int id) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         IGame myGame = find(id);
         myGame.startGame();
     }
 
     @Override
-    public void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
+    public void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.raise(amount, p);
@@ -127,7 +127,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void allIn(int id, User usr) throws NoMuchMoney, NotYourTurn {
+    public void allIn(int id, User usr) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.allIn(p);
@@ -142,7 +142,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
     }
 
     @Override
-    public void bet(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn {
+    public void bet(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         User u = usr;
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
@@ -308,7 +308,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
 
     @Override
-    public void call(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn {
+    public void call(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.call(amount, p);

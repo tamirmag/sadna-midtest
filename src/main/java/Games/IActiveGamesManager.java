@@ -17,17 +17,17 @@ public interface IActiveGamesManager {
 
     int createGame(User user, Preferences pref);
 
-    void startGame(int id) throws NoMuchMoney, NotYourTurn;
+    void startGame(int id) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
-    void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn;
+    void raise(int id, int amount, User usr) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void fold(int id, User usr) throws NotYourTurn;
 
-    void allIn(int id, User usr) throws NoMuchMoney, NotYourTurn;
+    void allIn(int id, User usr) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void check(int id, User usr) throws NoMuchMoney, NotYourTurn;
 
-    void bet(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn;
+    void bet(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void JoinGame(int id, User user) throws NoMuchMoney, CantJoin;
 
@@ -59,7 +59,7 @@ public interface IActiveGamesManager {
 
     void terminateGame(int id);
 
-    void call(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn;
+    void call(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void sendMessage(int id, String from, String to, String data);
 }

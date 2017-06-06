@@ -2,10 +2,7 @@ package Acceptance;
 
 import java.util.ArrayList;
 
-import Games.CantJoin;
-import Games.NotAllowedNumHigh;
-import Games.NotYourTurn;
-import Games.SpectatingNotAllowed;
+import Games.*;
 import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceUser;
 import Users.*;
@@ -83,17 +80,17 @@ public class ProxyBridge implements Bridge {
     }
 
     @Override
-    public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn {
+    public void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn, NotLegalAmount {
         real.bet(username, gameID, amount);
     }
 
     @Override
-    public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
+    public void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount {
         real.raise(username, gameID, amount);
     }
 
     @Override
-    public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn {
+    public void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn, NotLegalAmount {
         real.allIn(username, gameID);
     }
 
@@ -158,7 +155,7 @@ public class ProxyBridge implements Bridge {
     }
 
     @Override
-    public void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney {
+    public void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, NotLegalAmount {
         real.startGame(username, gameID);
     }
 

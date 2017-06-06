@@ -15,7 +15,7 @@ public class LimitHoldem extends Policy{
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount {
         if(super.getTurn() < 2)
             policy.raise(policy.getMinimumBet(), player);
         else
@@ -23,7 +23,7 @@ public class LimitHoldem extends Policy{
     }
 
     @Override
-    public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn {
+    public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         if(super.getTurn() < 2)
             policy.bet(policy.getMinimumBet(), player);
         else

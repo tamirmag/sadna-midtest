@@ -4,10 +4,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import DB.IUsersDB;
-import Games.CantJoin;
-import Games.NotAllowedNumHigh;
-import Games.NotYourTurn;
-import Games.SpectatingNotAllowed;
+import Games.*;
 import Loggers.IActionLogger;
 import Loggers.IActiveGamesLogManager;
 import Loggers.IErrorLogger;
@@ -544,7 +541,7 @@ public class acctests {
     }
 
     @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInBet() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, AlreadyLoggedOut, NotYourTurn {
+    public void UserNotLoggedInBet() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, AlreadyLoggedOut, NotYourTurn, NotLegalAmount {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.logout("moshe");
@@ -553,7 +550,7 @@ public class acctests {
     }
 
     @Test(expected = UserNotExists.class)
-    public void UserNotExistsBet() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn {
+    public void UserNotExistsBet() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn, NotLegalAmount {
         int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.bet("moshe1", 2122, 20);
         bridge.terminateGame(num);
@@ -571,12 +568,14 @@ public class acctests {
         catch (UserNotLoggedIn e)
         {
             bridge.terminateGame(num);
-        }
+        } catch (NotLegalAmount notLegalAmount) {
+           notLegalAmount.printStackTrace();
+       }
 
     }
 
     @Test
-    public void UserNotExistsRaise() throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotAllowedNumHigh, NotYourTurn, PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, CantJoin {
+    public void UserNotExistsRaise() throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotAllowedNumHigh, NotYourTurn, PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, CantJoin, NotLegalAmount {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("stav", "1111", "noname@gmail.com", 100);
         /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
@@ -599,7 +598,7 @@ public class acctests {
     }
 
     @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInAllIn() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, AlreadyLoggedOut, NotYourTurn {
+    public void UserNotLoggedInAllIn() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, AlreadyLoggedOut, NotYourTurn, NotLegalAmount {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
@@ -608,7 +607,7 @@ public class acctests {
     }
 
     @Test
-    public void UserNotExistsAllIn() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn, PasswordNotValid, UsernameNotValid, UserAlreadyExists, EmailNotValid {
+    public void UserNotExistsAllIn() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn, PasswordNotValid, UsernameNotValid, UserAlreadyExists, EmailNotValid, NotLegalAmount {
         bridge.register("moshe1", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
         try
@@ -635,7 +634,7 @@ public class acctests {
     }
 
     @Test
-    public void Successfold() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, NotYourTurn {
+    public void Successfold() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, NotYourTurn, NotLegalAmount {
         bridge.register("slava", "1111", "slava@gmail.com", 200);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
@@ -648,7 +647,7 @@ public class acctests {
     }
 
     @Test
-    public void foldNotYourTurn() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin {
+    public void foldNotYourTurn() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, NotLegalAmount {
         bridge.register("slava", "1111", "slava@gmail.com", 200);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
