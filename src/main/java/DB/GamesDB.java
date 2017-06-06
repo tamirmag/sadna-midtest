@@ -40,7 +40,7 @@ public class GamesDB implements IGamesDB{
     }
 
     @Override
-    public void save(Policy game) {
+    public void save(IGame game) {
         datastore.save(game);
     }
 }

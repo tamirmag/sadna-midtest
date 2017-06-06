@@ -191,7 +191,6 @@ public class Game implements IGame {
     public void win(Player player) {
 
         if (player != null) {
-            System.out.println(player.getName());
             player.getWallet().add(pot);
         } else {
             for (Player p : desk) {
