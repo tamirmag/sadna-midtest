@@ -1,6 +1,7 @@
 package Users;
 
 import DB.IUsersDB;
+import Games.IActiveGamesManager;
 import Games.Player;
 import Loggers.ActionLogger;
 import Loggers.IActionLogger;
@@ -77,6 +78,7 @@ public class AccountManager implements IAccountManager {
         else if (!isLoggedIn(username)) throw new AlreadyLoggedOut(username);
         else {
             IUsersDB.getInstance().logout(username);
+            IActiveGamesManager.getInstance().logout(username);
             ActionLogger.getInstance().writeToFile(username + " successfully logged out.");
         }
     }

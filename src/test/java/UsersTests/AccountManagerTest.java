@@ -1,5 +1,6 @@
 package UsersTests;
 
+import DB.IUsersDB;
 import Loggers.ActionLogger;
 import Users.*;
 import org.junit.*;
@@ -120,6 +121,15 @@ public class AccountManagerTest {
         AccountManager.getInstance().logout("roy");
 
     }
+    @BeforeClass
+    public static void configure() {
+        IUsersDB.getInstance().changeDataStore("tests");
+    }
+    @AfterClass
+    public static void reconfigure() {
+        IUsersDB.getInstance().changeDataStore("systemDatabase");
+    }
+
 
     @Before
     public void start() {
