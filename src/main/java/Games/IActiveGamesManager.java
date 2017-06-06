@@ -31,7 +31,7 @@ public interface IActiveGamesManager {
 
     void JoinGame(int id, User user) throws NoMuchMoney, CantJoin;
 
-    void spectateGame(int id, User user);
+    void spectateGame(int id, User user) throws SpectatingNotAllowed;
 
     List<IGame> findAllActiveGames(User user) throws NotYourLeague;
 

@@ -1,6 +1,5 @@
 package UsersTests;
 
-import DB.IUsersDB;
 import Loggers.ActionLogger;
 import Users.*;
 import org.junit.*;
@@ -121,8 +120,6 @@ public class AccountManagerTest {
         AccountManager.getInstance().logout("roy");
 
     }
-
-
 
     @Before
     public void start() {

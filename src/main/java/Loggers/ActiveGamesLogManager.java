@@ -71,6 +71,25 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
                 if (reader.available() > 0) {
                     user.getCharToPrint((char) reader.read());
                 } else {
+                    running = false;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void spectateGame1(int gameNumber, User user) {
+        String filename = getFileNameByGameNum(gameNumber);
+        boolean running = true;
+        try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(filename))) {
+            while (running) {
+                if (reader.available() > 0) {
+                    user.getCharToPrint((char) reader.read());
+                } else {
                     try {
                         sleep(500);
                     } catch (InterruptedException ex) {
@@ -83,8 +102,8 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 
     @Override
     public boolean isActiveGameExists(int num) {
@@ -106,7 +125,7 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
         filesRead.lock();
         for (GameLogger g : ActiveGames) {
             if (g.getFilename().equals("Game" + num + ".txt")) {
-                s.append(g.getFilename());
+                s.append(g.getFullPath());
                 break;
             }
         }
@@ -121,8 +140,15 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
         GameLogger g1 = new GameLogger(g);
         ActiveGames.add(g1);
         filesWrite.lock();
-
     }
+
+    @Override
+    public void AddGameLogger(GameLogger g) {
+        filesWrite.lock();
+        ActiveGames.add(g);
+        filesWrite.lock();
+    }
+
 
     @Override
     public void WriteToGameLogger(int gameNum, String message) {
@@ -160,24 +186,42 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
     }
 
     @Override
+    public void RemoveGameLogger(GameLogger g) {
+        filesWrite.lock();
+        ActiveGames.remove(g);
+        filesWrite.unlock();
+    }
+
+    @Override
     public void RemoveAllGameLoggers() {
         filesWrite.lock();
         if (ActiveGames != null) {
             Iterator<GameLogger> iter = ActiveGames.iterator();
             while (iter.hasNext()) {
                 GameLogger g = iter.next();
-               File f = g.getFile();
-                try {
-                    Files.delete(f.toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-               }
+                File f = g.getFile();
+                f.delete();
                 iter.remove();
-                //g.deleteFile();
             }
         }
         filesWrite.unlock();
     }
-
-
 }
+
+/*    public void RemoveAllGameLoggers1() {
+        filesWrite.lock();
+        if (ActiveGames != null) {
+            Iterator<GameLogger> iter = ActiveGames.iterator();
+            while (iter.hasNext()) {
+                GameLogger g = iter.next();
+                File f = g.getFile();
+                try {
+                   Files.delete(f.toPath());
+                } catch (IOException e) {
+               }
+                iter.remove();
+            }
+        }
+        filesWrite.unlock();
+    }
+    */

@@ -19,8 +19,13 @@ public interface IActiveGamesLogManager {
 
     void AddGameLogger(int g);
 
+    void AddGameLogger(GameLogger g);
+
     void WriteToGameLogger(int gameNum, String message);
 
     void RemoveGameLogger(int gameNum);
+
     void RemoveAllGameLoggers();
+
+    void RemoveGameLogger(GameLogger g);
 }

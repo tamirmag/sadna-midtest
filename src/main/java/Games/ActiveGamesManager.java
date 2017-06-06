@@ -1,9 +1,11 @@
 package Games;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import Loggers.ActiveGamesLogManager;
 import Loggers.GameLogger;
 import Loggers.IActiveGamesLogManager;
 import Users.NoMuchMoney;
@@ -285,12 +287,22 @@ public class ActiveGamesManager implements IActiveGamesManager {
     public void terminateGame(int id) {
         IGame myGame = find(id);
         myGame.terminateGame();
+        Iterator<IGame> iter = games.iterator();
+        while (iter.hasNext()) {
+            IGame game = iter.next();
+            if(game.getId() == id) iter.remove();
+        }
     }
 
 
-    public void spectateGame(int id, User user) {
+    public void spectateGame(int id, User user) throws SpectatingNotAllowed {
+        /*ROY changed the implementation of this function*/
+        /*IGame myGame = find(id);
+        myGame.spectateGame(user);*/
         IGame myGame = find(id);
+        if(!myGame.spectaAble()) throw new SpectatingNotAllowed(id);
         myGame.spectateGame(user);
+        ActiveGamesLogManager.getInstance().spectateGame(id,user);
     }
 
 

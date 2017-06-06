@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import Games.CantJoin;
 import Games.NotAllowedNumHigh;
 import Games.NotYourTurn;
+import Games.SpectatingNotAllowed;
 import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceClass;
 import ServiceLayer.ServiceUser;
@@ -41,7 +42,7 @@ public class Handler {
 		s.joinGame(gamenum, username);
 	}
 
-	public void handleSpectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
+	public void handleSpectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, SpectatingNotAllowed {
 		s.spectateGame(gamenum, username);
 	}
 

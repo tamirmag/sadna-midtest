@@ -7,6 +7,7 @@ import DB.IUsersDB;
 import Games.CantJoin;
 import Games.NotAllowedNumHigh;
 import Games.NotYourTurn;
+import Games.SpectatingNotAllowed;
 import Loggers.IActionLogger;
 import Loggers.IActiveGamesLogManager;
 import Loggers.IErrorLogger;
@@ -18,6 +19,7 @@ import ServiceLayer.ServiceUser;
 public class acctests {
     static Bridge bridge = Driver.getBridge();
     static ServiceUser u;
+
 
     @BeforeClass
     public static void configure()
@@ -36,7 +38,9 @@ public class acctests {
     @Before
     public void beforeAnyTest() throws AlreadyLoggedOut, UserNotExists
     {
-            bridge.clearUsers();
+        IFinishedGamesManager.getInstance().deleteAllFinishedGameLogs();
+        IActiveGamesLogManager.getInstance().RemoveAllGameLoggers();
+        bridge.clearUsers();
     }
 
     @AfterClass
@@ -47,11 +51,13 @@ public class acctests {
         IFinishedGamesManager.getInstance().deleteAllFinishedGameLogs();
         IActiveGamesLogManager.getInstance().RemoveAllGameLoggers();
         bridge.clearAllFinishedGameLogs();
-        IUsersDB.getInstance().changeDataStore("system");
+        IUsersDB.getInstance().changeDataStore("systemDatabase");
     }
 
+
+    /**************register************/
     @Test
-    public void testRegister() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
+    public void successRegister() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
         u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
         assertEquals(u.getUsername(), "moshe");
         assertEquals(u.getPassword(), "1111");
@@ -62,8 +68,35 @@ public class acctests {
         assertFalse(u.getWallet().getAmountOfMoney() < 0);
     }
 
+    @Test(expected = EmailNotValid.class)
+    public void emailNotValidRegister() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
+        bridge.register("magnez", "1111", "12323123123@!2", 100);
+    }
+
+    @Test(expected = NegativeValue.class)
+    public void negativeValueRegister() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
+        bridge.register("magnez", "1111", "noname@gmail.com", -100);
+    }
+
+    @Test(expected = UsernameNotValid.class)
+    public void usernameNotValidRegister() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
+        bridge.register("", "1111", "noname@gmail.com", 100);
+    }
+
+    @Test(expected = PasswordNotValid.class)
+    public void passwordNotValidRegister() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
+        bridge.register("magnez", "", "noname@gmail.com", 100);
+    }
+
+    @Test(expected = UserAlreadyExists.class)
+    public void userAlreadyExistsRegister() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+    }
+
+    /**************login***********************/
     @Test
-    public void testLoginWithIncorrectPassword() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, AlreadyLoggedOut {
+    public void loginWithIncorrectPassword() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, AlreadyLoggedOut {
         u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         String password = "1111";
@@ -72,8 +105,7 @@ public class acctests {
     }
 
     @Test
-    public void testLogin() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, AlreadyLoggedOut {
-        //ServiceUser u2 = bridge.register("moshe", "1111", "noname@gmail.com", 100);
+    public void successLogin() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, AlreadyLoggedOut {
         u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         ServiceUser u1 = bridge.login("moshe", "1111");
@@ -85,7 +117,7 @@ public class acctests {
     }
 
     @Test(expected = AlreadyLoggedIn.class)
-    public void AlreadyLoggedInLogin() throws UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, UserAlreadyExists, AlreadyLoggedIn, UserNotExists, EmailNotValid, NegativeValue, AlreadyLoggedOut {
+    public void alreadyLoggedInLogin() throws UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, UserAlreadyExists, AlreadyLoggedIn, UserNotExists, EmailNotValid, NegativeValue, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         bridge.login("moshe", "1111");
@@ -93,32 +125,39 @@ public class acctests {
     }
 
     @Test(expected = UsernameNotValid.class)
-    public void UsernameNotValidLogin() throws UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, UserAlreadyExists, AlreadyLoggedIn, UserNotExists, EmailNotValid, NegativeValue, AlreadyLoggedOut {
+    public void usernameNotValidLogin() throws UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, UserAlreadyExists, AlreadyLoggedIn, UserNotExists, EmailNotValid, NegativeValue, AlreadyLoggedOut {
         bridge.login("", "1111");
     }
 
     @Test(expected = PasswordNotValid.class)
-    public void PasswordNotValidLogin() throws UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, UserAlreadyExists, AlreadyLoggedIn, UserNotExists, EmailNotValid, NegativeValue, AlreadyLoggedOut {
+    public void passwordNotValidLogin() throws UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, UserAlreadyExists, AlreadyLoggedIn, UserNotExists, EmailNotValid, NegativeValue, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         bridge.login("moshe", "");
     }
 
     @Test(expected = UsernameAndPasswordNotMatch.class)
-    public void UsernamePasswordNotValidLogin() throws UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, UserAlreadyExists, AlreadyLoggedIn, UserNotExists, EmailNotValid, NegativeValue, AlreadyLoggedOut {
+    public void usernamePasswordNotMatchLogin() throws UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, UserAlreadyExists, AlreadyLoggedIn, UserNotExists, EmailNotValid, NegativeValue, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         bridge.login("moshe", "2222");
+        System.out.println("im in usernamePasswordNotMatchLogin");
     }
 
     @Test(expected = UserAlreadyExists.class)
-    public void UserAlreadyExistsLogin() throws UserAlreadyExists, UsernameNotValid, EmailNotValid, NegativeValue, PasswordNotValid {
+    public void userAlreadyExistsLogin() throws UserAlreadyExists, UsernameNotValid, EmailNotValid, NegativeValue, PasswordNotValid {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
     }
 
+    @Test(expected = UserNotExists.class)
+    public void userNotExistsLogin() throws UserNotExists, AlreadyLoggedOut, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UsernameNotValid, PasswordNotValid {
+        bridge.login("david", "1111");
+    }
+
+    /***********************logout********************/
     @Test
-    public void testLogOut() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, AlreadyLoggedOut {
+    public void successLogout() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         String uname = "moshe";
         bridge.logout(uname);
@@ -126,144 +165,160 @@ public class acctests {
     }
 
     @Test(expected = AlreadyLoggedOut.class)
-    public void AlreadyLoggedOutLogout() throws UserAlreadyExists, UserNotExists, AlreadyLoggedOut, AlreadyLoggedIn, UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, EmailNotValid, NegativeValue {
+    public void alreadyLoggedOutLogout() throws UserAlreadyExists, UserNotExists, AlreadyLoggedOut, AlreadyLoggedIn, UsernameNotValid, UsernameAndPasswordNotMatch, PasswordNotValid, EmailNotValid, NegativeValue {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         bridge.logout("moshe");
     }
 
     @Test(expected = UserNotExists.class)
-    public void UserNotExistsLogout() throws UserNotExists, AlreadyLoggedOut {
+    public void userNotExistsLogout() throws UserNotExists, AlreadyLoggedOut {
         bridge.logout("david");
     }
 
-    @Test(expected = UserNotExists.class)
-    public void UserNotExistsLogin() throws UserNotExists, AlreadyLoggedOut, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UsernameNotValid, PasswordNotValid {
-        bridge.login("david", "1111");
-    }
-
-    @Test(expected = EmailNotValid.class)
-    public void EmailNotValidRegistration() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
-        bridge.register("magnez", "1111", "12323123123@!2", 100);
-    }
-
-    @Test(expected = NegativeValue.class)
-    public void NegativeValueRegistration() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
-        bridge.register("magnez", "1111", "noname@gmail.com", -100);
-    }
-
-    @Test(expected = UsernameNotValid.class)
-    public void UsernameNotValidRegistration() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
-        bridge.register("", "1111", "noname@gmail.com", 100);
-    }
-
-    @Test(expected = PasswordNotValid.class)
-    public void PasswordNotValidRegistration() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
-        bridge.register("magnez", "", "noname@gmail.com", 100);
-    }
-
-    @Test(expected = UserAlreadyExists.class)
-    public void UserAlreadyExistsRegistration() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
-        bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.register("moshe", "1111", "noname@gmail.com", 100);
-    }
-
+    /************spectatableGames**************/
     @Test
     public void testFindSpectatableGames() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, NoMuchMoney, CantJoin, AlreadyLoggedOut {
         bridge.register("slava", "1111", "slava@gmail.com", 200);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.logout("moshe");
-        ServiceUser u1 = bridge.login("moshe", "1111");
-        assertEquals(u1.getUsername(), "moshe");
-        assertEquals(u1.getPassword(), "1111");
-        assertFalse(u1.getUsername().equals(""));
-        assertFalse(u1.getPassword().equals(""));
-        bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
-        bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
-        bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
-        bridge.joinGame(1, "moshe");
-        bridge.joinGame(2, "moshe");
-        bridge.joinGame(3, "moshe");
+        int i1 = bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
+        int i2 = bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
+        int i3= bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
+        bridge.joinGame(i1, "moshe");
+        bridge.joinGame(i2, "moshe");
+        bridge.joinGame(i3, "moshe");
         ArrayList<Integer> sGames = bridge.findSpectatableGames("moshe");
-        assertTrue(sGames.size() == 3);
+        assertEquals(sGames.size() ,3);
+        bridge.terminateGame(i1);
+        bridge.terminateGame(i2);
+        bridge.terminateGame(i3);
     }
 
     @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInFindSpectatableGames() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+    public void userNotLoggedInFindSpectatableGames() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         bridge.findSpectatableGames("moshe");
     }
 
     @Test(expected = UserNotExists.class)
-    public void UserNotExistsFindSpectatableGames() throws UserNotLoggedIn, UserNotExists {
+    public void userNotExistsFindSpectatableGames() throws UserNotLoggedIn, UserNotExists {
         bridge.findSpectatableGames("jkdfandngoineap");
     }
 
+    /*****************create game*****************/
     @Test
-    public void testCreateGameAndJoin() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, NoMuchMoney, CantJoin, AlreadyLoggedOut {
+    public void successCreateGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, NoMuchMoney, CantJoin, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
-        ServiceUser u1 = bridge.login("moshe", "1111");
-        ServiceUser u3 = bridge.register("stav", "2222", "yoyo@gmail.com", 100);
-        assertEquals(u1.getUsername(), "moshe");
-        assertEquals(u1.getPassword(), "1111");
-        assertFalse(u1.getUsername().equals(""));
-        assertFalse(u1.getPassword().equals(""));
-        assertEquals(u3.getUsername(), "stav");
-        assertEquals(u3.getPassword(), "2222");
+        bridge.login("moshe", "1111");
+        bridge.register("stav", "2222", "yoyo@gmail.com", 100);
         String name = "moshe";
-        int num = bridge.createGame(name, "NoLimitHoldem", 0, 0, 10, 2, 5, true);
-        bridge.joinGame(num, "stav");
-        ArrayList<Integer> sGames = bridge.findSpectatableGames("stav");
-       // assertEquals(sGames.size() ,1);
+        int i = bridge.createGame(name, "NoLimitHoldem", 0, 0, 10, 2, 5, true);
+        bridge.terminateGame(i);
+
     }
 
+
     @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInCreateGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+    public void userNotLoggedInCreateGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
-        bridge.createGame("moshe", "NoLimitHoldem", 2, 2, 10, 2, 5, true);
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 2, 2, 10, 2, 5, true);
+
     }
 
     @Test(expected = UserNotExists.class)
-    public void UserNotExistsCreateGame() throws UserNotLoggedIn, UserNotExists {
-        bridge.createGame("moshe1", "NoLimitHoldem", 2, 2, 10, 2, 5, true);
+    public void userNotExistsCreateGame() throws UserNotLoggedIn, UserNotExists {
+        int i = bridge.createGame("moshe1", "NoLimitHoldem", 2, 2, 10, 2, 5, true);
+
     }
 
+    /******************join game**************/
     @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInJoinGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin, AlreadyLoggedOut {
+    public void userNotLoggedInJoinGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         bridge.joinGame(22, "moshe");
     }
 
     @Test(expected = UserNotExists.class)
-    public void UserNotExistsJoinGame() throws UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin {
+    public void userNotExistsJoinGame() throws UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin {
         bridge.joinGame(22, "moshe1");
     }
 
+    @Test
+    public void successJoinGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, NoMuchMoney, CantJoin, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        ServiceUser u1 = bridge.login("moshe", "1111");
+        ServiceUser u3 = bridge.register("stav", "2222", "yoyo@gmail.com", 100);
+        String name = "moshe";
+        int num = bridge.createGame(name, "NoLimitHoldem", 0, 0, 10, 2, 5, true);
+        bridge.joinGame(num, "stav");
+        bridge.terminateGame(num);
+    }
+    /****************spectateGame****************/
+
+    @Test
+    public void successSpectateGame() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, SpectatingNotAllowed {
+        //REMEMBER: the real implementation of 'specatateGame' is actually the function 'spectateGame1' in ActiveGamesLogManager.
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "2222", "yoyo@gmail.com", 100);
+        bridge.register("david", "2222", "yoyo@gmail.com", 100);
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true); //spectate allowed
+        bridge.joinGame(i,"stav");
+        bridge.spectateGame(i, "david");
+        bridge.terminateGame(i);
+    }
+
+    @Test
+    public void cannotSpectateGameSpectateGame() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, SpectatingNotAllowed {
+        //REMEMBER: the real implementation of 'specatateGame' is actually the function 'spectateGame1' in ActiveGamesLogManager.
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "2222", "yoyo@gmail.com", 100);
+        bridge.register("david", "2222", "yoyo@gmail.com", 100);
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, false); //spectate not allowed
+        bridge.joinGame(i,"stav");
+        try
+        {
+            bridge.spectateGame(i, "david");
+        }
+        catch (SpectatingNotAllowed e)
+        {
+            assertFalse(false);
+            bridge.terminateGame(i);
+        }
+
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsSpectateGame() throws UserNotLoggedIn, UserNotExists, SpectatingNotAllowed {
+        bridge.spectateGame(22, "moshe1");
+    }
+
     @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInSpectateGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+    public void UserNotLoggedInSpectateGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut, SpectatingNotAllowed {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         bridge.spectateGame(22, "moshe");
     }
 
-    @Test(expected = UserNotExists.class)
-    public void UserNotExistsSpectateGame() throws UserNotLoggedIn, UserNotExists {
-        bridge.spectateGame(22, "moshe1");
-    }
 
+    /***********view replay***********/
     @Test
-    public void testViewReplay() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, AlreadyLoggedOut {
+    public void successViewReplay() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         ServiceUser u1 = bridge.login("moshe", "1111");
-        assertFalse(u1.getUsername().equals(""));
-        assertFalse(u1.getPassword().equals(""));
         String name = "moshe";
-        int num = bridge.createGame(name, "NoLimitHoldem", 2, 2, 10, 2, 5, true);
+        int num = bridge.createGame(name, "NoLimitHoldem", 2, 2, 10, 2, 5, false);
         bridge.terminateGame(num);
         ArrayList<String> sGames = bridge.viewReplay(num, "moshe");
         assertEquals(sGames.size(), 1);
@@ -281,19 +336,183 @@ public class acctests {
         bridge.viewReplay(22, "moshe1");
     }
 
+    /*************find active games by min players**********/
     @Test(expected = UserNotLoggedIn.class)
-    public void UserNotLoggedInFindActiveGamesByPotSize() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
-        // bridge.register("moshe", "1111", "noname@gmail.com", 100);
+    public void userNotLoggedInActiveGamesByMinPlayersPolicy() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
-        bridge.findActiveGamesByPotSize(100, "moshe");
+        bridge.findActiveGamesByMinPlayersPolicy("moshe",2);
     }
 
     @Test(expected = UserNotExists.class)
-    public void UserNotExistsFindActiveGamesByPotSize() throws UserNotLoggedIn, UserNotExists {
-        bridge.findActiveGamesByPotSize(100, "moshe1");
+    public void userNotExistsActiveGamesByMinPlayersPolicy() throws UserNotLoggedIn, UserNotExists {
+        bridge.findActiveGamesByMinPlayersPolicy("moshe1",2);
     }
 
+    @Test
+    public void successFindActiveGamesByMinPlayersPolicy() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, false); //spectate not allowed
+        ArrayList<Integer> games = bridge.findActiveGamesByMinPlayersPolicy("stav" ,1);
+        ArrayList<Integer> debug = new ArrayList<>();
+        debug.add(i);
+        assertEquals(games , debug);
+        bridge.terminateGame(i);
+    }
+    /*************find active games by max players**********/
+    @Test(expected = UserNotLoggedIn.class)
+    public void userNotLoggedInActiveGamesByMaxPlayersPolicy() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.findActiveGamesByMaxPlayersPolicy("moshe",2);
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void userNotExistsActiveGamesByMaxPlayersPolicy() throws UserNotLoggedIn, UserNotExists {
+        bridge.findActiveGamesByMaxPlayersPolicy("moshe1",2);
+    }
+
+    @Test
+    public void successFindActiveGamesByMaxPlayersPolicy() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, false); //spectate not allowed
+        ArrayList<Integer> games = bridge.findActiveGamesByMaxPlayersPolicy("stav" ,5);
+        ArrayList<Integer> debug = new ArrayList<>();
+        debug.add(i);
+        assertEquals(games , debug);
+        bridge.terminateGame(i);
+    }
+
+/*************find active games by player name**********/
+    @Test(expected = UserNotLoggedIn.class)
+    public void userNotLoggedInActiveGamesByPlayerName() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.findActiveGamesByPlayerName("moshe" , "stav");
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void userNotExistsActiveGamesByPlayerName() throws UserNotLoggedIn, UserNotExists {
+        bridge.findActiveGamesByMaxPlayersPolicy("moshe1",2);
+    }
+
+    @Test
+    public void successFindActiveGamesByPlayerName() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, CantJoin {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        bridge.register("roy", "1111", "noname@gmail.com", 100);
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, false); //spectate not allowed
+        bridge.joinGame(i,"stav");
+        ArrayList<Integer> games = bridge.findActiveGamesByPlayerName("roy" ,"moshe");
+        ArrayList<Integer> debug = new ArrayList<>();
+        debug.add(i);
+        assertEquals(games , debug);
+        bridge.terminateGame(i);
+    }
+
+    /*************find active games by chip policy**********/
+    @Test(expected = UserNotLoggedIn.class)
+    public void userNotLoggedInActiveGamesByChipPolicy() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.findActiveGamesByChipPolicy("moshe" , 1);
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void userNotExistsActiveGamesByChipPolicy() throws UserNotLoggedIn, UserNotExists {
+        bridge.findActiveGamesByChipPolicy("moshe1" , 1);
+    }
+
+    @Test
+    public void successFindActiveGamesByChipPolicy() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, CantJoin {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        bridge.register("roy", "1111", "noname@gmail.com", 100);
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, false); //spectate not allowed
+        bridge.joinGame(i,"stav");
+        ArrayList<Integer> games = bridge.findActiveGamesByChipPolicy("roy" ,0);
+        ArrayList<Integer> debug = new ArrayList<>();
+        debug.add(i);
+        assertEquals(games , debug);
+        bridge.terminateGame(i);
+    }
+
+    /*************find active games by buy-in policy**********/
+    @Test(expected = UserNotLoggedIn.class)
+    public void userNotLoggedInActiveGamesByBuyInPolicy() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.findActiveGamesByBuyInPolicy("moshe" , 1);
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void userNotExistsActiveGamesByBuyInPolicy() throws UserNotLoggedIn, UserNotExists {
+        bridge.findActiveGamesByBuyInPolicy("moshe1" , 1);
+    }
+
+    @Test
+    public void successFindActiveGamesByBuyInPolicy() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, CantJoin {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        bridge.register("roy", "1111", "noname@gmail.com", 100);
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, false); //spectate not allowed
+        bridge.joinGame(i,"stav");
+        ArrayList<Integer> games = bridge.findActiveGamesByBuyInPolicy("roy" ,0);
+        ArrayList<Integer> debug = new ArrayList<>();
+        debug.add(i);
+        assertEquals(games , debug);
+        bridge.terminateGame(i);
+    }
+
+    /*************find active games by minimum bet policy**********/
+    @Test(expected = UserNotLoggedIn.class)
+    public void userNotLoggedInActiveGamesByMinimumBetPolicy() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.findActiveGamesByMinimumBetPolicy("moshe" ,1);
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void userNotExistsActiveGamesByMinimumBetPolicy() throws UserNotLoggedIn, UserNotExists {
+        bridge.findActiveGamesByMinimumBetPolicy("moshe1" , 1);
+    }
+
+    @Test
+    public void successFindActiveGamesByMinimumBetPolicy() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, CantJoin {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        bridge.register("roy", "1111", "noname@gmail.com", 100);
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, false); //spectate not allowed
+        bridge.joinGame(i,"stav");
+        ArrayList<Integer> games = bridge.findActiveGamesByMinimumBetPolicy("roy" ,10);
+        ArrayList<Integer> debug = new ArrayList<>();
+        debug.add(i);
+        assertEquals(games , debug);
+        bridge.terminateGame(i);
+    }
+
+
+    /*****************CHECK********/
 
     @Test(expected = UserNotLoggedIn.class)
     public void UserNotLoggedInCheck() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, AlreadyLoggedOut, NotYourTurn {
@@ -301,12 +520,14 @@ public class acctests {
         bridge.logout("moshe");
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.check("moshe", 2122);
+        bridge.terminateGame(num);
     }
 
     @Test(expected = UserNotExists.class)
     public void UserNotExistsCheck() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn {
         int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.check("moshe1", 2122);
+        bridge.terminateGame(num);
     }
 
     @Test(expected = UserNotLoggedIn.class)
@@ -315,12 +536,14 @@ public class acctests {
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.logout("moshe");
         bridge.bet("moshe", num, 20);
+        bridge.terminateGame(num);
     }
 
     @Test(expected = UserNotExists.class)
     public void UserNotExistsBet() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn {
         int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.bet("moshe1", 2122, 20);
+        bridge.terminateGame(num);
     }
 
     @Test(expected = UserNotLoggedIn.class)
@@ -329,12 +552,29 @@ public class acctests {
         bridge.logout("moshe");
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.raise("moshe", 2122, 5);
+        bridge.terminateGame(num);
     }
 
-    @Test(expected = UserNotExists.class)
-    public void UserNotExistsRaise() throws UserNotLoggedIn, UserNotExists, NegativeValue, NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
-        int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
-        bridge.raise("moshe1", 2122, 5);
+    @Test
+    public void UserNotExistsRaise() throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotAllowedNumHigh, NotYourTurn, PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, CantJoin {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
+        bridge.joinGame(num,"stav");
+        bridge.startGame("moshe",num);
+        bridge.bet("moshe",num,1);
+        try
+        {
+            bridge.raise("stav",num,0);
+        }
+        catch (NotYourTurn e)
+        {
+            bridge.terminateGame(num);
+        }
+
     }
 
     @Test(expected = UserNotLoggedIn.class)
@@ -342,13 +582,15 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
-        bridge.allIn("moshe", 2122);
+        bridge.allIn("moshe", num);
+        bridge.terminateGame(num);
     }
 
     @Test(expected = UserNotExists.class)
     public void UserNotExistsAllIn() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn {
         int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
-        bridge.allIn("moshe1", 2122);
+        bridge.allIn("moshe1", num);
+        bridge.terminateGame(num);
     }
 
     @Test(expected = UserNotLoggedIn.class)
@@ -373,18 +615,33 @@ public class acctests {
         bridge.joinGame(i, "moshe");
         bridge.startGame("slava" , i);
         bridge.fold("slava" ,i);
+        bridge.terminateGame(i);
     }
 
-    @Test(expected = NotYourTurn.class)
-    public void foldNotYourTurn() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, NotYourTurn {
+    @Test
+    public void foldNotYourTurn() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin {
         bridge.register("slava", "1111", "slava@gmail.com", 200);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         ServiceUser u1 = bridge.login("moshe", "1111");
         int i = bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
         bridge.joinGame(i, "moshe");
-        bridge.startGame("slava" , i);
-        bridge.fold("moshe" ,i);
+        try {
+            bridge.startGame("slava", i);
+        }
+        catch (NotYourTurn e)
+        {
+            assertFalse(false);
+        }
+        try
+        {
+            bridge.fold("moshe" ,i);
+        }
+        catch (NotYourTurn e)
+        {
+            bridge.terminateGame(i);
+        }
+
     }
 
  /*   @Test(expected = UserNotLoggedIn.class)

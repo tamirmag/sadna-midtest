@@ -1,11 +1,10 @@
 package GamesTests;
 
+import DB.IUsersDB;
 import Games.*;
 import Loggers.ActionLogger;
 import Users.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,6 @@ public class GameTests {
         mor = new User(4,"mor", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
         yoni = new User(5,"yoni", "1235", 1, "rzarviv@gmail.com", new Wallet(100));
         p = new Preferences();
-
     }
 
     @After
@@ -46,6 +44,18 @@ public class GameTests {
         AccountManager.getInstance().clearUsers();
         AccountManager.getInstance().clearLeagues();
         ActionLogger.getInstance().clearLog();
+    }
+
+    @AfterClass
+    public static void reconfigure()
+    {
+        IUsersDB.getInstance().changeDataStore("systemDatabase");
+    }
+
+    @BeforeClass
+    public static void configure()
+    {
+        IUsersDB.getInstance().changeDataStore("tests");
     }
 
     @Test

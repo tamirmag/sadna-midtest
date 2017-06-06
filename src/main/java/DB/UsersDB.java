@@ -29,8 +29,7 @@ public class UsersDB implements IUsersDB {
     }
 
     @Override
-    public void changeDataStore(String newDataStore)
-    {
+    public void changeDataStore(String newDataStore) {
         datastore = morphia.createDatastore(m, newDataStore);
     }
 
@@ -46,7 +45,7 @@ public class UsersDB implements IUsersDB {
     public User getUser(String username) {
         final Query<User> query = datastore.createQuery(User.class).filter("username =", username);
         List<User> users = query.asList();
-        if(users.size() == 0) return null;
+        if (users.size() == 0) return null;
         return users.get(0);
     }
 
@@ -155,11 +154,10 @@ public class UsersDB implements IUsersDB {
             Iterator it = allLeagues.iterator();
             while (it.hasNext()) {
 
-               int league = (Integer) it.next();
+                int league = (Integer) it.next();
                 if (numOfLeaguesToSkip > 0) {
-                    numOfLeaguesToSkip -- ;
-                }
-                else {
+                    numOfLeaguesToSkip--;
+                } else {
                     ArrayList<User> temp = (ArrayList<User>) allUsers.subList(from, to);
 
                     from += numOfUsersInLeague;
@@ -170,12 +168,11 @@ public class UsersDB implements IUsersDB {
                         temp.addAll(new ArrayList<>(allUsers.subList(from, allUsers.size())));
                     }
                     for (User u : temp) {
-                       moveUserToLeague(u.getUsername() , league);
+                        moveUserToLeague(u.getUsername(), league);
                     }
                 }
             }
-        }
-        else {
+        } else {
             int from = 0;
             int to = numOfUsersInLeague;
 
@@ -192,7 +189,7 @@ public class UsersDB implements IUsersDB {
                     temp.addAll(new ArrayList<>(allUsers.subList(from, allUsers.size())));
                 }
                 for (User u : temp) {
-                    moveUserToLeague(u.getUsername() , league);
+                    moveUserToLeague(u.getUsername(), league);
                 }
             }
         }
@@ -200,11 +197,52 @@ public class UsersDB implements IUsersDB {
     }
 
     @Override
-    public void deleteAllUsers()
-    {
+    public void deleteAllUsers() {
         final Query<User> query = datastore.createQuery(User.class);
         datastore.delete(query);
     }
+
+    @Override
+    public List<User> getTop20GrossProfit() {
+        Query<User> query = datastore.createQuery(User.class).order("-grossProfit");
+        List<User> ret = query.asList();
+        if (ret.size() < 20) return ret;
+        else {
+            ret = ret.subList(0, 20);
+            return ret;
+        }
+    }
+
+    @Override
+    public void setNumOfGames(String username ,int num)
+    {
+        User u = getUser(username);
+        u.setNumOfGames(num);
+        datastore.save(u);
+    }
+
+    @Override
+    public List<User> getTop20NumOfGames() {
+        Query<User> query = datastore.createQuery(User.class).order("-numOfGames");
+        List<User> ret = query.asList();
+        if (ret.size() < 20) return ret;
+        else {
+            ret = ret.subList(0, 20);
+            return ret;
+        }
+    }
+
+    @Override
+    public List<User> getTop20highestCashGained() {
+        Query<User> query = datastore.createQuery(User.class).order("-highestCashGained");
+        List<User> ret = query.asList();
+        if (ret.size() < 20) return ret;
+        else {
+            ret = ret.subList(0, 20);
+            return ret;
+        }
+    }
+
 
 
 }

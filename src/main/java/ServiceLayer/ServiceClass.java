@@ -30,14 +30,6 @@ public class ServiceClass implements IServiceClass {
         IAccountManager.getInstance().logout(username);
     }
 
-    @Override
-    public ArrayList<Integer> findSpectatableGames(String username) throws UserNotLoggedIn, UserNotExists {
-        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
-        ArrayList<IGame> games = u.findActiveGamesBySpectatingPolicy(true);
-        ArrayList<Integer> ret = new ArrayList<>();
-        for (IGame i : games) ret.add(i.getId());
-        return ret;
-    }
 
     @Override
     public int createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
@@ -66,7 +58,7 @@ public class ServiceClass implements IServiceClass {
     }
 
     @Override
-    public void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
+    public void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, SpectatingNotAllowed {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.spectateGame(gamenum);
     }
@@ -77,11 +69,78 @@ public class ServiceClass implements IServiceClass {
         return u.viewReplay(gamenum);
     }
 
+    /********filter games******************/
 
     @Override
     public ArrayList<Integer> findActiveGamesByPotSize(int potSize, String username) throws UserNotLoggedIn, UserNotExists {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         ArrayList<IGame> games = u.findActiveGamesByPotSize(potSize);
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (IGame i : games) ret.add(i.getId());
+        return ret;
+    }
+
+    @Override
+    public ArrayList<Integer> findActiveGamesByPlayerName(String username,String playerName) throws UserNotLoggedIn, UserNotExists {
+        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        ArrayList<IGame> games = u.findActiveGamesByPlayerName(playerName);
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (IGame i : games) ret.add(i.getId());
+        return ret;
+    }
+    @Override
+    public ArrayList<Integer> findActiveGamesByBuyInPolicy(String username,int costOfJoin) throws UserNotLoggedIn, UserNotExists {
+        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        ArrayList<IGame> games = u.findActiveGamesByBuyInPolicy(costOfJoin);
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (IGame i : games) ret.add(i.getId());
+        return ret;
+    }
+    @Override
+    public ArrayList<Integer> findActiveGamesByChipPolicy(String username,int numOfChips) throws UserNotLoggedIn, UserNotExists {
+        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        ArrayList<IGame> games = u.findActiveGamesByChipPolicy(numOfChips);
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (IGame i : games) ret.add(i.getId());
+        return ret;
+    }
+    @Override
+    public ArrayList<Integer> findActiveGamesByMaxPlayersPolicy(String username,int maxPlayers) throws UserNotLoggedIn, UserNotExists {
+        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        ArrayList<IGame> games = u.findActiveGamesByMaxPlayersPolicy(maxPlayers);
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (IGame i : games) ret.add(i.getId());
+        return ret;
+    }
+    @Override
+    public ArrayList<Integer> findActiveGamesByMinPlayersPolicy(String username,int minPlayers) throws UserNotLoggedIn, UserNotExists {
+        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        ArrayList<IGame> games = u.findActiveGamesByMinPlayersPolicy(minPlayers);
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (IGame i : games) ret.add(i.getId());
+        return ret;
+    }
+    @Override
+    public ArrayList<Integer> findActiveGamesByMinimumBetPolicy(String username,int minimumBet) throws UserNotLoggedIn, UserNotExists {
+        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        ArrayList<IGame> games = u.findActiveGamesByMinimumBetPolicy(minimumBet);
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (IGame i : games) ret.add(i.getId());
+        return ret;
+    }
+    @Override
+    public ArrayList<Integer> findActiveGamesByGameTypePolicy(String username,String gameTypePolicy) throws UserNotLoggedIn, UserNotExists {
+        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        ArrayList<IGame> games = u.findActiveGamesByGameTypePolicy(gameTypePolicy);
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (IGame i : games) ret.add(i.getId());
+        return ret;
+    }
+
+    @Override
+    public ArrayList<Integer> findSpectatableGames(String username) throws UserNotLoggedIn, UserNotExists {
+        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        ArrayList<IGame> games = u.findActiveGamesBySpectatingPolicy(true);
         ArrayList<Integer> ret = new ArrayList<>();
         for (IGame i : games) ret.add(i.getId());
         return ret;

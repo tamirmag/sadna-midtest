@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Games.CantJoin;
 import Games.NotAllowedNumHigh;
 import Games.NotYourTurn;
+import Games.SpectatingNotAllowed;
 import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceUser;
 import Users.*;
@@ -25,7 +26,7 @@ public interface Bridge extends IServiceClass {
 
     void joinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, CantJoin, NoMuchMoney;
 
-    void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists;
+    void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, SpectatingNotAllowed;
 
     ArrayList<String> viewReplay(int gamenum, String username) throws UserNotLoggedIn, UserNotExists;
 
@@ -40,6 +41,20 @@ public interface Bridge extends IServiceClass {
     void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
 
     void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn;
+
+    ArrayList<Integer> findActiveGamesByGameTypePolicy(String username,String gameTypePolicy) throws UserNotLoggedIn, UserNotExists;
+
+    ArrayList<Integer> findActiveGamesByMinimumBetPolicy(String username,int minimumBet) throws UserNotLoggedIn, UserNotExists ;
+
+    ArrayList<Integer> findActiveGamesByMinPlayersPolicy(String username,int minPlayers) throws UserNotLoggedIn, UserNotExists;
+
+    ArrayList<Integer> findActiveGamesByMaxPlayersPolicy(String username,int maxPlayers) throws UserNotLoggedIn, UserNotExists;
+
+    ArrayList<Integer> findActiveGamesByChipPolicy(String username,int numOfChips) throws UserNotLoggedIn, UserNotExists;
+
+    ArrayList<Integer> findActiveGamesByBuyInPolicy(String username,int costOfJoin) throws UserNotLoggedIn, UserNotExists;
+
+    ArrayList<Integer> findActiveGamesByPlayerName(String username,String playerName) throws UserNotLoggedIn, UserNotExists;
 }
 
 //void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;
