@@ -309,8 +309,7 @@ public class acctests {
         bridge.logout("moshe");
         bridge.spectateGame(22, "moshe");
     }
-
-
+    
     /***********view replay***********/
     @Test
     public void successViewReplay() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, AlreadyLoggedOut {
