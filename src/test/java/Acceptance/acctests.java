@@ -249,8 +249,8 @@ public class acctests {
     public void successJoinGame() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, NoMuchMoney, CantJoin, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
-        ServiceUser u1 = bridge.login("moshe", "1111");
-        ServiceUser u3 = bridge.register("stav", "2222", "yoyo@gmail.com", 100);
+        bridge.login("moshe", "1111");
+        bridge.register("stav", "2222", "yoyo@gmail.com", 100);
         String name = "moshe";
         int num = bridge.createGame(name, "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.joinGame(num, "stav");
@@ -311,7 +311,7 @@ public class acctests {
     public void successViewReplay() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, AlreadyLoggedOut {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
-        ServiceUser u1 = bridge.login("moshe", "1111");
+        bridge.login("moshe", "1111");
         String name = "moshe";
         int num = bridge.createGame(name, "NoLimitHoldem", 2, 2, 10, 2, 5, false);
         bridge.terminateGame(num);
@@ -568,10 +568,10 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("stav", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
-        bridge.joinGame(num ,"stav");
-        bridge.startGame("moshe" ,num);
-        bridge.raise("moshe" ,num ,5);
-        bridge.check("stav" ,num);
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        bridge.check("stav", num);
         bridge.terminateGame(num);
     }
 
@@ -580,15 +580,12 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("stav", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
-        bridge.joinGame(num ,"stav");
-        bridge.startGame("moshe" ,num);
-        bridge.raise("moshe" ,num ,5);
-        try
-        {
-            bridge.check("moshe" ,num);
-        }
-        catch (NotYourTurn e)
-        {
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        try {
+            bridge.check("moshe", num);
+        } catch (NotYourTurn e) {
             bridge.terminateGame(num);
         }
     }
@@ -616,11 +613,11 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("stav", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
-        bridge.joinGame(num ,"stav");
-        bridge.startGame("moshe" ,num);
-        bridge.raise("moshe" ,num ,5);
-        bridge.check("stav" ,num);
-        bridge.bet("moshe" ,num ,5);
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        bridge.check("stav", num);
+        bridge.bet("moshe", num, 10);
         bridge.terminateGame(num);
     }
 
@@ -629,15 +626,13 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("stav", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
-        bridge.joinGame(num ,"stav");
-        bridge.startGame("moshe" ,num);
-        bridge.raise("moshe" ,num ,5);
-        bridge.check("stav" ,num);
-        try{
-            bridge.bet("moshe" ,num ,1000000);
-        }
-        catch (NoMuchMoney e)
-        {
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        bridge.check("stav", num);
+        try {
+            bridge.bet("moshe", num, 1000000);
+        } catch (NoMuchMoney e) {
             bridge.terminateGame(num);
         }
     }
@@ -647,14 +642,17 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("stav", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
-        bridge.joinGame(num ,"stav");
-        bridge.startGame("moshe" ,num);
-        bridge.raise("moshe" ,num ,5);
-        bridge.check("stav" ,num);
-        bridge.raise("moshe" ,num ,15);
-        bridge.check("stav" ,num);
-        bridge.bet("moshe" ,num ,-1000000);
-        bridge.terminateGame(num);
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        bridge.check("stav", num);
+        bridge.raise("moshe", num, 15);
+        bridge.check("stav", num);
+        try {
+            bridge.bet("moshe", num, -1000000);
+        } catch (NotLegalAmount e) {
+            bridge.terminateGame(num);
+        }
     }
 
     @Test
@@ -662,15 +660,13 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.register("stav", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
-        bridge.joinGame(num ,"stav");
-        bridge.startGame("moshe" ,num);
-        bridge.raise("moshe" ,num ,5);
-        bridge.check("stav" ,num);
-        try{
-            bridge.bet("stav" ,num ,10);
-        }
-        catch (NotYourTurn e)
-        {
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        bridge.check("stav", num);
+        try {
+            bridge.bet("stav", num, 10);
+        } catch (NotYourTurn e) {
             bridge.terminateGame(num);
         }
     }
@@ -704,10 +700,56 @@ public class acctests {
         bridge.check("stav", num);
         bridge.fold("moshe", num);
         bridge.terminateGame(num);
-
-
     }
 
+    @Test
+    public void notYourTurnRaise() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin, NotYourTurn, NotAllowedNumHigh, NotLegalAmount {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        bridge.check("stav", num);
+        try {
+            bridge.raise("stav", num, 10);
+        } catch (NotYourTurn e) {
+            bridge.terminateGame(num);
+        }
+    }
+
+    @Test
+    public void negativeValueRaise() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin, NotYourTurn, NotAllowedNumHigh, NotLegalAmount {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        bridge.check("stav", num);
+        bridge.raise("moshe", num, 15);
+        bridge.check("stav", num);
+        try {
+            bridge.raise("moshe", num, -1000000);
+        } catch (NotLegalAmount e) {
+            bridge.terminateGame(num);
+        }
+    }
+
+    @Test
+    public void successRaise() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin, NotYourTurn, NotAllowedNumHigh, NotLegalAmount {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        bridge.check("stav", num);
+        bridge.terminateGame(num);
+    }
+
+
+    /****************All_In*********************/
     @Test(expected = UserNotLoggedIn.class)
     public void UserNotLoggedInAllIn() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, AlreadyLoggedOut, NotYourTurn, NotLegalAmount {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
@@ -715,28 +757,64 @@ public class acctests {
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.allIn("moshe", num);
         bridge.terminateGame(num);
-        IErrorLogger.getInstance().writeToFile("in UserNotLoggedInAllIn , game " + num + " was terminated");
+
     }
 
     @Test
     public void UserNotExistsAllIn() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn, PasswordNotValid, UsernameNotValid, UserAlreadyExists, EmailNotValid, NotLegalAmount {
         bridge.register("moshe1", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
-        boolean notCatched = true;
         try {
             bridge.allIn("moshe", num);
         } catch (UserNotExists e) {
-            notCatched = false;
             bridge.terminateGame(num);
-            IErrorLogger.getInstance().writeToFile("in UserNotExistsAllIn , game " + num + " was terminated");
         }
-        if (notCatched) {
-            bridge.terminateGame(num);
-            IErrorLogger.getInstance().writeToFile("in UserNotExistsAllIn , game " + num + " was terminated when not cached.");
-        }
-
     }
 
+    @Test
+    public void successAllIn() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin, NotYourTurn, NotAllowedNumHigh, NotLegalAmount {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.allIn("moshe", num);
+        bridge.terminateGame(num);
+    }
+
+    @Test
+    public void notYourTurnAllIn() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin, NotYourTurn, NotAllowedNumHigh, NotLegalAmount {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 5);
+        bridge.check("stav", num);
+        try {
+            bridge.allIn("stav", num);
+        } catch (NotYourTurn e) {
+            bridge.terminateGame(num);
+        }
+    }
+
+    @Test
+    public void negativeValueAllIn() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin, NotYourTurn, NotAllowedNumHigh, NotLegalAmount {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        bridge.joinGame(num, "stav");
+        bridge.startGame("moshe", num);
+        bridge.raise("moshe", num, 90);
+        bridge.check("stav", num);
+        try {
+            bridge.allIn("moshe", num);
+        } catch (NotLegalAmount e) {
+            bridge.terminateGame(num);
+        }
+    }
+
+    /************fold**************/
     @Test(expected = UserNotLoggedIn.class)
     public void UserNotLoggedInFold() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut, NotYourTurn {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
@@ -767,24 +845,18 @@ public class acctests {
         bridge.register("slava", "1111", "slava@gmail.com", 200);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
-        ServiceUser u1 = bridge.login("moshe", "1111");
+        bridge.login("moshe", "1111");
         int i = bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
         bridge.joinGame(i, "moshe");
         bridge.startGame("slava", i);
-        boolean notCatched = true;
         try {
             bridge.fold("moshe", i);
         } catch (NotYourTurn e) {
-            notCatched = false;
             bridge.terminateGame(i);
-            IErrorLogger.getInstance().writeToFile("in foldNotYourTurn , game " + i + " was terminated.");
         }
-        if (notCatched) {
-            bridge.terminateGame(i);
-            IErrorLogger.getInstance().writeToFile("in foldNotYourTurn , game " + i + " was terminated when not cached.");
-        }
-
     }
+}
+
 
  /*   @Test(expected = UserNotLoggedIn.class)
     public void UserNotLoggedInSetDefaultLeague() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NotHighestRanking, AlreadyLoggedOut {
@@ -871,4 +943,4 @@ public class acctests {
     }*/
 
 
-}
+
