@@ -11,7 +11,7 @@ public class CardActions
     public CardActions() {
     }
 
-    public boolean isFlush(ArrayList<Card> cards)
+    public static boolean isFlush(ArrayList<Card> cards)
     {
         boolean ans = false;
         Hashtable<Suit,ArrayList<Card>> table = new Hashtable<>();
@@ -33,12 +33,12 @@ public class CardActions
 
     }
 
-    public int getMaxValue(ArrayList<Card> cards)
+    public static int getMaxValue(ArrayList<Card> cards)
     {
         return Collections.max(cards).number.value;
     }
 
-    public int NumOfPairs(ArrayList<Card> cards)
+    public static int NumOfPairs(ArrayList<Card> cards)
     {
         int numOfPairs= 0;
         Hashtable<Number,ArrayList<Card>> table = new Hashtable<>();
@@ -58,7 +58,7 @@ public class CardActions
         return numOfPairs;
     }
 
-    public boolean isFullHouse(ArrayList<Card> cards)
+    public static boolean isFullHouse(ArrayList<Card> cards)
     {
         int numOfPairs= 0;
         int numOfTrio=0;
@@ -80,16 +80,16 @@ public class CardActions
         return (numOfPairs==1 && numOfTrio ==1);
     }
 
-    public boolean isPair(ArrayList<Card> cards)
+    public static boolean isPair(ArrayList<Card> cards)
     {
         return NumOfPairs(cards) ==1;
     }
-    public boolean isTwoPair(ArrayList<Card> cards)
+    public static boolean isTwoPair(ArrayList<Card> cards)
     {
         return NumOfPairs(cards) ==2;
     }
 
-    public boolean isStraight(ArrayList<Card> cards)
+    public static boolean isStraight(ArrayList<Card> cards)
     {
         int numOfSuccessives =0;
         ArrayList<Integer> vals = new ArrayList<>();
@@ -113,7 +113,7 @@ public class CardActions
         return (numOfSuccessives > 0);
     }
 
-    public boolean isRoyalFlush(ArrayList<Card> cards)
+    public static boolean isRoyalFlush(ArrayList<Card> cards)
     {
         boolean ans = false;
         Hashtable<Suit,ArrayList<Card>> table = new Hashtable<>();
@@ -136,7 +136,7 @@ public class CardActions
         return ans;
     }
 
-    private boolean checkRoyalFlush(ArrayList<Card> cards) {
+    private static boolean checkRoyalFlush(ArrayList<Card> cards) {
         int isTen = 0;
         int isJack = 0;
         int isQueen = 0;
@@ -165,7 +165,7 @@ public class CardActions
         return((isTen > 0) && (isAce > 0) && (isJack > 0) && (isQueen > 0) && (isKing > 0));
     }
 
-    public boolean isStraightFlush(ArrayList<Card> cards)
+    public static boolean isStraightFlush(ArrayList<Card> cards)
     {
         boolean ans = false;
         Hashtable<Suit,ArrayList<Card>> table = new Hashtable<>();
@@ -185,16 +185,16 @@ public class CardActions
         }
         return ans;
     }
-    public boolean isFourOfAKind(ArrayList<Card> cards)
+    public static boolean isFourOfAKind(ArrayList<Card> cards)
     {
         return is_OfAKind(cards,4);
     }
-    public boolean isThreeOfAKind(ArrayList<Card> cards)
+    public static boolean isThreeOfAKind(ArrayList<Card> cards)
     {
         return is_OfAKind(cards,3);
     }
 
-    private boolean is_OfAKind(ArrayList<Card> cards , int howMuch)
+    private static boolean is_OfAKind(ArrayList<Card> cards , int howMuch)
     {
         boolean ans = false;
         Hashtable<Number,ArrayList<Card>> table = new Hashtable<>();

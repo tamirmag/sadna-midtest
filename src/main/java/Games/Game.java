@@ -198,8 +198,134 @@ public class Game implements IGame {
             }
         }
 
+        Player winner = player;
+        if((winner = hasRoyalFlash()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }else if((winner = hasStraightFlush()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }else if((winner = hasFourOfAKind()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }else if((winner = hasFullHouse()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }else if((winner = hasFlush()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }else if((winner = hasStraight()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }else if((winner = hasThreeOfAKind()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }else if((winner = hasTwoPair()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }else if((winner = hasOnePair()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }else if((winner = hasHighCard()) != null){
+            winner.getWallet().add(pot);
+  //          pot = 0;
+        }
+
         pot = 0;
 
+    }
+
+    private Player hasHighCard() {
+        int max =0;
+        Player winner = null;
+        for (Player player: desk) {
+            if(CardActions.getMaxValue(player.getHand())>=max){
+                max = CardActions.getMaxValue(player.getHand());
+                winner = player;
+            }
+        }
+        return winner;
+    }
+
+    private Player hasOnePair() {
+        for (Player player: desk) {
+            if(CardActions.isPair(player.hand)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    private Player hasTwoPair() {
+        for (Player player: desk) {
+            if(CardActions.isTwoPair(player.hand)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    private Player hasThreeOfAKind() {
+        for (Player player: desk) {
+            if(CardActions.isThreeOfAKind(player.hand)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    private Player hasStraight() {
+        for (Player player: desk) {
+            if(CardActions.isStraight(player.hand)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    private Player hasFlush() {
+        for (Player player: desk) {
+            if(CardActions.isFlush(player.hand)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    private Player hasFullHouse() {
+        for (Player player: desk) {
+            if(CardActions.isFullHouse(player.hand)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    private Player hasFourOfAKind() {
+        for (Player player: desk) {
+            if(CardActions.isFourOfAKind(player.hand)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    private Player hasStraightFlush() {
+        for (Player player: desk) {
+            if(CardActions.isStraightFlush(player.hand)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    private Player hasRoyalFlash() {
+        for (Player player: desk) {
+            if(CardActions.isRoyalFlush(player.hand)){
+                return player;
+            }
+        }
+        return null;
     }
 
     @Override

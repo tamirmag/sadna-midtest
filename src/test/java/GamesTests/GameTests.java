@@ -102,7 +102,26 @@ public class GameTests {
     }
 
     @Test
-    public void roytest(){
+    public void fullSenarioTest() throws CantJoin, NoMuchMoney, NotYourTurn, NotLegalAmount, NotAllowedNumHigh {
+        p.setNoLimitHoldem(true);
+        int game  = man.createGame(roy, p);
+        man.JoinGame(game, tamir);
+        man.startGame(game);
+        //pre flop
+        man.check(game, roy);
+        man.check(game, tamir);
+        //flop
+        man.check(game, roy);
+        man.check(game, tamir);
+        //turn
+        man.raise(game, 20, roy);
+        man.check(game, tamir);
+        //river
+        man.raise(game, 20, roy);
+        man.check(game, tamir);
+        System.out.println(tamir.getWallet().getAmountOfMoney() + "    " + roy.getWallet().getAmountOfMoney());
+
+        //assertTrue(tamir.getWallet().getAmountOfMoney() == 100+man.getMinimumBet(game)/2);
 
     }
 
