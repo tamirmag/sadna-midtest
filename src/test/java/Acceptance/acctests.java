@@ -31,7 +31,7 @@ public class acctests {
     public void afterAnyTest() throws AlreadyLoggedOut, UserNotExists {
         bridge.clearUsers();
         IActionLogger.getInstance().clearLog();
-        IErrorLogger.getInstance().clearLog();
+        //IErrorLogger.getInstance().clearLog();
         bridge.clearAllFinishedGameLogs();
     }
 
@@ -47,7 +47,7 @@ public class acctests {
     public static void afterAllTests() throws AlreadyLoggedOut, UserNotExists {
         bridge.clearUsers();
         IActionLogger.getInstance().clearLog();
-        IErrorLogger.getInstance().clearLog();
+        //IErrorLogger.getInstance().clearLog();
         IFinishedGamesManager.getInstance().deleteAllFinishedGameLogs();
         IActiveGamesLogManager.getInstance().RemoveAllGameLoggers();
         bridge.clearAllFinishedGameLogs();
@@ -502,9 +502,9 @@ public class acctests {
         /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
                    int minimumBet, int minimalAmountOfPlayers,
                    int maximalAmountOfPlayers, boolean spectatingMode)*/
-        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, false); //spectate not allowed
+        int i = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 2, 1, 6, false); //spectate not allowed
         bridge.joinGame(i,"stav");
-        ArrayList<Integer> games = bridge.findActiveGamesByMinimumBetPolicy("roy" ,10);
+        ArrayList<Integer> games = bridge.findActiveGamesByMinimumBetPolicy("roy" ,2);
         ArrayList<Integer> debug = new ArrayList<>();
         debug.add(i);
         assertEquals(games , debug);
@@ -519,15 +519,29 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
-        bridge.check("moshe", 2122);
-        bridge.terminateGame(num);
+        try
+        {
+            bridge.check("moshe", 2122);
+        }
+        catch (UserNotLoggedIn e)
+        {
+            bridge.terminateGame(num);
+        }
+
     }
 
-    @Test(expected = UserNotExists.class)
-    public void UserNotExistsCheck() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn {
-        int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
-        bridge.check("moshe1", 2122);
-        bridge.terminateGame(num);
+    @Test
+    public void UserNotExistsCheck() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn, PasswordNotValid, UsernameNotValid, UserAlreadyExists, EmailNotValid {
+        bridge.register("moshe1", "1111", "noname@gmail.com", 100);
+        int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        try
+        {
+            bridge.check("moshe2", num);
+        }
+        catch (UserNotExists e)
+        {
+            bridge.terminateGame(num);
+        }
     }
 
     @Test(expected = UserNotLoggedIn.class)
@@ -546,13 +560,20 @@ public class acctests {
         bridge.terminateGame(num);
     }
 
-    @Test(expected = UserNotLoggedIn.class)
+    @Test
     public void UserNotLoggedInRaise() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, AlreadyLoggedOut, NotYourTurn {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
-        bridge.logout("moshe");
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
-        bridge.raise("moshe", 2122, 5);
-        bridge.terminateGame(num);
+        bridge.logout("moshe");
+       try
+       {
+           bridge.raise("moshe", 2122, 5);
+       }
+        catch (UserNotLoggedIn e)
+        {
+            bridge.terminateGame(num);
+        }
+
     }
 
     @Test
@@ -562,13 +583,14 @@ public class acctests {
         /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
                    int minimumBet, int minimalAmountOfPlayers,
                    int maximalAmountOfPlayers, boolean spectatingMode)*/
-        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
+        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 1, 2, 5, true);
+        IErrorLogger.getInstance().writeToFile("in UserNotExistsRaise, created game "  +num);
         bridge.joinGame(num,"stav");
-        bridge.startGame("moshe",num);
-        bridge.bet("moshe",num,1);
-        try
-        {
-            bridge.raise("stav",num,0);
+        bridge.startGame("moshe", num);
+        try {
+            bridge.raise("moshe", num, 1);
+            bridge.check("stav", num);
+            bridge.fold("moshe", num);
         }
         catch (NotYourTurn e)
         {
@@ -586,11 +608,19 @@ public class acctests {
         bridge.terminateGame(num);
     }
 
-    @Test(expected = UserNotExists.class)
-    public void UserNotExistsAllIn() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn {
-        int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
-        bridge.allIn("moshe1", num);
-        bridge.terminateGame(num);
+    @Test
+    public void UserNotExistsAllIn() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn, PasswordNotValid, UsernameNotValid, UserAlreadyExists, EmailNotValid {
+        bridge.register("moshe1", "1111", "noname@gmail.com", 100);
+        int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        try
+        {
+            bridge.allIn("moshe", num);
+        }
+        catch (UserNotExists e)
+        {
+            bridge.terminateGame(num);
+        }
+
     }
 
     @Test(expected = UserNotLoggedIn.class)
@@ -610,7 +640,7 @@ public class acctests {
         bridge.register("slava", "1111", "slava@gmail.com", 200);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
-        ServiceUser u1 = bridge.login("moshe", "1111");
+        bridge.login("moshe", "1111");
         int i = bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
         bridge.joinGame(i, "moshe");
         bridge.startGame("slava" , i);

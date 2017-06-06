@@ -139,7 +139,7 @@ public class Game implements IGame {
 
     @Override
     public int getMinimumBet(){
-        return 5;
+        return currentMinimumBet;
     }
 
     @Override

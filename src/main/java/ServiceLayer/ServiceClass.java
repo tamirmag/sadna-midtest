@@ -148,7 +148,7 @@ public class ServiceClass implements IServiceClass {
 
 
     @Override
-    public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn {
+    public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney {
         IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
         u.check(gameID);
     }

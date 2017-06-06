@@ -231,6 +231,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
     public ArrayList<IGame> findActiveGamesByMinimumBetPolicy(int minimumBet) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
+            int i = game.getMinimumBet();
             if (game.getMinimumBet() == minimumBet)
                 ourGames.add(game);
         }
@@ -261,7 +262,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
     public ArrayList<IGame> findActiveGamesByGameTypePolicy(String gameTypePolicy) {
         ArrayList<IGame> ourGames = new ArrayList();
         for (IGame game : games) {
-            if (game.getType() == gameTypePolicy)
+            if (game.getType() .equals(gameTypePolicy))
                 ourGames.add(game);
         }
         return ourGames;
