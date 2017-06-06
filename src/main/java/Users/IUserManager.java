@@ -53,14 +53,14 @@ public interface IUserManager {
     //Game actions
     void check(int gameID) throws NoMuchMoney, NotYourTurn;
 
-    void bet(int gameID, int amount) throws NoMuchMoney, NotYourTurn;
+    void bet(int gameID, int amount) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
-    void allIn(int gameID) throws NoMuchMoney, NotYourTurn;
+    void allIn(int gameID) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void fold(int gameID) throws NotYourTurn;
 
-    void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn;
+    void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
-    void startGame(int gameID) throws NotYourTurn, NoMuchMoney;
+    void startGame(int gameID) throws NotYourTurn, NoMuchMoney, NotLegalAmount;
 
 }

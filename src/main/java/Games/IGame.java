@@ -22,7 +22,7 @@ public interface IGame {
 
     void leaveGame(Player player, int userID);
 
-    void allIn(Player player) throws NoMuchMoney, NotYourTurn;
+    void allIn(Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void setMaximumPlayers(int num);
 
@@ -52,7 +52,7 @@ public interface IGame {
 
     void terminateGame();
 
-    void startGame() throws NoMuchMoney, NotYourTurn;
+    void startGame() throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     boolean inMax();
 
@@ -68,7 +68,7 @@ public interface IGame {
 
     void spectateGame(User user);
 
-    void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn;
+    void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void fold(Player player) throws NotYourTurn;
 
@@ -76,9 +76,9 @@ public interface IGame {
 
     void dealCard(Player player);
 
-    void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn;
+    void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
-    void call(int amount, Player player) throws NoMuchMoney, NotYourTurn;
+    void call(int amount, Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     boolean isLocked();
 

@@ -2,10 +2,7 @@ package Acceptance;
 
 import java.util.ArrayList;
 
-import Games.CantJoin;
-import Games.NotAllowedNumHigh;
-import Games.NotYourTurn;
-import Games.SpectatingNotAllowed;
+import Games.*;
 import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceUser;
 import Users.*;
@@ -34,11 +31,11 @@ public interface Bridge extends IServiceClass {
 
     void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
 
-    void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
+    void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
-    void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, NotYourTurn;
+    void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
-    void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
+    void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn;
 

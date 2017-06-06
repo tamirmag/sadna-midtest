@@ -83,7 +83,7 @@ public class GameTests {
     }
 
     @Test
-    public void startGameTest() throws CantJoin, NoMuchMoney, NotYourTurn {
+    public void startGameTest() throws CantJoin, NoMuchMoney, NotYourTurn, NotLegalAmount {
         p.setNoLimitHoldem(true);
         int game  = man.createGame(roy, p);
         man.JoinGame(game, tamir);
@@ -92,7 +92,7 @@ public class GameTests {
     }
 
     @Test
-    public void foldGameTest() throws CantJoin, NoMuchMoney, NotYourTurn {
+    public void foldGameTest() throws CantJoin, NoMuchMoney, NotYourTurn, NotLegalAmount {
         p.setNoLimitHoldem(true);
         int game  = man.createGame(roy, p);
         man.JoinGame(game, tamir);

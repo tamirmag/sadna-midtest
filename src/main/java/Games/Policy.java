@@ -88,12 +88,12 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn {
+    public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         this.policy.bet(amount, player);
     }
 
     @Override
-    public void call(int amount, Player player) throws NoMuchMoney, NotYourTurn {
+    public void call(int amount, Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         this.policy.call(amount, player);
     }
 
@@ -108,7 +108,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void startGame() throws NoMuchMoney, NotYourTurn {
+    public void startGame() throws NoMuchMoney, NotYourTurn, NotLegalAmount {
         this.policy.startGame();
     }
 
@@ -133,7 +133,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void allIn(Player player) throws NoMuchMoney, NotYourTurn { this.policy.allIn(player); }
+    public void allIn(Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount { this.policy.allIn(player); }
 
     @Override
     public int getTurn() {
@@ -171,7 +171,7 @@ public abstract class Policy implements IGame {
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount {
         this.policy.raise(amount, player);
     }
 

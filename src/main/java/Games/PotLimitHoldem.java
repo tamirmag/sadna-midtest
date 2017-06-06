@@ -15,7 +15,7 @@ public class PotLimitHoldem extends Policy {
     }
 
     @Override
-    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn {
+    public void raise(int amount, Player player) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount {
         if (amount <= super.getPot())
             policy.raise(amount, player);
         else

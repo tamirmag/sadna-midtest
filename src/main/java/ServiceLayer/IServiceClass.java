@@ -1,9 +1,6 @@
 package ServiceLayer;
 
-import Games.CantJoin;
-import Games.NotAllowedNumHigh;
-import Games.NotYourTurn;
-import Games.SpectatingNotAllowed;
+import Games.*;
 import Users.*;
 
 import java.util.ArrayList;
@@ -41,11 +38,11 @@ public interface IServiceClass {
 
     void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
 
-    void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
+    void bet(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
-    void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, NotYourTurn;
+    void raise(String username, int gameID, int amount) throws UserNotLoggedIn, UserNotExists, NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
-    void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn;
+    void allIn(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn;
 
@@ -57,7 +54,7 @@ public interface IServiceClass {
 
     void clearAllFinishedGameLogs();
 
-    void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney;
+    void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, NotLegalAmount;
 
     ArrayList<Integer> findActiveGamesByGameTypePolicy(String username,String gameTypePolicy) throws UserNotLoggedIn, UserNotExists;
 
