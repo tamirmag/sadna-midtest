@@ -16,7 +16,8 @@ public class User {
     private int league;
     private Wallet wallet;
     private int numOfGames;
-
+    private int grossProfit; //The total gross profit
+    private int highestCashGained; //The highest cash gain in a game.
     public boolean isLoggedIn() {
         return loggedIn;
     }
@@ -41,6 +42,8 @@ public class User {
         this.email = email;
         this.wallet = wallet;
         this.numOfGames = 0;
+        grossProfit = 0;
+        highestCashGained = 0;
     }
 
     @Override
@@ -109,6 +112,21 @@ public class User {
         this.numOfGames = numOfGames;
     }
 
+    public int getGrossProfit() {
+        return grossProfit;
+    }
+
+    public void setGrossProfit(int grossProfit) {
+        this.grossProfit = grossProfit;
+    }
+
+    public int getHighestCashGained() {
+        return highestCashGained;
+    }
+
+    public void setHighestCashGained(int highestCashGained) {
+        this.highestCashGained = highestCashGained;
+    }
 
 }
 

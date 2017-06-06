@@ -1,5 +1,6 @@
 package Games;
 
+import Loggers.ActiveGamesLogManager;
 import Loggers.IActiveGamesLogManager;
 import Loggers.IFinishedGamesManager;
 import Users.IAccountManager;
@@ -51,10 +52,10 @@ public class Game implements IGame {
     public Game(ArrayList<Player> players, int id, int league) {
         this.players = players;
         currentMinimumBet = 0;
-        //      maxPlayers = 0;
         pot = 0;
         this.id = id;
         logger = new GameLogger(id);
+        ActiveGamesLogManager.getInstance().AddGameLogger(logger);
         this.league = league;
         this.spectators = new ArrayList<>();
         chat = new Chat();
@@ -253,8 +254,8 @@ public class Game implements IGame {
     public void terminateGame() {
         IAccountManager.getInstance().updateNumOfGames(players);
         logger.writeToFile("game ended");
-        IActiveGamesLogManager.getInstance().RemoveGameLogger(logger.getGameNumber());
         IFinishedGamesManager.getInstance().addFinishedGameLog(logger);
+        IActiveGamesLogManager.getInstance().RemoveGameLogger(logger);
     }
 
     @Override

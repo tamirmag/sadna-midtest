@@ -17,7 +17,7 @@ public interface IUserManager {
 
     ArrayList<String> viewReplay(int gameNumber);
 
-    void spectateGame(int gameNumber);
+    void spectateGame(int gameNumber) throws SpectatingNotAllowed;
 
     int CreateGame( Preferences pref);
 

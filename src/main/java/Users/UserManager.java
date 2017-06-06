@@ -88,9 +88,9 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public void spectateGame(int gameNumber) {
+    public void spectateGame(int gameNumber) throws SpectatingNotAllowed {
         /*TODO :finish implementing this function*/
-        ActiveGamesLogManager.getInstance().spectateGame(gameNumber, user);
+        IActiveGamesManager.getInstance().spectateGame(gameNumber, user);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class UserManager implements IUserManager {
 
     @Override
     public ArrayList<IGame> findActiveGamesByMinPlayersPolicy(int minimal) {
-        return ActiveGamesManager.getInstance().findActiveGamesByMinimumBetPolicy(minimal);
+        return ActiveGamesManager.getInstance().findActiveGamesByPlayersMinimumPolicy(minimal);
     }
 
     @Override

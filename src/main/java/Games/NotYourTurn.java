@@ -5,6 +5,6 @@ package Games;
  */
 public class NotYourTurn extends Exception{
     public NotYourTurn() {
-        super("this is not your's turn");
+        super("this is not your turn");
     }
 }

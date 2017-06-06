@@ -149,7 +149,7 @@ public class AccountManager implements IAccountManager {
         for (Player p : players) {
             User u = getUser(p.getName());
             int numOfGames = u.getNumOfGames();
-            u.setNumOfGames(numOfGames + 1);
+            IUsersDB.getInstance().setNumOfGames(u.getUsername() ,numOfGames+1);
             if ((numOfGames + 1) % 10 == 0) {
                 int formerLeague = u.getLeague();
                 moveUserToLeague(u.getUsername(), formerLeague + 1);
@@ -162,6 +162,13 @@ public class AccountManager implements IAccountManager {
         IUsersDB.getInstance().deleteAllUsers();
     }
 
+    @Override
+    public User getLoggedInUser(String username) throws UserNotExists, UserNotLoggedIn {
+        User u = IUsersDB.getInstance().getUser(username);
+        if(u==null) throw new UserNotExists("null");
+        else if (!u.isLoggedIn()) throw new UserNotLoggedIn(u.getUsername());
+        return u;
+    }
     /*********redundant functions**********/
 
 
@@ -185,11 +192,4 @@ public class AccountManager implements IAccountManager {
 
     }
 
-    @Override
-    public User getLoggedInUser(String username) throws UserNotExists, UserNotLoggedIn {
-        User u = IUsersDB.getInstance().getUser(username);
-        if(u==null) throw new UserNotExists("null");
-        else if (!u.isLoggedIn()) throw new UserNotLoggedIn(u.getUsername());
-        return u;
-    }
 }

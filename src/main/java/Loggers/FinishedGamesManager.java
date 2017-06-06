@@ -89,7 +89,6 @@ public class FinishedGamesManager implements IFinishedGamesManager {
         filesWrite.lock();
         finishedGames.add(g);
         filesWrite.unlock();
-
     }
 
     @Override
@@ -99,13 +98,32 @@ public class FinishedGamesManager implements IFinishedGamesManager {
             Iterator<GameLogger> iter = finishedGames.iterator();
             while (iter.hasNext()) {
                 GameLogger g = iter.next();
+                File f = g.getFile();
+                f.delete();
+                iter.remove();
+            }
+        }
+        filesWrite.unlock();
+    }
+
+
+
+}
+
+
+
+  /*      filesWrite.lock();
+        if (finishedGames != null) {
+            Iterator<GameLogger> iter = finishedGames.iterator();
+            while (iter.hasNext()) {
+                GameLogger g = iter.next();
                 iter.remove();
                 g.deleteFile();
             }
         }
         filesWrite.unlock();
-    }
-}
+    }*/
+
    /* @Override
     public void saveFavoriteTurn(User user, IGame game, int turn) {
         ArrayList<String> all_turns_of_user = new ArrayList<>();

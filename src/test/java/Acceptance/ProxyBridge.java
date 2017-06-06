@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Games.CantJoin;
 import Games.NotAllowedNumHigh;
 import Games.NotYourTurn;
+import Games.SpectatingNotAllowed;
 import ServiceLayer.IServiceClass;
 import ServiceLayer.ServiceUser;
 import Users.*;
@@ -60,7 +61,7 @@ public class ProxyBridge implements Bridge {
     }
 
     @Override
-    public void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists {
+    public void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, SpectatingNotAllowed {
         real.spectateGame(gamenum, username);
     }
 
@@ -99,6 +100,41 @@ public class ProxyBridge implements Bridge {
     @Override
     public void fold(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn {
         real.fold(username, gameID);
+    }
+
+    @Override
+    public ArrayList<Integer> findActiveGamesByGameTypePolicy(String username, String gameTypePolicy) throws UserNotLoggedIn, UserNotExists {
+        return real.findActiveGamesByGameTypePolicy(username ,gameTypePolicy);
+    }
+
+    @Override
+    public ArrayList<Integer> findActiveGamesByMinimumBetPolicy(String username, int minimumBet) throws UserNotLoggedIn, UserNotExists {
+        return real.findActiveGamesByMinimumBetPolicy(username, minimumBet);
+    }
+
+    @Override
+    public ArrayList<Integer> findActiveGamesByMinPlayersPolicy(String username, int minPlayers) throws UserNotLoggedIn, UserNotExists {
+        return real.findActiveGamesByMinPlayersPolicy(username,minPlayers);
+    }
+
+    @Override
+    public ArrayList<Integer> findActiveGamesByMaxPlayersPolicy(String username, int maxPlayers) throws UserNotLoggedIn, UserNotExists {
+        return real.findActiveGamesByMaxPlayersPolicy(username, maxPlayers);
+    }
+
+    @Override
+    public ArrayList<Integer> findActiveGamesByChipPolicy(String username, int numOfChips) throws UserNotLoggedIn, UserNotExists {
+        return real.findActiveGamesByChipPolicy(username, numOfChips);
+    }
+
+    @Override
+    public ArrayList<Integer> findActiveGamesByBuyInPolicy(String username, int costOfJoin) throws UserNotLoggedIn, UserNotExists {
+        return real.findActiveGamesByBuyInPolicy(username,costOfJoin);
+    }
+
+    @Override
+    public ArrayList<Integer> findActiveGamesByPlayerName(String username, String playerName) throws UserNotLoggedIn, UserNotExists {
+        return real.findActiveGamesByPlayerName(username,playerName);
     }
 
     @Override

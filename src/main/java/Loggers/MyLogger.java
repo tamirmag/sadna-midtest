@@ -15,15 +15,7 @@ public abstract class MyLogger implements IMyLogger {
     private String filename = null;
     private Path fullPath;
     private String filepath = "Logs";
-
-
-    public File getFile() {
-        return file;
-    }
-
-    private File file ;
-
-
+    private File file;
     ReentrantReadWriteLock fileLock = new ReentrantReadWriteLock(true);
     final Lock fileRead = fileLock.readLock();
     final Lock fileWrite = fileLock.writeLock();
@@ -44,6 +36,10 @@ public abstract class MyLogger implements IMyLogger {
             Path inputPath = Paths.get(s);
             fullPath = inputPath.toAbsolutePath();
         }
+    }
+
+    public File getFile() {
+        return file;
     }
 
     @Override
