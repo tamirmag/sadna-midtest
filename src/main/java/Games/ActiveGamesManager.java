@@ -143,7 +143,6 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
     @Override
     public void bet(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn {
-        User u = usr;
         IGame myGame = find(id);
         Player p = myGame.findPlayer(usr);
         myGame.bet(amount, p);
