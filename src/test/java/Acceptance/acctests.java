@@ -756,6 +756,19 @@ public class acctests {
         bridge.saveFavoriteTurn(22, "moshe1", "favoriteTurn1");
     }*/
 
-
+    @Test
+    public void negativeValueBet() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin, NotYourTurn, NotAllowedNumHigh, NotLegalAmount {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        bridge.joinGame(num ,"stav");
+        bridge.startGame("moshe" ,num);
+        bridge.raise("moshe" ,num ,5);
+        bridge.check("stav" ,num);
+        bridge.raise("moshe" ,num ,15);
+        bridge.check("stav" ,num);
+        bridge.bet("moshe" ,num ,-1000000);
+        bridge.terminateGame(num);
+    }
 
 }

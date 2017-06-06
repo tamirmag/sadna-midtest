@@ -11,8 +11,10 @@ public class MinBetPolicy extends Policy{
 
     @Override
     public void bet(int amount, Player player) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
-        if(amount >= minimumBet)
-            this.policy.call(amount,player);
+        if(amount >= minimumBet) {
+            this.policy.call(amount, player);
+        }else
+            throw new NotLegalAmount(amount, minimumBet);
     }
 
     public MinBetPolicy(IGame policy, int minimumBet) {
