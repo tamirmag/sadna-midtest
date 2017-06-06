@@ -31,7 +31,7 @@ public class acctests {
     public void afterAnyTest() throws AlreadyLoggedOut, UserNotExists {
         bridge.clearUsers();
         IActionLogger.getInstance().clearLog();
-        //IErrorLogger.getInstance().clearLog();
+        IErrorLogger.getInstance().clearLog();
         bridge.clearAllFinishedGameLogs();
     }
 
@@ -47,7 +47,7 @@ public class acctests {
     public static void afterAllTests() throws AlreadyLoggedOut, UserNotExists {
         bridge.clearUsers();
         IActionLogger.getInstance().clearLog();
-        //IErrorLogger.getInstance().clearLog();
+        IErrorLogger.getInstance().clearLog();
         IFinishedGamesManager.getInstance().deleteAllFinishedGameLogs();
         IActiveGamesLogManager.getInstance().RemoveAllGameLoggers();
         bridge.clearAllFinishedGameLogs();
@@ -225,13 +225,15 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         int i = bridge.createGame("moshe", "NoLimitHoldem", 2, 2, 10, 2, 5, true);
-
+        bridge.terminateGame(i);
+        IErrorLogger.getInstance().writeToFile("in userNotLoggedInCreateGame , game " +i+" was terminated.");
     }
 
     @Test(expected = UserNotExists.class)
     public void userNotExistsCreateGame() throws UserNotLoggedIn, UserNotExists {
         int i = bridge.createGame("moshe1", "NoLimitHoldem", 2, 2, 10, 2, 5, true);
-
+        bridge.terminateGame(i);
+        IErrorLogger.getInstance().writeToFile("in userNotExistsCreateGame , game " +i+" was terminated.");
     }
 
     /******************join game**************/
@@ -292,9 +294,9 @@ public class acctests {
         }
         catch (SpectatingNotAllowed e)
         {
-            assertFalse(false);
             bridge.terminateGame(i);
         }
+
 
     }
 
@@ -309,7 +311,7 @@ public class acctests {
         bridge.logout("moshe");
         bridge.spectateGame(22, "moshe");
     }
-    
+
     /***********view replay***********/
     @Test
     public void successViewReplay() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, UserNotLoggedIn, AlreadyLoggedOut {
@@ -510,6 +512,36 @@ public class acctests {
         bridge.terminateGame(i);
     }
 
+    /*************find active games by game type policy**********/
+    @Test(expected = UserNotLoggedIn.class)
+    public void userNotLoggedInActiveGamesByGameTypePolicy() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.findActiveGamesByGameTypePolicy("moshe" ,"NoLimitHoldem");
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void userNotExistsActiveGamesByGameTypePolicy() throws UserNotLoggedIn, UserNotExists {
+        bridge.findActiveGamesByGameTypePolicy("moshe1" ,"NoLimitHoldem");
+    }
+
+    @Test
+    public void successFindActiveGamesByGameTypePolicy() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, CantJoin {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.register("stav", "1111", "noname@gmail.com", 100);
+        bridge.register("roy", "1111", "noname@gmail.com", 100);
+        /*createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
+                   int minimumBet, int minimalAmountOfPlayers,
+                   int maximalAmountOfPlayers, boolean spectatingMode)*/
+        int i = bridge.createGame("moshe", "LimitHoldem", 0, 0, 2, 1, 6, false); //spectate not allowed
+        bridge.joinGame(i,"stav");
+        ArrayList<Integer> games = bridge.findActiveGamesByGameTypePolicy("roy" ,"LimitHoldem");
+        ArrayList<Integer> debug = new ArrayList<>();
+        debug.add(i);
+        assertEquals(games , debug);
+        bridge.terminateGame(i);
+    }
+
 
     /*****************CHECK********/
 
@@ -527,6 +559,7 @@ public class acctests {
             bridge.terminateGame(num);
         }
 
+
     }
 
     @Test
@@ -541,6 +574,7 @@ public class acctests {
         {
             bridge.terminateGame(num);
         }
+
     }
 
     @Test(expected = UserNotLoggedIn.class)
@@ -564,15 +598,11 @@ public class acctests {
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.logout("moshe");
-       try
-       {
-           bridge.raise("moshe", 2122, 5);
-       }
-        catch (UserNotLoggedIn e)
-        {
+        try {
+            bridge.raise("moshe", 2122, 5);
+        } catch (UserNotLoggedIn e) {
             bridge.terminateGame(num);
         }
-
     }
 
     @Test
@@ -583,18 +613,14 @@ public class acctests {
                    int minimumBet, int minimalAmountOfPlayers,
                    int maximalAmountOfPlayers, boolean spectatingMode)*/
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 1, 2, 5, true);
-        IErrorLogger.getInstance().writeToFile("in UserNotExistsRaise, created game "  +num);
         bridge.joinGame(num,"stav");
         bridge.startGame("moshe", num);
-        try {
-            bridge.raise("moshe", num, 1);
-            bridge.check("stav", num);
-            bridge.fold("moshe", num);
-        }
-        catch (NotYourTurn e)
-        {
-            bridge.terminateGame(num);
-        }
+        bridge.raise("moshe", num, 1);
+        bridge.check("stav", num);
+        bridge.fold("moshe", num);
+        bridge.terminateGame(num);
+
+
 
     }
 
@@ -605,19 +631,28 @@ public class acctests {
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.allIn("moshe", num);
         bridge.terminateGame(num);
+        IErrorLogger.getInstance().writeToFile("in UserNotLoggedInAllIn , game "+num+" was terminated");
     }
 
     @Test
     public void UserNotExistsAllIn() throws UserNotLoggedIn, UserNotExists, NegativeValue, NoMuchMoney, NotYourTurn, PasswordNotValid, UsernameNotValid, UserAlreadyExists, EmailNotValid {
         bridge.register("moshe1", "1111", "noname@gmail.com", 100);
         int num = bridge.createGame("moshe1", "NoLimitHoldem", 0, 0, 10, 1, 5, true);
+        boolean notCatched = true;
         try
         {
             bridge.allIn("moshe", num);
         }
         catch (UserNotExists e)
         {
+            notCatched = false;
             bridge.terminateGame(num);
+            IErrorLogger.getInstance().writeToFile("in UserNotExistsAllIn , game "+num+" was terminated");
+        }
+        if(notCatched)
+        {
+            bridge.terminateGame(num);
+            IErrorLogger.getInstance().writeToFile("in UserNotExistsAllIn , game " +num+" was terminated when not cached.");
         }
 
     }
@@ -648,27 +683,29 @@ public class acctests {
     }
 
     @Test
-    public void foldNotYourTurn() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin {
+    public void foldNotYourTurn() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, NotYourTurn {
         bridge.register("slava", "1111", "slava@gmail.com", 200);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         ServiceUser u1 = bridge.login("moshe", "1111");
         int i = bridge.createGame("slava", "NoLimitHoldem", 0, 0, 1, 1, 5, true);
         bridge.joinGame(i, "moshe");
-        try {
-            bridge.startGame("slava", i);
-        }
-        catch (NotYourTurn e)
-        {
-            assertFalse(false);
-        }
+        bridge.startGame("slava", i);
+        boolean notCatched = true;
         try
         {
             bridge.fold("moshe" ,i);
         }
         catch (NotYourTurn e)
         {
+            notCatched = false;
             bridge.terminateGame(i);
+            IErrorLogger.getInstance().writeToFile("in foldNotYourTurn , game " +i+" was terminated.");
+        }
+        if(notCatched)
+        {
+            bridge.terminateGame(i);
+            IErrorLogger.getInstance().writeToFile("in foldNotYourTurn , game " +i+" was terminated when not cached.");
         }
 
     }

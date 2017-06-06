@@ -34,11 +34,8 @@ public class Game implements IGame {
     private int dealerId = 0;
     private int turnId = 0; //number of current playing player
     private int turn = 0; // number of round
-    private boolean up = true; // if somones raised in this round
-    //    private int minimumBet;
+    private boolean up = true; // if someone's raised in this round
     private int currentMinimumBet;
-    //   private int maxPlayers;
-    //   private int minPlayers;
     private int pot;
     private ArrayList<Integer> playerDesk; //the amount of many that every player put
     private boolean locked = false;
