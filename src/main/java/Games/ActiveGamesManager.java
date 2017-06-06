@@ -92,6 +92,11 @@ public class ActiveGamesManager implements IActiveGamesManager {
             if (game.getId() == id)
                 myGame = game;
         }
+        if(myGame == null)
+        {
+            IGamesDB db = GamesDB.getInstance();
+            myGame = db.getGame(id);
+        }
         return myGame;
     }
 
