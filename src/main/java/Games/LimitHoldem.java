@@ -30,4 +30,9 @@ public class LimitHoldem extends Policy{
             policy.bet(amount, player);
     }
 
+    @Override
+    public String getType() {
+        return "LimitHoldem";
+    }
+
 }
