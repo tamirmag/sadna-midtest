@@ -1,8 +1,15 @@
 package Users;
 
 
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+
+@Entity
 public class Wallet implements IWallet {
     private int amountOfMoney=0;
+    @Id
+    private String id = new ObjectId().toString();
 
     public Wallet()
     {

@@ -2,6 +2,8 @@ package Games;
 
 import Users.NoMuchMoney;
 import Users.User;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -9,9 +11,11 @@ import java.util.Hashtable;
 /**
  * Created by tamir on 16/04/2017.
  */
+@Entity
 public abstract class Policy implements IGame {
 
     IGame policy;
+    @Id
     int id;
 
     @Override

@@ -8,6 +8,9 @@ import Users.NoMuchMoney;
 import Users.Wallet;
 import Loggers.GameLogger;
 import Users.User;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -15,19 +18,12 @@ import java.util.Hashtable;
 /**
  * Created by tamir on 16/04/2017.
  */
+@Entity
 public class Game implements IGame {
 
-    @Override
-    public int getId() {
-        return id;
-    }
 
-    @Override
-    public void publishMessage(String msg, Player player) {
-        // TODO implement
-        //log.addToLog(msg);
-    }
     private Chat chat;
+    @Id
     private int id;
     private int league;
     private DeckManager deck = new DeckManager();
@@ -47,6 +43,7 @@ public class Game implements IGame {
     private ArrayList<Integer> playerDesk; //the amount of many that every player put
     private boolean locked = false;
     private String type = "nurmal";
+    @Transient
     private GameLogger logger;
 
     public Game(ArrayList<Player> players, int id, int league) {
@@ -62,6 +59,16 @@ public class Game implements IGame {
     }
 
 
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void publishMessage(String msg, Player player) {
+        // TODO implement
+        //log.addToLog(msg);
+    }
     @Override
     public int getPlayersNum() {
         return players.size();
@@ -278,6 +285,7 @@ public class Game implements IGame {
 
     @Override
     public void endTurn(Player player) {
+
         if (desk.get(turnId).equals(player)) {
             this.turnId = this.turnId + 1;
 

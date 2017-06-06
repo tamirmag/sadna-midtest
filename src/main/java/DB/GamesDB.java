@@ -1,6 +1,9 @@
 package DB;
 
+import Games.DeckManager;
+import Games.Game;
 import Games.IGame;
+import Games.Policy;
 import com.mongodb.MongoClient;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
@@ -22,7 +25,7 @@ public class GamesDB implements IGamesDB{
         morphia = new Morphia();
         morphia.mapPackage("Games");
         m = new MongoClient("localhost", 27017);
-        datastore = morphia.createDatastore(m, "system");
+        datastore = morphia.createDatastore(m, "systemDatabase");
     }
 
     public static GamesDB getInstance() {
@@ -37,7 +40,7 @@ public class GamesDB implements IGamesDB{
     }
 
     @Override
-    public void save(IGame game) {
+    public void save(Policy game) {
         datastore.save(game);
     }
 }

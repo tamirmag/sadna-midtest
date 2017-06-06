@@ -1,6 +1,9 @@
 package DB;
 
+import Games.DeckManager;
+import Games.Game;
 import Games.IGame;
+import Games.Policy;
 
 /**
  * Created by tamir on 05/06/2017.
@@ -8,5 +11,5 @@ import Games.IGame;
 public interface IGamesDB {
     IGame getGame(int id);
 
-    void save(IGame game);
+    void save(Policy game);
 }

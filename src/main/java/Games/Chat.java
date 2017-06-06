@@ -1,6 +1,9 @@
 package Games;
 
-import Users.User;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,10 +13,14 @@ import java.util.Map;
 /**
  * Created by tamir on 04/06/2017.
  */
+@Entity
 public class Chat {
+    @Transient
     HashMap<String, ArrayList<Message>> players;
+    @Transient
     HashMap<String, ArrayList<Message>> spectators;
-
+    @Id
+    private String id = new ObjectId().toString();
     public Chat() {
         players = new HashMap<>();
         spectators = new HashMap<>();

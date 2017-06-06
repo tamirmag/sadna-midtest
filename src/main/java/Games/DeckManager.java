@@ -2,12 +2,19 @@ package Games;
 
 import Games.Card;
 import Games.Color;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Transient;
 
 import java.util.*;
 
+@Entity
 public class DeckManager {
-    Stack<Card> deck = new Stack<>();
 
+    Stack<Card> deck = new Stack<>();
+    @Id
+    private String id = new ObjectId().toString();
     public DeckManager() {
         initialize();
     }
