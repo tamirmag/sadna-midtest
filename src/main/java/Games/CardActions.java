@@ -35,6 +35,7 @@ public class CardActions
 
     public static int getMaxValue(ArrayList<Card> cards)
     {
+        System.out.println(cards.size());
         return Collections.max(cards).number.value;
     }
 

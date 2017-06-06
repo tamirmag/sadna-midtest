@@ -191,48 +191,49 @@ public class Game implements IGame {
     public void win(Player player) {
 
         if (player != null) {
+            System.out.println(player.getName());
             player.getWallet().add(pot);
         } else {
-            for (Player p :desk) {
+            for (Player p : desk) {
                 p.hand.addAll(flop);
             }
+
+
+            Player winner = player;
+            if ((winner = hasRoyalFlash()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            } else if ((winner = hasStraightFlush()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            } else if ((winner = hasFourOfAKind()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            } else if ((winner = hasFullHouse()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            } else if ((winner = hasFlush()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            } else if ((winner = hasStraight()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            } else if ((winner = hasThreeOfAKind()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            } else if ((winner = hasTwoPair()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            } else if ((winner = hasOnePair()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            } else if ((winner = hasHighCard()) != null) {
+                winner.getWallet().add(pot);
+                //          pot = 0;
+            }
+
+            pot = 0;
         }
-
-        Player winner = player;
-        if((winner = hasRoyalFlash()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }else if((winner = hasStraightFlush()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }else if((winner = hasFourOfAKind()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }else if((winner = hasFullHouse()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }else if((winner = hasFlush()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }else if((winner = hasStraight()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }else if((winner = hasThreeOfAKind()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }else if((winner = hasTwoPair()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }else if((winner = hasOnePair()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }else if((winner = hasHighCard()) != null){
-            winner.getWallet().add(pot);
-  //          pot = 0;
-        }
-
-        pot = 0;
-
     }
 
     private Player hasHighCard() {
