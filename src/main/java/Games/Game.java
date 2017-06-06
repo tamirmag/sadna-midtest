@@ -43,6 +43,7 @@ public class Game implements IGame {
     private ArrayList<Integer> playerDesk; //the amount of many that every player put
     private boolean locked = false;
     private String type = "nurmal";
+    private boolean inStart = true;
     @Transient
     private GameLogger logger;
 
@@ -218,7 +219,7 @@ public class Game implements IGame {
     @Override
     public void call(int amount, Player player) throws NoMuchMoney, NotYourTurn {
         if (desk.get(turnId).equals(player)) {
-            if(amount >= currentMinimumBet) {
+            if(inStart || amount >= currentMinimumBet) {
                 playerDesk.set(turnId, amount);
                 player.wallet.sub(amount);
                 currentMinimumBet = amount;
@@ -274,6 +275,7 @@ public class Game implements IGame {
             playerDesk.add(0);
         }
         blinedBet();
+        inStart = false;
     }
 
     private void blinedBet() throws NoMuchMoney, NotYourTurn {

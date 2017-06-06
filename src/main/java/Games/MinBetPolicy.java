@@ -18,7 +18,7 @@ public class MinBetPolicy extends Policy{
     public MinBetPolicy(IGame policy, int minimumBet) {
         this.policy = policy;
         this.minimumBet = minimumBet;
-      //  setMinimumBet(minimumBet);
+        setMinimumBet(minimumBet);
         this.id = this.policy.getId();
 
 
