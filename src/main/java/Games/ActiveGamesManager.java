@@ -116,8 +116,6 @@ public class ActiveGamesManager implements IActiveGamesManager {
         return myGame.isLocked();
     }
 
-    ;
-
     @Override
     public void fold(int id, User usr) throws NotYourTurn {
         IGame myGame = find(id);
