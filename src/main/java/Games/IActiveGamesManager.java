@@ -37,6 +37,8 @@ public interface IActiveGamesManager {
 
     List<IGame> findActiveGamesByPlayer(String name);
 
+    void logout(String name);
+
     ArrayList<IGame> findActiveGamesByPotSize(int potSize);
 
     List<IGame> findSpectatableGames(User user);

@@ -11,5 +11,5 @@ import Games.Policy;
 public interface IGamesDB {
     IGame getGame(int id);
 
-    void save(Policy game);
+    void save(IGame game);
 }
