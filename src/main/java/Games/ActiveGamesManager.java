@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import DB.GamesDB;
+import DB.IGamesDB;
 import Loggers.ActiveGamesLogManager;
 import Loggers.GameLogger;
 import Loggers.IActiveGamesLogManager;
@@ -179,6 +181,15 @@ public class ActiveGamesManager implements IActiveGamesManager {
                 ourGames.add(game);
         }
         return ourGames;
+    }
+
+    @Override
+    public void logout(String name){
+        List<IGame> arr = findActiveGamesByPlayer(name);
+        IGamesDB db = GamesDB.getInstance();
+        for (IGame g:arr) {
+            db.save(g);
+        }
     }
 
     @Override
