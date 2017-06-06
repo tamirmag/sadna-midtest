@@ -13,4 +13,9 @@ public class NoLimitHoldem extends Policy{
         this.id = this.policy.getId();
     }
 
+    @Override
+    public String getType() {
+        return "NoLimitHoldem";
+    }
+
 }

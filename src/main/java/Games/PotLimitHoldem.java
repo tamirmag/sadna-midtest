@@ -21,4 +21,9 @@ public class PotLimitHoldem extends Policy {
         else
             throw new NotAllowedNumHigh(super.getPot());
     }
+
+    @Override
+    public String getType() {
+        return "PotLimitHoldem";
+    }
 }
