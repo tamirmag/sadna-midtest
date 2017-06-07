@@ -18,23 +18,14 @@ public class User {
     private int numOfGames;
     private int grossProfit; //The total gross profit
     private int highestCashGained; //The highest cash gain in a game.
-    public boolean isLoggedIn() {
-        return loggedIn;
-    }
-
-    public User()
-    {
-
-    }
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
-    }
-
     private boolean loggedIn;
     private ArrayList<Player> existingPlayers = new ArrayList<>();
+    private int totalCashGain;
 
+    public User() {
+    }
 
-    public User(int id ,String username, String password, int league, String email, Wallet wallet) {
+    public User(int id, String username, String password, int league, String email, Wallet wallet) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -44,6 +35,7 @@ public class User {
         this.numOfGames = 0;
         grossProfit = 0;
         highestCashGained = 0;
+        totalCashGain = 0;
     }
 
     @Override
@@ -127,6 +119,23 @@ public class User {
     public void setHighestCashGained(int highestCashGained) {
         this.highestCashGained = highestCashGained;
     }
+
+    public int getTotalCashGain() {
+        return totalCashGain;
+    }
+
+    public void setTotalCashGain(int totalCashGain) {
+        this.totalCashGain = totalCashGain;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
 
 }
 

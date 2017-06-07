@@ -44,7 +44,7 @@ public class ProxyBridge implements Bridge {
     }
 
     @Override
-    public int createGame(String username,String gameType,  int BuyInPolicy, int ChipPolicy, int minimumBet,
+    public int createGame(String username, String gameType, int BuyInPolicy, int ChipPolicy, int minimumBet,
                           int minimalAmountOfPlayers, int maximalAmountOfPlayers, boolean spectatingMode)
             throws UserNotLoggedIn, UserNotExists {
         return real.createGame(username, gameType, BuyInPolicy, ChipPolicy,
@@ -101,7 +101,7 @@ public class ProxyBridge implements Bridge {
 
     @Override
     public ArrayList<Integer> findActiveGamesByGameTypePolicy(String username, String gameTypePolicy) throws UserNotLoggedIn, UserNotExists {
-        return real.findActiveGamesByGameTypePolicy(username ,gameTypePolicy);
+        return real.findActiveGamesByGameTypePolicy(username, gameTypePolicy);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class ProxyBridge implements Bridge {
 
     @Override
     public ArrayList<Integer> findActiveGamesByMinPlayersPolicy(String username, int minPlayers) throws UserNotLoggedIn, UserNotExists {
-        return real.findActiveGamesByMinPlayersPolicy(username,minPlayers);
+        return real.findActiveGamesByMinPlayersPolicy(username, minPlayers);
     }
 
     @Override
@@ -126,13 +126,39 @@ public class ProxyBridge implements Bridge {
 
     @Override
     public ArrayList<Integer> findActiveGamesByBuyInPolicy(String username, int costOfJoin) throws UserNotLoggedIn, UserNotExists {
-        return real.findActiveGamesByBuyInPolicy(username,costOfJoin);
+        return real.findActiveGamesByBuyInPolicy(username, costOfJoin);
     }
 
     @Override
     public ArrayList<Integer> findActiveGamesByPlayerName(String username, String playerName) throws UserNotLoggedIn, UserNotExists {
-        return real.findActiveGamesByPlayerName(username,playerName);
+        return real.findActiveGamesByPlayerName(username, playerName);
     }
+
+    @Override
+    public ArrayList<String> getTop20NumOfGames(String username) throws UserNotLoggedIn, UserNotExists {
+        return real.getTop20NumOfGames(username);
+    }
+
+    @Override
+    public ArrayList<String> getTop20highestCashGained(String username) throws UserNotLoggedIn, UserNotExists {
+        return real.getTop20highestCashGained(username);
+    }
+
+    @Override
+    public ArrayList<String> getTop20GrossProfit(String username) throws UserNotLoggedIn, UserNotExists {
+        return real.getTop20GrossProfit(username);
+    }
+
+    @Override
+    public double getUserAverageCashGain(String username, String toFind) throws UserNotExists, UserNotLoggedIn {
+        return real.getUserAverageCashGain(username ,toFind);
+    }
+
+    @Override
+    public double getUserAverageGrossProfit(String username, String toFind) throws UserNotExists, UserNotLoggedIn {
+        return real.getUserAverageGrossProfit(username,toFind);
+    }
+
 
     @Override
     public void terminateGame(int gameID) {

@@ -186,6 +186,33 @@ public class UserManager implements IUserManager {
     public void startGame(int gameID) throws NotYourTurn, NoMuchMoney, NotLegalAmount {
         IActiveGamesManager.getInstance().startGame(gameID);
     }
+
+    @Override
+    public ArrayList<User> getTop20NumOfGames() {
+        return IAccountManager.getInstance().getTop20NumOfGames();
+    }
+
+    @Override
+    public ArrayList<User> getTop20highestCashGained() {
+        return IAccountManager.getInstance().getTop20highestCashGained();
+    }
+
+    @Override
+    public ArrayList<User> getTop20GrossProfit() {
+        return IAccountManager.getInstance().getTop20GrossProfit();
+    }
+
+    @Override
+    public double getUserAverageCashGain(String username) throws UserNotExists
+    {
+        return IAccountManager.getInstance().getUserAverageCashGain(username);
+    }
+
+    @Override
+    public double getUserAverageGrossProfit(String username) throws UserNotExists
+    {
+        return IAccountManager.getInstance().getUserAverageGrossProfit(username);
+    }
 }
 
 

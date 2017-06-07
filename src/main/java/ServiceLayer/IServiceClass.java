@@ -70,5 +70,16 @@ public interface IServiceClass {
 
     ArrayList<Integer> findActiveGamesByPlayerName(String username,String playerName) throws UserNotLoggedIn, UserNotExists;
 
+    ArrayList<String> getTop20NumOfGames(String username) throws UserNotLoggedIn, UserNotExists;
+
+    ArrayList<String> getTop20highestCashGained(String username) throws UserNotLoggedIn, UserNotExists;
+
+    ArrayList<String> getTop20GrossProfit(String username) throws UserNotLoggedIn, UserNotExists;
+
+    double getUserAverageCashGain(String username ,String toFind) throws UserNotExists, UserNotLoggedIn;
+
+    double getUserAverageGrossProfit(String username ,String toFind) throws UserNotExists, UserNotLoggedIn;
+
+
 
 }

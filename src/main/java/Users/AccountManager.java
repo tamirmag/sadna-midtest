@@ -5,6 +5,7 @@ import Games.IActiveGamesManager;
 import Games.Player;
 import Loggers.ActionLogger;
 import Loggers.IActionLogger;
+import org.junit.AfterClass;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -151,7 +152,7 @@ public class AccountManager implements IAccountManager {
         for (Player p : players) {
             User u = getUser(p.getName());
             int numOfGames = u.getNumOfGames();
-            IUsersDB.getInstance().setNumOfGames(u.getUsername() ,numOfGames+1);
+            IUsersDB.getInstance().setNumOfGames(u.getUsername(), numOfGames + 1);
             if ((numOfGames + 1) % 10 == 0) {
                 int formerLeague = u.getLeague();
                 moveUserToLeague(u.getUsername(), formerLeague + 1);
@@ -167,13 +168,47 @@ public class AccountManager implements IAccountManager {
     @Override
     public User getLoggedInUser(String username) throws UserNotExists, UserNotLoggedIn {
         User u = IUsersDB.getInstance().getUser(username);
-        if(u==null) throw new UserNotExists("null");
+        if (u == null) throw new UserNotExists("null");
         else if (!u.isLoggedIn()) throw new UserNotLoggedIn(u.getUsername());
         return u;
     }
+
+    @Override
+    public ArrayList<User> getTop20NumOfGames() {
+        ArrayList<User> ret = new ArrayList<>(IUsersDB.getInstance().getTop20NumOfGames());
+        return ret;
+    }
+
+    @Override
+    public ArrayList<User> getTop20highestCashGained() {
+        ArrayList<User> ret = new ArrayList<>(IUsersDB.getInstance().getTop20highestCashGained());
+        return ret;
+    }
+
+    @Override
+    public ArrayList<User> getTop20GrossProfit() {
+        ArrayList<User> ret = new ArrayList<>(IUsersDB.getInstance().getTop20GrossProfit());
+        return ret;
+    }
+
+    public double getUserAverageGrossProfit(String username) throws UserNotExists {
+         if (!isUserExists(username)) throw new UserNotExists(username);
+         else
+         {
+             return IUsersDB.getInstance().getUserAverageGrossProfit(username);
+         }
+    }
+
+    public double getUserAverageCashGain(String username) throws UserNotExists {
+         if (!isUserExists(username)) throw new UserNotExists(username);
+         else
+         {
+             return IUsersDB.getInstance().getUserAverageCashGain(username);
+         }
+    }
+
+
     /*********redundant functions**********/
-
-
     @Override
     public void clearLoggedInUsers() {
 

@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface IUsersDB {
-    static UsersDB getInstance()
-    {
+    static UsersDB getInstance() {
         return UsersDB.getInstance();
     }
 
@@ -49,5 +48,11 @@ public interface IUsersDB {
 
     List<User> getTop20GrossProfit();
 
-    void setNumOfGames(String username ,int num);
+    void setNumOfGames(String username, int num);
+
+    double getUserAverageCashGain(String username);
+
+    double getUserAverageGrossProfit(String username);
+
+
 }
