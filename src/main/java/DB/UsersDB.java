@@ -272,6 +272,54 @@ public class UsersDB implements IUsersDB {
         return ret ;
     }
 
+    @Override
+    public void setTotalCashGain (String username , int totalCashGain)
+    {
+        User u = getUser(username);
+        u.setTotalCashGain(totalCashGain);
+        datastore.save(u);
+    }
+
+    @Override
+    public void setGrossProfit (String username , int grossProfit)
+    {
+        User u = getUser(username);
+        u.setGrossProfit(grossProfit);
+        datastore.save(u);
+    }
+
+    @Override
+    public void setHighestCashGained (String username , int highestCashGained)
+    {
+        User u = getUser(username);
+        u.setHighestCashGained(highestCashGained);
+        datastore.save(u);
+    }
+
+    @Override
+    public int getTotalCashGain (String username )
+    {
+        User u = getUser(username);
+        return u.getTotalCashGain();
+    }
+
+    @Override
+    public int getGrossProfit (String username)
+    {
+        User u = getUser(username);
+        return u.getGrossProfit();
+    }
+
+    @Override
+    public int getHighestCashGained (String username)
+    {
+        User u = getUser(username);
+        return u.getHighestCashGained();
+    }
+
+
+
+
 
 }
 

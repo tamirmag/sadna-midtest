@@ -5,19 +5,9 @@ import Games.IActiveGamesManager;
 import Games.Player;
 import Loggers.ActionLogger;
 import Loggers.IActionLogger;
-import org.junit.AfterClass;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 public class AccountManager implements IAccountManager {
@@ -191,6 +181,7 @@ public class AccountManager implements IAccountManager {
         return ret;
     }
 
+    @Override
     public double getUserAverageGrossProfit(String username) throws UserNotExists {
          if (!isUserExists(username)) throw new UserNotExists(username);
          else
@@ -199,12 +190,61 @@ public class AccountManager implements IAccountManager {
          }
     }
 
+    @Override
     public double getUserAverageCashGain(String username) throws UserNotExists {
          if (!isUserExists(username)) throw new UserNotExists(username);
          else
          {
              return IUsersDB.getInstance().getUserAverageCashGain(username);
          }
+    }
+
+    @Override
+    public void setTotalCashGain(String username, int totalCashGain) throws UserNotExists {
+        if (!isUserExists(username)) throw new UserNotExists(username);
+        else {
+            IUsersDB.getInstance().setTotalCashGain(username, totalCashGain);
+        }
+    }
+
+    @Override
+    public void setGrossProfit (String username , int grossProfit) throws UserNotExists {
+        if (!isUserExists(username)) throw new UserNotExists(username);
+        else {
+            IUsersDB.getInstance().setGrossProfit(username, grossProfit);
+        }
+    }
+
+    @Override
+    public void setHighestCashGained (String username , int highestCashGained) throws UserNotExists {
+        if (!isUserExists(username)) throw new UserNotExists(username);
+        else {
+            IUsersDB.getInstance().setHighestCashGained(username, highestCashGained);
+        }
+    }
+    
+    @Override
+    public int getTotalCashGain(String username) throws UserNotExists {
+        if (!isUserExists(username)) throw new UserNotExists(username);
+        else {
+            return IUsersDB.getInstance().getTotalCashGain(username);
+        }
+    }
+
+    @Override
+    public int getGrossProfit (String username ) throws UserNotExists {
+        if (!isUserExists(username)) throw new UserNotExists(username);
+        else {
+            return IUsersDB.getInstance().getGrossProfit(username);
+        }
+    }
+
+    @Override
+    public int getHighestCashGained (String username) throws UserNotExists {
+        if (!isUserExists(username)) throw new UserNotExists(username);
+        else {
+           return IUsersDB.getInstance().getHighestCashGained(username);
+        }
     }
 
 

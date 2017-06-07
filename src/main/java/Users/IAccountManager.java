@@ -6,10 +6,9 @@ import Games.Player;
 import java.util.ArrayList;
 
 public interface IAccountManager {
-    static IAccountManager getInstance()
-    {
-       return AccountManager.getInstance();
-    };
+    static IAccountManager getInstance() {
+        return AccountManager.getInstance();
+    }
 
     boolean isUserExists(String username);
 
@@ -25,7 +24,7 @@ public interface IAccountManager {
     void logout(String username) throws AlreadyLoggedOut, UserNotExists;
 
     UserManager login(String username, String password)
-                    throws UsernameNotValid, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists;
+            throws UsernameNotValid, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists;
 
     void addUser(User u) throws UserAlreadyExists, UsernameNotValid;
 
@@ -47,18 +46,31 @@ public interface IAccountManager {
 
     void updateNumOfGames(ArrayList<Player> players);
 
-     ArrayList<User> getTop20NumOfGames();
+    ArrayList<User> getTop20NumOfGames();
 
-     ArrayList<User> getTop20highestCashGained();
+    ArrayList<User> getTop20highestCashGained();
 
-     ArrayList<User> getTop20GrossProfit();
+    ArrayList<User> getTop20GrossProfit();
 
     double getUserAverageCashGain(String username) throws UserNotExists;
 
     double getUserAverageGrossProfit(String username) throws UserNotExists;
 
+    void setTotalCashGain(String username, int totalCashGain) throws UserNotExists;
 
-    //int getMaximalRank();
+    void setGrossProfit(String username, int grossProfit) throws UserNotExists;
 
-   // void moveUserToLeague(String username, int newLeague) throws UserNotInLeague, LeagueNotExists, UserAlreadyInLeague, UserNotExists;
+    void setHighestCashGained(String username, int highestCashGained) throws UserNotExists;
+
+    int getTotalCashGain(String username) throws UserNotExists;
+
+    int getGrossProfit(String username) throws UserNotExists;
+
+    int getHighestCashGained(String username) throws UserNotExists;
+
+
 }
+//int getMaximalRank();
+
+// void moveUserToLeague(String username, int newLeague) throws UserNotInLeague, LeagueNotExists, UserAlreadyInLeague, UserNotExists;
+
