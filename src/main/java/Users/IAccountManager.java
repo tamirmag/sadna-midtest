@@ -47,6 +47,17 @@ public interface IAccountManager {
 
     void updateNumOfGames(ArrayList<Player> players);
 
+     ArrayList<User> getTop20NumOfGames();
+
+     ArrayList<User> getTop20highestCashGained();
+
+     ArrayList<User> getTop20GrossProfit();
+
+    double getUserAverageCashGain(String username) throws UserNotExists;
+
+    double getUserAverageGrossProfit(String username) throws UserNotExists;
+
+
     //int getMaximalRank();
 
    // void moveUserToLeague(String username, int newLeague) throws UserNotInLeague, LeagueNotExists, UserAlreadyInLeague, UserNotExists;

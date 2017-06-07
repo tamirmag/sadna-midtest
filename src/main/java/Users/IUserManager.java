@@ -13,13 +13,11 @@ public interface IUserManager {
 
     void addPlayer(Player p);
 
-    //void addFavoriteTurn(String turn);
-
     ArrayList<String> viewReplay(int gameNumber);
 
     void spectateGame(int gameNumber) throws SpectatingNotAllowed;
 
-    int CreateGame( Preferences pref);
+    int CreateGame(Preferences pref);
 
     ArrayList<IGame> findActiveGamesByPlayerName(String playerName);
 
@@ -41,14 +39,7 @@ public interface IUserManager {
 
     User getUser();
 
-    void JoinGame(int gameNumber) throws  CantJoin, NoMuchMoney;
-
-   // void moveUserToLeague(String username, int toLeague)
-     //       throws UserAlreadyInLeague, NegativeValue, UserNotInLeague, LeagueNotExists, UserNotExists, NotHighestRanking;
-
-    //void setCriteria() throws NotImplementedException, NotHighestRanking;
-
-   // void setDefaultLeague(int defaultLeague) throws NegativeValue, NotHighestRanking;
+    void JoinGame(int gameNumber) throws CantJoin, NoMuchMoney;
 
     //Game actions
     void check(int gameID) throws NoMuchMoney, NotYourTurn;
@@ -62,5 +53,18 @@ public interface IUserManager {
     void raise(int gameID, int amount) throws NotAllowedNumHigh, NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void startGame(int gameID) throws NotYourTurn, NoMuchMoney, NotLegalAmount;
+
+    //
+
+    ArrayList<User> getTop20NumOfGames();
+
+    ArrayList<User> getTop20highestCashGained();
+
+    ArrayList<User> getTop20GrossProfit();
+
+    double getUserAverageCashGain(String username) throws UserNotExists;
+
+    double getUserAverageGrossProfit(String username) throws UserNotExists;
+
 
 }

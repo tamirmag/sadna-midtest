@@ -757,7 +757,6 @@ public class acctests {
         int num = bridge.createGame("moshe", "NoLimitHoldem", 0, 0, 10, 2, 5, true);
         bridge.allIn("moshe", num);
         bridge.terminateGame(num);
-
     }
 
     @Test
@@ -828,7 +827,7 @@ public class acctests {
     }
 
     @Test
-    public void Successfold() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, NotYourTurn, NotLegalAmount {
+    public void Successfold() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut, UserNotExists, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotLoggedIn, NoMuchMoney, CantJoin, NotYourTurn, NotLegalAmount, NotAllowedNumHigh {
         bridge.register("slava", "1111", "slava@gmail.com", 200);
         bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
@@ -855,6 +854,179 @@ public class acctests {
             bridge.terminateGame(i);
         }
     }
+
+    /*****************statistics*********************************/
+
+
+    /*****************getTop20GrossProfit*********************************/
+    @Test
+    public void successGetTop20GrossProfit() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+
+        ArrayList<String> top = bridge.getTop20GrossProfit("moshe");
+        assertEquals(top.size(), 5);
+    }
+
+    @Test(expected = UserNotLoggedIn.class)
+    public void UserNotLoggedInGetTop20GrossProfit() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.getTop20GrossProfit("moshe");
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsGetTop20GrossProfit() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.getTop20GrossProfit("moshe");
+    }
+
+    /*****************getTop20NumOfGames*********************************/
+
+    @Test
+    public void successGetTop20NumOfGames() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+
+        ArrayList<String> top = bridge.getTop20NumOfGames("moshe");
+        assertEquals(top.size(), 5);
+    }
+
+    @Test(expected = UserNotLoggedIn.class)
+    public void UserNotLoggedIngetTop20NumOfGames() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.getTop20NumOfGames("moshe");
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsgetTop20NumOfGames() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.getTop20NumOfGames("moshe");
+    }
+
+    /*************************getTop20highestCashGained*******************/
+
+    @Test
+    public void successgetTop20highestCashGained() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+
+        ArrayList<String> top = bridge.getTop20highestCashGained("moshe");
+        assertEquals(top.size(), 5);
+    }
+
+    @Test(expected = UserNotLoggedIn.class)
+    public void UserNotLoggedIngetTop20highestCashGained() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.getTop20highestCashGained("moshe");
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsgetTop20highestCashGained() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists, AlreadyLoggedOut {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.getTop20highestCashGained("moshe");
+    }
+
+    /****************************getUserAverageCashGain****************/
+
+    @Test
+    public void successGetUserAverageCashGain() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+
+        double ans = bridge.getUserAverageCashGain("moshe" ,"slava1");
+        assertTrue(ans == 0);
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsGetUserAverageCashGain() throws UserNotLoggedIn, UserNotExists, PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.getUserAverageCashGain("moshe" ,"slava1");
+    }
+
+    @Test(expected = UserNotLoggedIn.class)
+    public void UserNotLoggedInGetUserAverageCashGain() throws UserNotLoggedIn, UserNotExists, PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.getUserAverageCashGain("moshe" ,"slava1");
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void SearchedUserNotExistsGetUserAverageCashGain() throws UserNotLoggedIn, UserNotExists, PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.getUserAverageCashGain("moshe" ,"slava1");
+    }
+
+    /****************************getUserAverageGrossProfit****************/
+
+    @Test
+    public void successgetUserAverageGrossProfit() throws PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, UserNotLoggedIn, UserNotExists {
+        bridge.register("slava1", "1111", "slava@gmail.com", 200);
+        bridge.register("slava2", "1111", "slava@gmail.com", 200);
+        bridge.register("slava3", "1111", "slava@gmail.com", 200);
+        bridge.register("slava4", "1111", "slava@gmail.com", 200);
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+
+        double ans = bridge.getUserAverageGrossProfit("moshe" ,"slava1");
+        assertTrue(ans == 0);
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void UserNotExistsgetUserAverageGrossProfit() throws UserNotLoggedIn, UserNotExists, PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.getUserAverageGrossProfit("moshe" ,"slava1");
+    }
+
+    @Test(expected = UserNotLoggedIn.class)
+    public void UserNotLoggedIngetUserAverageGrossProfit() throws UserNotLoggedIn, UserNotExists, PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.logout("moshe");
+        bridge.getUserAverageGrossProfit("moshe" ,"slava1");
+    }
+
+    @Test(expected = UserNotExists.class)
+    public void SearchedUserNotExistsgetUserAverageGrossProfit() throws UserNotLoggedIn, UserNotExists, PasswordNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, EmailNotValid, AlreadyLoggedOut {
+        bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        bridge.getUserAverageGrossProfit("moshe" ,"slava1");
+    }
+
+
+
 }
 
 

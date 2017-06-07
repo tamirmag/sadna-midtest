@@ -9,6 +9,7 @@ import org.mongodb.morphia.query.Query;
 
 import java.util.*;
 
+
 public class UsersDB implements IUsersDB {
 
     private static final UsersDB instance = new UsersDB();
@@ -21,7 +22,7 @@ public class UsersDB implements IUsersDB {
         morphia = new Morphia();
         morphia.mapPackage("Users");
         m = new MongoClient("localhost", 27017);
-        datastore = morphia.createDatastore(m, "system");
+        datastore = morphia.createDatastore(m, "systemDatabase");
     }
 
     public static UsersDB getInstance() {
@@ -202,20 +203,9 @@ public class UsersDB implements IUsersDB {
         datastore.delete(query);
     }
 
-    @Override
-    public List<User> getTop20GrossProfit() {
-        Query<User> query = datastore.createQuery(User.class).order("-grossProfit");
-        List<User> ret = query.asList();
-        if (ret.size() < 20) return ret;
-        else {
-            ret = ret.subList(0, 20);
-            return ret;
-        }
-    }
 
     @Override
-    public void setNumOfGames(String username ,int num)
-    {
+    public void setNumOfGames(String username, int num) {
         User u = getUser(username);
         u.setNumOfGames(num);
         datastore.save(u);
@@ -243,6 +233,49 @@ public class UsersDB implements IUsersDB {
         }
     }
 
+    @Override
+    public List<User> getTop20GrossProfit() {
+        Query<User> query = datastore.createQuery(User.class).order("-grossProfit");
+        List<User> ret = query.asList();
+        if (ret.size() < 20) return ret;
+        else {
+            ret = ret.subList(0, 20);
+            return ret;
+        }
+    }
+
+    @Override
+    public double getUserAverageCashGain(String username)
+    {
+        User u = getUser(username);
+        int totalCashGain = u.getTotalCashGain();
+        int numOfGames = u.getNumOfGames();
+        double ret =0;
+        if(numOfGames != 0)
+        {
+            ret = (totalCashGain * 1.0) / (numOfGames * 1.0);
+        }
+        return ret ;
+    }
+
+    @Override
+    public double getUserAverageGrossProfit(String username)
+    {
+        User u = getUser(username);
+        int totalgrossProfit = u.getGrossProfit();
+        int numOfGames = u.getNumOfGames();
+        double ret = 0;
+        if(numOfGames != 0)
+        {
+            ret = (totalgrossProfit * 1.0) / (numOfGames * 1.0);
+        }
+        return ret ;
+    }
 
 
 }
+
+
+
+
+
