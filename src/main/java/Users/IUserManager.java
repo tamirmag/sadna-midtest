@@ -19,6 +19,8 @@ public interface IUserManager {
 
     int CreateGame(Preferences pref);
 
+    ArrayList<IGame> findActiveGamesByLeague();
+
     ArrayList<IGame> findActiveGamesByPlayerName(String playerName);
 
     ArrayList<IGame> findActiveGamesByPotSize(int potSize);

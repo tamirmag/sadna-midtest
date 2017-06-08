@@ -39,8 +39,18 @@ public class ProxyBridge implements Bridge {
     }
 
     @Override
+    public void editProfile(String username,String password,String email) throws EmailNotValid, UsernameNotValid, UserAlreadyExists, UserNotExists, UserNotLoggedIn, PasswordNotValid {
+        real.editProfile(username,password,email);
+    }
+
+    @Override
     public ArrayList<Integer> findSpectatableGames(String username) throws UserNotLoggedIn, UserNotExists {
         return real.findSpectatableGames(username);
+    }
+
+    @Override
+    public ArrayList<Integer> findActiveGamesByLeague(String username) throws UserNotLoggedIn, UserNotExists {
+        return real.findActiveGamesByLeague(username);
     }
 
     @Override
@@ -183,6 +193,10 @@ public class ProxyBridge implements Bridge {
     @Override
     public void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, NotLegalAmount {
         real.startGame(username, gameID);
+    }
+
+    public int getPlayersNum(int gameID){
+        return real.getPlayersNum(gameID);
     }
 
 }

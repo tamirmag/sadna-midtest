@@ -56,6 +56,8 @@ public class Game implements IGame {
         chat = new Chat();
     }
 
+    @Override
+    public int getLeague(){ return  league;}
 
     @Override
     public int getId() {

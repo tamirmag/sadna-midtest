@@ -25,8 +25,16 @@ public class Handler {
 		s.logout(username);
 	}
 
+	public void handleEditProfile(String username,String password,String email) throws EmailNotValid, UsernameNotValid, UserAlreadyExists, UserNotExists, UserNotLoggedIn, PasswordNotValid {
+		s.editProfile(username,password,email);
+	}
+
 	public ArrayList<Integer> handleFindSpectatableGames(String username) throws UserNotLoggedIn, UserNotExists {
 		return s.findSpectatableGames(username);
+	}
+
+	public ArrayList<Integer> handleFindActiveGamesByLeague(String username) throws UserNotLoggedIn, UserNotExists {
+		return s.findActiveGamesByLeague(username);
 	}
 
 	public int handleCreateGame(String username, String gameType, int buyInPolicy, int chipPolicy, int minimumBet,
@@ -86,6 +94,9 @@ public class Handler {
 	public void handleClearAllFinishedGameLogs() {
 		s.clearAllFinishedGameLogs();
 	}
-	
+
+	public int handleGetPlayersNum(int gameID){
+		return s.getPlayersNum(gameID);
+	}
 	
 }

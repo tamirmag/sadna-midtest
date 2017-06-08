@@ -14,6 +14,9 @@ public interface IServiceClass {
 
     void logout(String username) throws UserNotExists, AlreadyLoggedOut;
 
+    void editProfile(String username, String password, String email)
+            throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists, UserNotExists, UserNotLoggedIn;
+
     ArrayList<Integer> findSpectatableGames(String username) throws UserNotLoggedIn, UserNotExists;
 
     int createGame(String username,String gameType, int BuyInPolicy, int ChipPolicy,
@@ -56,6 +59,8 @@ public interface IServiceClass {
 
     void startGame(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney, NotLegalAmount;
 
+    ArrayList<Integer> findActiveGamesByLeague(String username) throws UserNotLoggedIn, UserNotExists;
+
     ArrayList<Integer> findActiveGamesByGameTypePolicy(String username,String gameTypePolicy) throws UserNotLoggedIn, UserNotExists;
 
     ArrayList<Integer> findActiveGamesByMinimumBetPolicy(String username,int minimumBet) throws UserNotLoggedIn, UserNotExists ;
@@ -80,6 +85,6 @@ public interface IServiceClass {
 
     double getUserAverageGrossProfit(String username ,String toFind) throws UserNotExists, UserNotLoggedIn;
 
-
+    int getPlayersNum(int id);
 
 }

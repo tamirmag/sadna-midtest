@@ -58,6 +58,13 @@ public interface Bridge extends IServiceClass {
     ArrayList<String> getTop20highestCashGained(String username) throws UserNotLoggedIn, UserNotExists;
 
     ArrayList<String> getTop20GrossProfit(String username) throws UserNotLoggedIn, UserNotExists;
+
+    ArrayList<Integer> findActiveGamesByLeague(String username) throws UserNotLoggedIn, UserNotExists;
+
+    void editProfile(String username, String password, String email)
+            throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists, UserNotExists, UserNotLoggedIn;
+
+    int getPlayersNum(int gameID);
 }
 
 //void setDefaultLeague(String username, int defaultLeague) throws UserNotLoggedIn, UserNotExists, NegativeValue, NotHighestRanking;
