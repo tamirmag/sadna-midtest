@@ -62,7 +62,27 @@ public class Http_Server extends AbstractVerticle {
 			}
             
         });
-        
+
+		router.route("/getPlayersNum/:gameID").handler(routingContext -> {
+			Integer id = Integer.parseInt(routingContext.request().getParam("gameID"));
+			try {
+				int ans=hand.handleGetPlayersNum(id.intValue());
+				//Map<String,Object> map=new HashMap<String,Object>();
+				//map.put("key", su);
+				//JsonObject jsonObject=new JsonObject(map);
+				//String toSend=jsonObject.encode();
+
+				Gson gson=new GsonBuilder().create();
+				String toSend=gson.toJson(new Integer(ans),Integer.class);
+
+				HttpServerResponse response = routingContext.response();
+				response.end(toSend);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+
         router.route("/login/:id/:password").handler(routingContext -> {
             String id = routingContext.request().getParam("id");
             String password = routingContext.request().getParam("password");
@@ -96,6 +116,20 @@ public class Http_Server extends AbstractVerticle {
 			}
         });
 
+		router.route("/editProfile/:username/:password/:email").handler(routingContext -> {
+			String username = routingContext.request().getParam("username");
+			String password = routingContext.request().getParam("password");
+			String email = routingContext.request().getParam("email");
+			try {
+				hand.handleEditProfile(username,password,email);
+				HttpServerResponse response = routingContext.response();
+				response.end("editing profile successful");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+
         router.route("/findSpectatableGames/:username").handler(routingContext -> {
             
         	String username = routingContext.request().getParam("username");
@@ -112,9 +146,27 @@ public class Http_Server extends AbstractVerticle {
 				e.printStackTrace();
 			}
         });
+
+		router.route("/findActiveGamesByLeague/:username").handler(routingContext -> {
+
+			String username = routingContext.request().getParam("username");
+			try {
+				ArrayList<Integer> ans=hand.handleFindActiveGamesByLeague(username);
+				Gson gson=new GsonBuilder().create();
+				String toSend=gson.toJson(ans,new TypeToken<ArrayList<Integer>>(){}.getType());
+
+				HttpServerResponse response = routingContext.response();
+				response.end(toSend);
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
         
         router.route("/createGame/:username/:gameType/:BuyInPolicy/:ChipPolicy/:minimumBet/:minimalAmountOfPlayers/:maximalAmountOfPlayers/:spectatingMode").handler(routingContext -> {
-            String username = routingContext.request().getParam("username");
+			System.out.println("create game in server");
+        	String username = routingContext.request().getParam("username");
             String gameType = routingContext.request().getParam("gameType");
             int BuyInPolicy = Integer.parseInt(routingContext.request().getParam("BuyInPolicy")); 
             int ChipPolicy = Integer.parseInt(routingContext.request().getParam("ChipPolicy"));

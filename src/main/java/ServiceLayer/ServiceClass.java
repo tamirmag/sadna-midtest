@@ -33,6 +33,12 @@ public class ServiceClass implements IServiceClass {
         IAccountManager.getInstance().logout(username);
     }
 
+    @Override
+    public void editProfile(String username, String password, String email)
+            throws UsernameNotValid, EmailNotValid, PasswordNotValid, UserAlreadyExists, UserNotExists, UserNotLoggedIn {
+        IUserManager u=new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        u.editProfile(username,password,email);
+    }
 
     @Override
     public int createGame(String username, String gameType, int BuyInPolicy, int ChipPolicy,
@@ -155,6 +161,15 @@ public class ServiceClass implements IServiceClass {
         return ret;
     }
 
+    @Override
+    public ArrayList<Integer> findActiveGamesByLeague(String username) throws UserNotLoggedIn, UserNotExists {
+        IUserManager u = new UserManager(IAccountManager.getInstance().getLoggedInUser(username));
+        ArrayList<IGame> games = u.findActiveGamesByLeague();
+        ArrayList<Integer> ret = new ArrayList<>();
+        for (IGame i : games) ret.add(i.getId());
+        return ret;
+    }
+
 
     @Override
     public void check(String username, int gameID) throws UserNotLoggedIn, UserNotExists, NotYourTurn, NoMuchMoney {
@@ -257,7 +272,9 @@ public class ServiceClass implements IServiceClass {
         return u.getUserAverageGrossProfit(toFind) ;
     }
 
-
+    public int getPlayersNum(int id){
+        return IActiveGamesManager.getInstance().getPlayersNum(id);
+    }
 
 }
 
