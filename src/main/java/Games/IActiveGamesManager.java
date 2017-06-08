@@ -39,6 +39,8 @@ public interface IActiveGamesManager {
 
     void logout(String name);
 
+    ArrayList<IGame> findActiveGamesByLeague(User user);
+
     ArrayList<IGame> findActiveGamesByPotSize(int potSize);
 
     List<IGame> findSpectatableGames(User user);
@@ -64,4 +66,6 @@ public interface IActiveGamesManager {
     void call(int id, int amount, User usr) throws NoMuchMoney, NotYourTurn, NotLegalAmount;
 
     void sendMessage(int id, String from, String to, String data);
+
+    int getPlayersNum(int id);
 }

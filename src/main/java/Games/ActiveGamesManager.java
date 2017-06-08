@@ -51,6 +51,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
         game = new Game(players, i,user.getLeague());
         game = buildByPref(pref, game);
         games.add(game);
+        System.out.println(games.size());
         return i;
     }
 
@@ -171,8 +172,18 @@ public class ActiveGamesManager implements IActiveGamesManager {
     @Override
     public List<IGame> findAllActiveGames(User user) throws NotYourLeague {
         ArrayList<IGame> ourGames = new ArrayList();
-        for (IGame game : games) {
+        for (IGame game : games){
             if (game.canJoin(user))
+                ourGames.add(game);
+        }
+        return ourGames;
+    }
+
+    @Override
+    public ArrayList<IGame> findActiveGamesByLeague(User user) {
+        ArrayList<IGame> ourGames = new ArrayList<>();
+        for (IGame game : games){
+            if (user.getLeague()==game.getLeague())
                 ourGames.add(game);
         }
         return ourGames;
@@ -342,6 +353,11 @@ public class ActiveGamesManager implements IActiveGamesManager {
             }
             games.clear();
         }
+    }
+
+    public int getPlayersNum(int id){
+        IGame myGame = find(id);
+        return  myGame.getPlayersNum();
     }
 
 }

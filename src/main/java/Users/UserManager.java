@@ -144,6 +144,11 @@ public class UserManager implements IUserManager {
     }
 
     @Override
+    public ArrayList<IGame> findActiveGamesByLeague() {
+        return ActiveGamesManager.getInstance().findActiveGamesByLeague(user);
+    }
+
+    @Override
     public User getUser() {
         return user;
     }

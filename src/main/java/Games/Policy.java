@@ -57,6 +57,9 @@ public abstract class Policy implements IGame {
     }
 
     @Override
+    public int getLeague() {return this.policy.getLeague();}
+
+    @Override
     public int getPot() {
         return policy.getPot();
     }

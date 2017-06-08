@@ -28,6 +28,8 @@ public interface IGame {
 
     void setChipNum(int num);
 
+    int getLeague();
+
     int getMaxPlayers();
 
     int getMinPlayers();
