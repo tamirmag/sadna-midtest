@@ -222,7 +222,7 @@ public class AccountManager implements IAccountManager {
             IUsersDB.getInstance().setHighestCashGained(username, highestCashGained);
         }
     }
-    
+
     @Override
     public int getTotalCashGain(String username) throws UserNotExists {
         if (!isUserExists(username)) throw new UserNotExists(username);
