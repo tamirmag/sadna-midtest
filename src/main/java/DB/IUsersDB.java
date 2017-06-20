@@ -54,5 +54,17 @@ public interface IUsersDB {
 
     double getUserAverageGrossProfit(String username);
 
+    void setTotalCashGain(String username, int totalCashGain);
+
+    void setGrossProfit(String username, int grossProfit);
+
+    void setHighestCashGained(String username, int highestCashGained);
+
+    int getTotalCashGain(String username);
+
+    int getGrossProfit(String username);
+
+    int getHighestCashGained(String username);
+
 
 }

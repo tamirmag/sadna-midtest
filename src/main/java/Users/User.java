@@ -19,8 +19,9 @@ public class User {
     private int grossProfit; //The total gross profit
     private int highestCashGained; //The highest cash gain in a game.
     private boolean loggedIn;
-    private ArrayList<Player> existingPlayers = new ArrayList<>();
     private int totalCashGain;
+    private ArrayList<Player> existingPlayers = new ArrayList<>();
+
 
     public User() {
     }
