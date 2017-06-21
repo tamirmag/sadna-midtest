@@ -51,7 +51,7 @@ public class ActiveGamesManager implements IActiveGamesManager {
         game = new Game(players, i,user.getLeague());
         game = buildByPref(pref, game);
         games.add(game);
-        System.out.println(games.size());
+       // System.out.println(games.size());
         return i;
     }
 
