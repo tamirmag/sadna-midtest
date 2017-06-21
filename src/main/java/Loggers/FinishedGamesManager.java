@@ -1,5 +1,6 @@
 package Loggers;
 
+import DB.LoggerDB;
 import Games.IGame;
 import Users.User;
 import Games.Player;
@@ -17,14 +18,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class FinishedGamesManager implements IFinishedGamesManager {
     private final static FinishedGamesManager instance = new FinishedGamesManager();
     ArrayList<GameLogger> finishedGames = new ArrayList<>();
-    private final String relPathToLogs = "GameLogs";
-
-    ReentrantReadWriteLock filesLock = new ReentrantReadWriteLock(true);
-    final Lock filesRead = filesLock.readLock();
-    final Lock filesWrite = filesLock.readLock();
-
-    ReentrantReadWriteLock usersLock = new ReentrantReadWriteLock(true);
-    final Lock usersRead = usersLock.readLock();
 
     public static FinishedGamesManager getInstance() {
         return instance;
@@ -37,27 +30,19 @@ public class FinishedGamesManager implements IFinishedGamesManager {
     }
 
     private FinishedGamesManager() {
-        String s = relPathToLogs + "\\";
-        Path inputPath = Paths.get(s);
-        Path fullPath = inputPath.toAbsolutePath();
-        File[] files = new File(fullPath.toString()).listFiles();
-        for (File f : files) {
-            GameLogger g = new GameLogger(f.getName());
+        ArrayList<GameLogger> loggers = LoggerDB.getInstance().getAllGameLoggers();
+        for (GameLogger g : loggers) {
             ArrayList<String> content = g.getContentOfFile();
-            if (content != null) {
-                if (content.indexOf("game ended") != -1)//the game ended
-                    finishedGames.add(g);
-            }
+            if (content.indexOf("game ended") != -1)//the game is active
+                finishedGames.add(g);
         }
     }
 
     @Override
     public ArrayList<String> getNamesOfAllEndedGames() {
         ArrayList<String> ans = new ArrayList<>();
-        filesRead.lock();
         for (GameLogger g : finishedGames)
-            ans.add(g.getFilename().replace(".txt", ""));
-        filesRead.unlock();
+            ans.add(g.getFilename());//ans.add(g.getFilename().replace(".txt", ""));
         return ans;
     }
 
@@ -65,47 +50,38 @@ public class FinishedGamesManager implements IFinishedGamesManager {
     public ArrayList<String> viewReplay(int gameNumber) {
         if (gameNumber <= 0 || !isFinishedGameExists(gameNumber)) return new ArrayList<String>();
         else {
-            filesRead.lock();
             for (GameLogger g : finishedGames) {
-                if (g.getFilename().equals("Game" + gameNumber + ".txt")) return g.getContentOfFile();
+                if (g.getFilename().equals("Game" + gameNumber)) return g.getContentOfFile();
             }
-            filesRead.unlock();
             return new ArrayList<String>();
         }
     }
 
 
     private boolean isFinishedGameExists(int num) {
-        filesRead.lock();
         for (GameLogger gameLogger : finishedGames) {
-            if (gameLogger.getFilename().equals("Game" + num + ".txt")) return true;
+            if (gameLogger.getFilename().equals("Game" + num)) return true;
         }
-        filesRead.unlock();
         return false;
     }
 
     @Override
     public void addFinishedGameLog(GameLogger g) {
-        filesWrite.lock();
         finishedGames.add(g);
-        filesWrite.unlock();
     }
 
     @Override
     public void deleteAllFinishedGameLogs() {
-        filesWrite.lock();
         if (finishedGames != null) {
             Iterator<GameLogger> iter = finishedGames.iterator();
             while (iter.hasNext()) {
                 GameLogger g = iter.next();
-                File f = g.getFile();
-                f.delete();
+                g.deleteFile();
                 iter.remove();
             }
         }
-        filesWrite.unlock();
-    }
 
+    }
 
 
 }
