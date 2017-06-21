@@ -4,6 +4,7 @@ package ObservableLayer;
 public interface IObservableHandler {
 
     static IObservableHandler getInstance(){return ObservableHandler.getInstance();}
+
     void attachPlayer(String playerName, String ipAddress, int port, int game);
 
     void attachSpectator(String playerName, String ipAddress, int port, int game);
