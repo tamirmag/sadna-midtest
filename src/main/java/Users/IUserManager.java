@@ -42,8 +42,6 @@ public interface IUserManager {
 
     void JoinGame(int gameNumber) throws CantJoin, NoMuchMoney;
 
-    void LeaveGame(int gameNumber) throws NoMuchMoney, CantJoin;
-
     //Game actions
     void check(int gameID) throws NoMuchMoney, NotYourTurn;
 
