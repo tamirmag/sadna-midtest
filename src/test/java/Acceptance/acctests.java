@@ -1,18 +1,18 @@
 package Acceptance;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
 import DB.IUsersDB;
 import Games.*;
 import Loggers.IActionLogger;
 import Loggers.IActiveGamesLogManager;
 import Loggers.IErrorLogger;
 import Loggers.IFinishedGamesManager;
+import ServiceLayer.ServiceUser;
 import Users.*;
 import org.junit.*;
-import ServiceLayer.ServiceUser;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 public class acctests {
     static Bridge bridge = Driver.getBridge();

@@ -1,18 +1,17 @@
 package Games;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import DB.GamesDB;
 import DB.IGamesDB;
 import Loggers.ActiveGamesLogManager;
-import Loggers.GameLogger;
 import Loggers.IActiveGamesLogManager;
 import Users.NoMuchMoney;
 import Users.User;
 import com.sun.jmx.snmp.SnmpDataTypeEnums;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ActiveGamesManager implements IActiveGamesManager {
     private static ActiveGamesManager instance = null;
