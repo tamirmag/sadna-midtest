@@ -19,7 +19,8 @@ public class homePage {
     private JButton spectateGameButton;
     public JPanel homePageView;
 
-
+    //////////////////////////
+    public ButtonGroup gameGroup;
     private void createGameList(JFrame frm)
     {
         frm.add(new JButton("AAA"));
@@ -43,83 +44,56 @@ public class homePage {
         spectateGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //createGameList(frame);
-
-                /*String[] gamesL = {"one", "two"};
-                JFrame frame= new JFrame("spectateGame");
-                frame.setContentPane(new chooseGame(username, gamesL,frame,thisFrame,"spectateGame").chooseGameView);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);*/
-                String[] gamesL = {"one", "two"};
+                JFrame frame = new JFrame("chooseGame");
+                createGameList(frame);
                 try {
                     ArrayList<Integer> gamesNum= Http_Client.findSpectatableGames(username);
-                    /*for (int i = 0; i < gamesNum.size(); i++) {
-                        System.out.println(""+gamesNum);
-                    }
-                    System.out.println("1");
-                    int numOfGames=gamesNum.size(); //falls HERE!!!!
-                    System.out.println("numOfGames:  "+numOfGames);*/
-                    if(gamesNum.isEmpty()) {
+                    if(gamesNum.size()>0) {
+                        String[] gamesL = {"one", "two"};
                         String[] games = new String[gamesNum.size()];
                         String temp = "";
                         for (int i = 0; i < gamesNum.size(); i++) {
                             games[i] = "" + gamesNum.get(i);
                         }
-                        gamesL=games;
-
+                        frame.setContentPane(new chooseGame(username, games,frame,thisFrame,"spectateGame").chooseGameView);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        frame.pack();
+                        frame.setVisible(true);
                     }
                     else{
-                        System.out.println("no games to spectate!");
                         JOptionPane.showMessageDialog(thisFrame,"no games to spectate!");
                     }
-
                 } catch (Exception e1) {
-                    System.out.println("didnt sucess (even with 0)");
                     e1.printStackTrace();
                 }
-                //when it works- move the lines below to the end of if in the the "try"!!
-                JFrame frame= new JFrame("spectateGame");
-                frame.setContentPane(new chooseGame(username, gamesL,frame,thisFrame,"spectateGame").chooseGameView);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
             }
         });
         joinExistingGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String[] gamesL = {"one", "two"};
+                JFrame frame = new JFrame("chooseGame");
+                //ArrayList<Integer> gamesNum=null;
                 try {
                     ArrayList<Integer> gamesNum= Http_Client.findActiveGamesByLeague(username);
-                    int numOfGames=gamesNum.size();
-                    System.out.println("numOfGames:  "+numOfGames);
-                    if(numOfGames>0) {
-                        String[] games = new String[numOfGames];
-                        String temp = "";
-                        for (int i = 0; i < gamesNum.size(); i++) {
-                            games[i] = "" + gamesNum.get(i);
+                    if(gamesNum.size()>0){
+                        String[] gamesL= {"one","two"};
+                        String[] games= new String[gamesNum.size()];
+                        String temp="";
+                        for (int i=0; i<gamesNum.size();i++){
+                            games[i]=""+ gamesNum.get(i);
                         }
-                        gamesL=games;
-
+                        frame.setContentPane(new chooseGame(username,games,frame,thisFrame,"joinExistingGame").chooseGameView);
+                        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        frame.pack();
+                        frame.setVisible(true);
                     }
                     else{
-                        System.out.println("no games to spectate!");
-                        JOptionPane.showMessageDialog(thisFrame,"no games to spectate!");
+                        JOptionPane.showMessageDialog(thisFrame,"no existing games!");
                     }
-
                 } catch (Exception e1) {
-                    System.out.println("didnt sucess (even with 0)");
+
                     e1.printStackTrace();
                 }
-                //when it works- move the lines below to the end of the if in the "try"!!
-                JFrame frame= new JFrame("joinGame");
-                frame.setContentPane(new chooseGame(username, gamesL,frame,thisFrame,"joinExistingGame").chooseGameView);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
-
-
             }
         });
         editProfileButton.addActionListener(new ActionListener() {
