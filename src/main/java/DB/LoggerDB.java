@@ -3,7 +3,6 @@ package DB;
 
 import Loggers.GameLogger;
 import Loggers.MyLogger;
-import Users.User;
 import com.mongodb.MongoClient;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;

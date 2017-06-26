@@ -1,18 +1,9 @@
 package Loggers;
 
 import DB.LoggerDB;
-import Games.IGame;
-import Users.User;
-import Games.Player;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 public class FinishedGamesManager implements IFinishedGamesManager {

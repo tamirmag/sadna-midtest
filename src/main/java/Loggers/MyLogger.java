@@ -63,7 +63,6 @@ public abstract class MyLogger implements IMyLogger {
     public File getFile() {
         return file;
     }
-
     @Override
     public void writeToFile(String message) {
         fileWrite.lock();
@@ -78,8 +77,6 @@ public abstract class MyLogger implements IMyLogger {
         }
         fileWrite.unlock();
     }
-
-
     @Override
     public ArrayList<String> getContentOfFile() {
         fileRead.lock();
@@ -94,7 +91,6 @@ public abstract class MyLogger implements IMyLogger {
         fileRead.unlock();
         return new ArrayList<>(lines);
     }
-
     @Override
     public void clearLog() {
         fileWrite.lock();
@@ -106,17 +102,14 @@ public abstract class MyLogger implements IMyLogger {
         }
         fileWrite.unlock();
     }
-
     @Override
     public String getFilename() {
         return filename;
     }
-
     @Override
     public Path getFullPath() {
         return fullPath;
     }
-
     public void deleteFile() {
         fileWrite.lock();
         try {

@@ -1,20 +1,15 @@
 package Loggers;
 
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import DB.LoggerDB;
+import Users.User;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-
-import DB.LoggerDB;
-import Users.IAccountManager;
-import Users.IUserManager;
-import Users.User;
 
 import static java.lang.Thread.sleep;
 
@@ -47,7 +42,7 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
 
     @Override
     public void spectateGame(int gameNumber, User user) {
-        String filename = getFileNameByGameNum(gameNumber);
+      /*  String filename = getFileNameByGameNum(gameNumber);
         boolean running = true;
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(filename))) {
             while (running) {
@@ -61,7 +56,7 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 
