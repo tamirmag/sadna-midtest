@@ -3,7 +3,6 @@ package Users;
 import Games.Player;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Reference;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,6 @@ public class User {
     private int highestCashGained; //The highest cash gain in a game.
     private boolean loggedIn;
     private int totalCashGain;
-    @Reference
     private ArrayList<Player> existingPlayers = new ArrayList<>();
 
 
@@ -56,6 +54,10 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public int getUserID() {
+        return id;
     }
 
     public void setUsername(String username) {

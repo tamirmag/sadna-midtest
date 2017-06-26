@@ -1,24 +1,18 @@
 package Loggers;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-
 import java.util.ArrayList;
 
-@Entity
 public class GameLogger extends MyLogger implements IMyLogger {
 
-    @Id
-    private String gameNumber;
+    private int gameNumber;
 
     public GameLogger(int gameNumber) {
-        super("Game" + gameNumber );
-        this.gameNumber = "Game" + gameNumber ;
+        super("Game" + gameNumber + ".txt", "GameLogs");
+        this.gameNumber = gameNumber;
     }
 
-
     public GameLogger(String filename) {
-        super(filename);
+        super(filename, "GameLogs");
     }
 
     public ArrayList<String> getRound(int roundnum) {
@@ -46,22 +40,7 @@ public class GameLogger extends MyLogger implements IMyLogger {
     }
 
     public int getGameNumber() {
-        int ret = -1;
-        String i = gameNumber.substring(4);
-        if(tryParseInt(i))
-        {
-            ret = Integer.parseInt(i);
-        }
-        return ret;
-    }
-
-    boolean tryParseInt(String value) {
-        try {
-            Integer.parseInt(value);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        return gameNumber;
     }
 
 }

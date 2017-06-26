@@ -98,6 +98,7 @@ public class UserManager implements IUserManager {
         return i;
     }
 
+
     @Override
     public ArrayList<IGame> findActiveGamesByPlayerName(String playerName) {
         return new ArrayList<>(IActiveGamesManager.getInstance().findActiveGamesByPlayer(playerName));
@@ -159,6 +160,12 @@ public class UserManager implements IUserManager {
         Player p = new Player(this.user.getUsername(), this.user.getWallet());
         addPlayer(p);
         ActionLogger.getInstance().writeToFile(user.getUsername() + " joined to game " + gameNumber);
+    }
+
+    @Override
+    public void LeaveGame(int gameNumber) throws NoMuchMoney, CantJoin {
+        ActiveGamesManager.getInstance().leaveGame(gameNumber, this.user, this.user.getUserID());
+        ActionLogger.getInstance().writeToFile(user.getUsername() + " leaved to game " + gameNumber);
     }
 
     //Game actions
