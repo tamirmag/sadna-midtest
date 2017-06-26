@@ -25,8 +25,6 @@ public interface IServiceClass {
 
     void joinGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin;
 
-    void leaveGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, NoMuchMoney, CantJoin;
-
     void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, SpectatingNotAllowed;
 
     ArrayList<String> viewReplay(int gamenum, String username) throws UserNotLoggedIn, UserNotExists;
