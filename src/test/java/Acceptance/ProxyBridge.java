@@ -66,6 +66,11 @@ public class ProxyBridge implements Bridge {
         real.joinGame(gamenum, username);
 
     }
+    @Override
+    public void leaveGame(int gamenum, String username) throws UserNotLoggedIn, CantJoin, NoMuchMoney, UserNotExists {
+        real.leaveGame(gamenum, username);
+
+    }
 
     @Override
     public void spectateGame(int gamenum, String username) throws UserNotLoggedIn, UserNotExists, SpectatingNotAllowed {

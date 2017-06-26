@@ -92,6 +92,15 @@ public class GameTests {
     }
 
     @Test
+    public void findGameTest() throws CantJoin, NoMuchMoney, NotYourTurn, NotLegalAmount {
+        p.setNoLimitHoldem(true);
+        int game1  = man.createGame(roy, p);
+        int game2  = man.createGame(tamir, p);
+        System.out.println("found "+man.findActiveGamesByLeague(roy).size());
+        assertTrue(man.findActiveGamesByLeague(roy).size()>0);
+    }
+
+    @Test
     public void foldGameTest() throws CantJoin, NoMuchMoney, NotYourTurn, NotLegalAmount {
         p.setNoLimitHoldem(true);
         int game  = man.createGame(roy, p);

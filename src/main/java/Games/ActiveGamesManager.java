@@ -12,6 +12,7 @@ import Loggers.GameLogger;
 import Loggers.IActiveGamesLogManager;
 import Users.NoMuchMoney;
 import Users.User;
+import com.sun.jmx.snmp.SnmpDataTypeEnums;
 
 public class ActiveGamesManager implements IActiveGamesManager {
     private static ActiveGamesManager instance = null;
@@ -51,7 +52,8 @@ public class ActiveGamesManager implements IActiveGamesManager {
         game = new Game(players, i,user.getLeague());
         game = buildByPref(pref, game);
         games.add(game);
-       // System.out.println(games.size());
+        System.out.println(games.size());
+        System.out.println("ha! new " + i);
         return i;
     }
 
@@ -95,14 +97,16 @@ public class ActiveGamesManager implements IActiveGamesManager {
         }
         if(myGame == null)
         {
-            IGamesDB db = GamesDB.getInstance();
-            myGame = db.getGame(id);
+    //        IGamesDB db = GamesDB.getInstance();
+    //        myGame = db.getGame(id);
         }
+        System.out.println((myGame != null) + "     mh  " + id);
         return myGame;
     }
 
     @Override
     public void startGame(int id) throws NoMuchMoney, NotYourTurn, NotLegalAmount {
+        System.out.println("ha?");
         IGame myGame = find(id);
         myGame.startGame();
     }
@@ -181,11 +185,14 @@ public class ActiveGamesManager implements IActiveGamesManager {
 
     @Override
     public ArrayList<IGame> findActiveGamesByLeague(User user) {
+        System.out.println("ma");
         ArrayList<IGame> ourGames = new ArrayList<>();
         for (IGame game : games){
+            System.out.println("mi" + game.getId());
             if (user.getLeague()==game.getLeague())
                 ourGames.add(game);
         }
+        System.out.println(ourGames.isEmpty() + "?!?!?");
         return ourGames;
     }
 
