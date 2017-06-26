@@ -4,15 +4,18 @@ package ObservableLayer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ObservableHandler {
+public class ObservableHandler implements IObservableHandler {
 
     private HashMap<Integer, ArrayList<ObservableSpectator>> spectators;
     private HashMap<Integer, ArrayList<ObservablePlayer>> players;
-
-    public ObservableHandler() {
+    private static final IObservableHandler instance = new ObservableHandler();
+    private ObservableHandler() {
         players = new HashMap<>();
         spectators = new HashMap<>();
     }
+
+    public static IObservableHandler getInstance()
+    {return instance;}
 
     public void attachPlayer(String playerName, String ipAddress, int port, int game) {
         ObservablePlayer player = new ObservablePlayer(ipAddress, port, playerName);
