@@ -36,9 +36,9 @@
     <orderEntry type="library" name="Maven: io.vertx:vertx-lang-scala_2.12:3.4.2" level="project" />
     <orderEntry type="library" name="Maven: io.vertx:vertx-lang-scala-on-the-fly_2.12:3.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-compiler:2.12.2" level="project" />
+    <orderEntry type="library" name="Maven: org.scala-lang:scala-reflect:2.12.2" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang.modules:scala-xml_2.12:1.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.12.2" level="project" />
-    <orderEntry type="library" name="Maven: org.scala-lang:scala-reflect:2.12.2" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver:3.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:bson:3.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:3.4.2" level="project" />

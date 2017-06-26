@@ -1,47 +1,68 @@
 package Loggers;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import DB.LoggerDB;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+@Entity
 public abstract class MyLogger implements IMyLogger {
-    private String filename = null;
-    private Path fullPath;
-    private String filepath = "Logs";
-    private File file;
-    ReentrantReadWriteLock fileLock = new ReentrantReadWriteLock(true);
-    final Lock fileRead = fileLock.readLock();
-    final Lock fileWrite = fileLock.writeLock();
 
-    public MyLogger(String filename, String filepath) {
-        synchronized (this) {
-            this.filename = filename;
-            this.filepath = filepath;
-            File dir = new File(this.filepath);
-            dir.mkdirs();
-            file = new File(dir, filename);
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String s = this.filepath + "\\" + this.filename;
-            Path inputPath = Paths.get(s);
-            fullPath = inputPath.toAbsolutePath();
-        }
+    @Id
+    private String filename = null;
+
+    private ArrayList<String> content;
+
+    public MyLogger(String filename) {
+        this.filename = filename;
+        content = new ArrayList<>();
+        LoggerDB.getInstance().addNewLogger(this);
     }
 
+    @Override
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    @Override
+    public ArrayList<String> getContentOfFile() {
+        return content;
+    }
+
+    public void setContent(ArrayList<String> content) {
+        this.content = content;
+    }
+
+    @Override
+    public void writeToFile(String message) {
+        content.add(message);
+        LoggerDB.getInstance().saveLogger(this);
+    }
+
+    @Override
+    public void clearLog() {
+        content.clear();
+        LoggerDB.getInstance().saveLogger(this);
+    }
+
+    @Override
+    public void deleteFile() {
+        filename = "";
+        content.clear();
+        LoggerDB.getInstance().deleteLogger(filename);
+    }
+
+
+
+    /*
     public File getFile() {
         return file;
     }
-
     @Override
     public void writeToFile(String message) {
         fileWrite.lock();
@@ -56,8 +77,6 @@ public abstract class MyLogger implements IMyLogger {
         }
         fileWrite.unlock();
     }
-
-
     @Override
     public ArrayList<String> getContentOfFile() {
         fileRead.lock();
@@ -72,7 +91,6 @@ public abstract class MyLogger implements IMyLogger {
         fileRead.unlock();
         return new ArrayList<>(lines);
     }
-
     @Override
     public void clearLog() {
         fileWrite.lock();
@@ -84,17 +102,14 @@ public abstract class MyLogger implements IMyLogger {
         }
         fileWrite.unlock();
     }
-
     @Override
     public String getFilename() {
         return filename;
     }
-
     @Override
     public Path getFullPath() {
         return fullPath;
     }
-
     public void deleteFile() {
         fileWrite.lock();
         try {
@@ -104,5 +119,5 @@ public abstract class MyLogger implements IMyLogger {
             e.printStackTrace();
         }
         fileWrite.unlock();
-    }
+    }*/
 }
