@@ -20,7 +20,7 @@ public class LoggerDB {
 
     private LoggerDB() {
         morphia = new Morphia();
-        morphia.mapPackage("Loggers");
+        morphia.mapPackage("Loggers", true);
         m = new MongoClient("localhost", 27017);
         datastore = morphia.createDatastore(m, "systemDatabase");
     }
