@@ -7,7 +7,7 @@ import org.mongodb.morphia.annotations.Id;
 public class ErrorLogger extends MyLogger implements IErrorLogger {
     @Id
     private String filename = "ErrorLog";
-    private static final ErrorLogger instance = new ErrorLogger();
+    private static ErrorLogger instance;
 
     private ErrorLogger() {
         super("ErrorLog");
@@ -16,6 +16,9 @@ public class ErrorLogger extends MyLogger implements IErrorLogger {
     }
 
     public static IErrorLogger getInstance() {
+        if (instance == null) {
+            instance = new ErrorLogger();
+        }
         return instance;
     }
 

@@ -14,14 +14,20 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class acctests {
-    static Bridge bridge = Driver.getBridge();
-    static ServiceUser u;
-
+public class AcceptanceTests {
+    private static Bridge bridge;
 
     @BeforeClass
     public static void configure() {
+        bridge = Driver.getBridge();
         IUsersDB.getInstance().changeDataStore("tests");
+    }
+
+    @Before
+    public void beforeAnyTest() throws AlreadyLoggedOut, UserNotExists {
+        IFinishedGamesManager.getInstance().deleteAllFinishedGameLogs();
+        IActiveGamesLogManager.getInstance().RemoveAllGameLoggers();
+        bridge.clearUsers();
     }
 
     @After
@@ -30,13 +36,6 @@ public class acctests {
         IActionLogger.getInstance().clearLog();
         IErrorLogger.getInstance().clearLog();
         bridge.clearAllFinishedGameLogs();
-    }
-
-    @Before
-    public void beforeAnyTest() throws AlreadyLoggedOut, UserNotExists {
-        IFinishedGamesManager.getInstance().deleteAllFinishedGameLogs();
-        IActiveGamesLogManager.getInstance().RemoveAllGameLoggers();
-        bridge.clearUsers();
     }
 
     @AfterClass
@@ -54,7 +53,7 @@ public class acctests {
     /**************register************/
     @Test
     public void successRegister() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid {
-        u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        ServiceUser u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
         assertEquals(u.getUsername(), "moshe");
         assertEquals(u.getPassword(), "1111");
         assertEquals(u.getEmail(), "noname@gmail.com");
@@ -93,7 +92,7 @@ public class acctests {
     /**************login***********************/
     @Test
     public void loginWithIncorrectPassword() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, AlreadyLoggedOut {
-        u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        ServiceUser u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         String password = "1111";
         bridge.login("moshe", password);
@@ -102,7 +101,7 @@ public class acctests {
 
     @Test
     public void successLogin() throws EmailNotValid, NegativeValue, UsernameNotValid, UserAlreadyExists, PasswordNotValid, UsernameAndPasswordNotMatch, AlreadyLoggedIn, UserNotExists, AlreadyLoggedOut {
-        u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
+        ServiceUser u = bridge.register("moshe", "1111", "noname@gmail.com", 100);
         bridge.logout("moshe");
         ServiceUser u1 = bridge.login("moshe", "1111");
         assertEquals(u1.getUsername(), "moshe");

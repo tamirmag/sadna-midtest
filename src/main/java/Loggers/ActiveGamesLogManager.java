@@ -14,7 +14,7 @@ import java.util.Iterator;
 import static java.lang.Thread.sleep;
 
 public class ActiveGamesLogManager implements IActiveGamesLogManager {
-    private static final ActiveGamesLogManager instance = new ActiveGamesLogManager();
+    private static ActiveGamesLogManager instance;
     ArrayList<GameLogger> ActiveGames = new ArrayList<GameLogger>();
 
 
@@ -29,6 +29,9 @@ public class ActiveGamesLogManager implements IActiveGamesLogManager {
 
 
     public static IActiveGamesLogManager getInstance() {
+        if (instance == null) {
+            instance = new ActiveGamesLogManager();
+        }
         return instance;
     }
 
