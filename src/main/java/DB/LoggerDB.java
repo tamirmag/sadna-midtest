@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoggerDB {
-    private static final LoggerDB instance = new LoggerDB();
+    private static LoggerDB instance;
 
     Morphia morphia;
     MongoClient m;
@@ -20,12 +20,15 @@ public class LoggerDB {
 
     private LoggerDB() {
         morphia = new Morphia();
-        morphia.mapPackage("Loggers");
+        morphia.mapPackage("Loggers", true);
         m = new MongoClient("localhost", 27017);
         datastore = morphia.createDatastore(m, "systemDatabase");
     }
 
     public static LoggerDB getInstance() {
+        if (instance == null) {
+            instance = new LoggerDB();
+        }
         return instance;
     }
 

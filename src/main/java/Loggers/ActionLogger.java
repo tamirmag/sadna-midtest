@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ActionLogger extends MyLogger implements IActionLogger {
     @Id
     private String filename = "ActionLog";
-    private static final ActionLogger instance = new ActionLogger();
+    private static ActionLogger instance;
 
     private ActionLogger() {
         super("ActionLog");
@@ -18,6 +18,9 @@ public class ActionLogger extends MyLogger implements IActionLogger {
     }
 
     public static IActionLogger getInstance() {
+        if (instance == null) {
+            instance = new ActionLogger();
+        }
         return instance;
     }
 

@@ -7,10 +7,13 @@ import java.util.Iterator;
 
 
 public class FinishedGamesManager implements IFinishedGamesManager {
-    private final static FinishedGamesManager instance = new FinishedGamesManager();
+    private static FinishedGamesManager instance;
     ArrayList<GameLogger> finishedGames = new ArrayList<>();
 
     public static FinishedGamesManager getInstance() {
+        if (instance == null) {
+            instance = new FinishedGamesManager();
+        }
         return instance;
     }
 
